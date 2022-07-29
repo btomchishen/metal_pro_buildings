@@ -2,7 +2,6 @@
 <?
 use Bitrix\Main\Context;
 $request = Context::getCurrent()->getRequest();
-fp($request, '$request1');
 ?>
 <div class="calculation_global_wrapper">
     <table class="calculation">
@@ -189,47 +188,44 @@ fp($request, '$request1');
             <tr class="section_head">
                 <td colspan="10" style="height: 33px"></td>
             </tr>
+
+			<tr>
+                <td colspan="5"></td>
+                <td colspan="2">BUILDING COST (WITHOUT FACTOR)</td>
+				<td class="cost" colspan="3">Cost (/w out factor): <?=isset($request["COST_WITHOUT_FACTOR"]) && !empty($request["COST_WITHOUT_FACTOR"]) ? '$'.number_format($request["COST_WITHOUT_FACTOR"], 2, '.', ',') : '$0,00';?></td>
+            </tr>
+
             <tr>
                 <td colspan="5"></td>
-                <td colspan="2"><?=GetMessage('BILDING_CALCULATION');?></td>
+                <td colspan="2">BUILDING COST (WITH FACTOR)</td>
                 <td class="cost" colspan="3"><?=GetMessage('СOST_CALCULATION');?><?=isset($request["COST"]) && !empty($request["COST"]) ? '$'.number_format($request["COST"], 2, '.', ',') : '$0,00';?></td>
             </tr>
+
+
+
 
 
             <tr class="section_head_wrap">
                 <td class="border_none" colspan="4"></td>
                 <td class="section_head" colspan="6"><?=GetMessage('SUMMARY_CALCULATION');?></td>
             </tr>
+
+
             <tr class="section">
                 <td class="border_none" colspan="4"></td>
                 <td class="name" colspan="3"><?=GetMessage('DRAWINGS_CALCULATION');?></td>
                 <td colspan="1">=</td>
                 <td colspan="2"><?=isset($request["DRAWINGS"]) && !empty($request["DRAWINGS"]) ? '$'.number_format($request["DRAWINGS"], 2, '.', ',') : '$0,00';?></td>
             </tr>
-            <tr class="section">
-                <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3">REVISED DRAWINGS $85 BEFORE APPROVAL, $250 AFTER APPROVAL</td>
-                <td colspan="1">=</td>
-                <td colspan="2">???????</td>
-            </tr>
+
             <tr class="section">
                 <td class="border_none" colspan="4"></td>
                 <td class="name" colspan="3"><?=GetMessage('ESTIMATED_FREIGHT_CALCULATION');?> </td>
                 <td colspan="1">=</td>
                 <td colspan="2"><?=isset($request["ARCHES_FREIGHT_COST"]) && !empty($request["ARCHES_FREIGHT_COST"]) ? '$'.number_format($request["ARCHES_FREIGHT_COST"], 2, '.', ',') : '$0,00';?></td>
             </tr>
-            <tr class="section">
-                <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3">MAX ARCH RATE PER SKID 5000 lb</td>
-                <td colspan="1">=</td>
-                <td colspan="2"><?=isset($request["ARCHES_FREIGHT_COST"]) && !empty($request["ARCHES_FREIGHT_COST"]) ? '$'.number_format($request["ARCHES_FREIGHT_COST"], 2, '.', ',') : '$0,00';?></td>
-            </tr>
-            <tr class="section">
-                <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3"><?=GetMessage('ENDWALL_BASEPLATES_FREIGHT_ENDWALL_CALCULATION');?></td>
-                <td colspan="1">=</td>
-                <td colspan="2"><?=isset($request["ENDWALL_BASEPLATE_FREIGHT"]) && !empty($request["ENDWALL_BASEPLATE_FREIGHT"]) ? '$'.number_format($request["ENDWALL_BASEPLATE_FREIGHT"], 2, '.', ',') : '$0,00';?></td>
-            </tr>
+
+
             <tr class="section">
                 <td class="border_none" colspan="4"></td>
                 <td class="name" colspan="3"><?=GetMessage('SUB_TOTAL_CALCULATION');?></td>
@@ -237,59 +233,63 @@ fp($request, '$request1');
                 <td colspan="2"><?=isset($request["SUB_TOTAL"]) && !empty($request["SUB_TOTAL"]) ? '$'.number_format($request["SUB_TOTAL"], 2, '.', ',') : '$0,00';?></td>
             </tr>
 
+				<tr class="section">
+                <td class="border_none" colspan="4"></td>
+				<td class="name" colspan="3">VENDOR BUILDING COST</td>
+                <td colspan="1">=</td>
+                <td colspan="2"><?=isset($request["VENDOR_BUILDING_COST"]) && !empty($request["VENDOR_BUILDING_COST"]) ? '$'.number_format($request["VENDOR_BUILDING_COST"], 2, '.', ',') : '$0,00';?></td>
+            </tr>
 
             <tr class="section">
                 <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3">INSULATION PACKAGE  (PATCH TAPE: 42.25 FOR 5000 FT)</td>
-                <td colspan="1">=</td>
-                <td colspan="2">???????</td>
-            </tr>
-            <tr class="section">
-                <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3">INSULATION FREIGHT</td>
-                <td colspan="1">=</td>
-                <td colspan="2">???????</td>
-            </tr>
-            <tr class="section">
-                <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3">PINS & CAPS FREIGHT</td>
-                <td colspan="1">=</td>
-                <td colspan="2">?????</td>
-            </tr>
-            <tr class="section">
-                <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3">ANCHORS WEDGES FREIGHT	90	36,13333333	LBS</td>
-                <td colspan="1">=</td>
-                <td colspan="2">??????</td>
-            </tr>
-            <tr class="section">
-                <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3"><?=GetMessage('TOTAL_COST_CALCULATION');?></td>
+				<td class="name" colspan="3">VENDOR TOTAL COST (BUILDING + FREIGHT + DRAWINGS)</td>
                 <td colspan="1">=</td>
                 <td colspan="2"><?=isset($request["TOTAL_COST"]) && !empty($request["TOTAL_COST"]) ? '$'.number_format($request["TOTAL_COST"], 2, '.', ',') : '$0,00';?></td>
             </tr>
 
-
             <tr class="section">
                 <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3"><?=GetMessage('SOLD_FOR_CALCULATION');?></td>
-                <td colspan="1">=</td>
-                <td colspan="2"><?=isset($request["SOLD_FOR"]) && !empty($request["SOLD_FOR"]) ? '$'.number_format($request["SOLD_FOR"], 2, '.', ',') : '$0,00';?></td>
-            </tr>
-            <tr class="section">
-                <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3"><?=GetMessage('ASKING_FOR_CALCULATION');?></td>
+                <td class="name" colspan="3">SUGGESTED SALE PRICE</td>
                 <td colspan="1">=</td>
                 <td colspan="2"><?=isset($request["ASKING"]) && !empty($request["ASKING"]) ? '$'.number_format($request["ASKING"], 2, '.', ',') : '$0,00';?></td>
+            </tr>
+
+			<tr class="section">
+                <td class="border_none" colspan="4"></td>
+                <td class="name" colspan="3">BUILDING RETAIL PRICE</td>
+                <td colspan="1">=</td>
+                <td colspan="2"><?=isset($request["SOLD_FOR"]) && !empty($request["SOLD_FOR"]) ? '$'.number_format($request["SOLD_FOR"], 2, '.', ',') : '$0,00';?></td>
             </tr>
 
 
             <tr>
                 <td class="border_none" colspan="4"></td>
                 <td colspan="2"></td>
-                <td colspan="1">Paid Date</td>
-                <td colspan="3">?????</td>
+				<td colspan="1">Arches Weight (lb):</td>
+                <td colspan="3"><?=isset($request["ACTUAL_ARCHES_WEIGHT"]) && !empty($request["ACTUAL_ARCHES_WEIGHT"]) ? ''.number_format($request["ACTUAL_ARCHES_WEIGHT"], 2, '.', ',') : '0.00';?> lbs</td>
             </tr>
+<tr>
+                <td class="border_none" colspan="4"></td>
+                <td colspan="2"></td>
+				<td colspan="1">Front Endwall Weight:</td>
+                <td colspan="3"><?=isset($request["ENDWALLS_FRONT_TOTAL_LBS"]) && !empty($request["ENDWALLS_FRONT_TOTAL_LBS"]) ? ''.number_format($request["ENDWALLS_FRONT_TOTAL_LBS"], 2, '.', ',') : '0.00';?> lbs</td>
+            </tr>
+
+<tr>
+                <td class="border_none" colspan="4"></td>
+                <td colspan="2"></td>
+				<td colspan="1">Rear Endwall Weight:</td>
+                <td colspan="3"><?=isset($request["ENDWALLS_REAR_TOTAL_LBS"]) && !empty($request["ENDWALLS_REAR_TOTAL_LBS"]) ? ''.number_format($request["ENDWALLS_REAR_TOTAL_LBS"], 2, '.', ',') : '0.00';?> lbs</td>
+            </tr>
+
+
+<tr>
+                <td class="border_none" colspan="4"></td>
+                <td colspan="2"></td>
+				<td colspan="1">Total Weight:</td>
+                <td colspan="3"><?=isset($request["ENDWALLS_TOTAL_LBS2"]) && !empty($request["ENDWALLS_TOTAL_LBS2"]) ? ''.number_format($request["ENDWALLS_TOTAL_LBS2"], 2, '.', ',') : '0.00';?> lbs</td>
+            </tr>
+
             <tr class="section">
                 <td class="border_none" colspan="4"></td>
                 <td class="name" colspan="2"><?=GetMessage('DEPOSIT_REQUIRED_CALCULATION');?></td>
@@ -313,7 +313,13 @@ fp($request, '$request1');
                 <td colspan="3"><?=GetMessage('WIND_LOAD_CALCULATION');?> <?=isset($request["WIND_LOAD"]) && !empty($request["WIND_LOAD"]) ? $request["WIND_LOAD"] : '';?></td>
             </tr>
             <tr>
-                <td colspan="3"><?=GetMessage('MODEL_LIVE_LOAD_CALCULATION');?> <?=isset($request["PSF"]) && !empty($request["PSF"]) ? $request["PSF"] : '';?></td>
+
+				<?php if (($request["ACTUAL_USE_EXPOSURE"] <= 2 && $request["REQUIRED_LIVE_LOAD_CATEGORY_II"] > $request["ACTUAL_MODEL_LIVE_LOAD_PSF"]) || ($request["ACTUAL_USE_EXPOSURE"] >= 3 && $request["REQUIRED_LIVE_LOAD_CATEGORY_I"] > $request["ACTUAL_MODEL_LIVE_LOAD_PSF"])) { ?>
+				<td style="background-color: #c53436; color: white;" colspan="3"><?=GetMessage('MODEL_LIVE_LOAD_CALCULATION');?> <?=isset($request["ACTUAL_MODEL_LIVE_LOAD_PSF"]) && !empty($request["ACTUAL_MODEL_LIVE_LOAD_PSF"]) ? $request["ACTUAL_MODEL_LIVE_LOAD_PSF"] : '';?></td>
+				<?php } else { ?>
+					<td colspan="3"><?=GetMessage('MODEL_LIVE_LOAD_CALCULATION');?> <?=isset($request["ACTUAL_MODEL_LIVE_LOAD_PSF"]) && !empty($request["ACTUAL_MODEL_LIVE_LOAD_PSF"]) ? $request["ACTUAL_MODEL_LIVE_LOAD_PSF"] : '';?></td>
+				<?php } ?>
+
                 <td colspan="3"><?=GetMessage('LIVE_LOAD_CATEGORY_I_CALCULATION');?> <?=isset($request["REQUIRED_LIVE_LOAD_CATEGORY_I"]) && !empty($request["REQUIRED_LIVE_LOAD_CATEGORY_I"]) ? $request["REQUIRED_LIVE_LOAD_CATEGORY_I"] : '';?></td>
                 <td colspan="4"><?=GetMessage('LIVE_LOAD_CATEGORY_II_CALCULATION');?> <?=isset($request["REQUIRED_LIVE_LOAD_CATEGORY_I"]) && !empty($request["REQUIRED_LIVE_LOAD_CATEGORY_II"]) ? $request["REQUIRED_LIVE_LOAD_CATEGORY_II"] : '';?></td>
             </tr>

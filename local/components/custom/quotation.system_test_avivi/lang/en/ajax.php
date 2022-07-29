@@ -1,4 +1,5 @@
 <?
+$MESS['CUSTOMER_ID'] = "Customer ID";
 $MESS["MODEL_INPUT"] = "Model";
 $MESS["CITY_INPUT"] = "City";
 $MESS["PROV_INPUT"] = "Prov.";
@@ -9,3 +10,4 @@ $MESS["WIDTH_INPUT"] = "Width";
 $MESS["HEIGHT_INPUT"] = "Height";
 $MESS["QUANTITY_INPUT"] = "Quantity";
 $MESS["COUNTRY_INPUT"] = "Country";
+$MESS["COST_INPUT"] = "Cost";

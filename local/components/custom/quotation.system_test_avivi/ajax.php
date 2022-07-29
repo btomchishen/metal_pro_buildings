@@ -19,21 +19,21 @@ if(isset($request["SELECT_CITY"]) && $request["SELECT_CITY"] == "Y")
 
 if(isset($request["SELECT_PSF"]) && $request["SELECT_PSF"] == "Y")
 {
-	$useExposure = array_shift(CHighData::GetList(USE_EXPOSURE_LIST_HIGHLOAD, array("ID" => $request["USE_EXPOSURE"])));
-	$PSFdata = array_shift(CHighData::GetList(
-		LOADING_TABLE_HIGHLOAD, 
-		array(
-			'>='.$useExposure["UF_LOADING_TABLE_FIELD_NAME"] => $request["PSF"],
-		),
-		array("*"),
-		array(
-			$useExposure["UF_LOADING_TABLE_FIELD_NAME"] => "ASC"
-		),
+    $useExposure = array_shift(CHighData::GetList(USE_EXPOSURE_LIST_HIGHLOAD, array("ID" => $request["USE_EXPOSURE"])));
+    $PSFdata = array_shift(CHighData::GetList(
+        LOADING_TABLE_HIGHLOAD,
+        array(
+            '>='.$useExposure["UF_LOADING_TABLE_FIELD_NAME"] => $request["PSF"],
+        ),
+        array("*"),
+        array(
+            $useExposure["UF_LOADING_TABLE_FIELD_NAME"] => "ASC"
+        ),
 	));
-	$array = array(
-		$PSFdata["UF_LOADING_TABLE_PROVINCE"], $PSFdata["UF_LOADING_TABLE_CITY"]
-	);
-	echo json_encode($array);
+    $array = array(
+        $PSFdata["UF_LOADING_TABLE_PROVINCE"], $PSFdata["UF_LOADING_TABLE_CITY"]
+    );
+    echo json_encode($array);
 }
 
 if(isset($request["SELECT_ACCESSORIES"]) && $request["SELECT_ACCESSORIES"] == "Y")
@@ -286,6 +286,7 @@ if(isset($request["SELECT_DOOR"]) && $request["SELECT_DOOR"] == "Y")
 if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($request["UPDATE_DATA"]) && $request["UPDATE_DATA"] == "Y"))
 {
 	$requiredFields = array(
+		array("FIELD_CODE" => "CUSTOMER_ID", "FIELD_NAME" => Loc::getMessage("CUSTOMER_ID")),
 		array("FIELD_CODE" => "MODEL", "FIELD_NAME" => Loc::getMessage("MODEL_INPUT")),
 		array("FIELD_CODE" => "BUILDING_CITY", "FIELD_NAME" => Loc::getMessage("CITY_INPUT")),
 		array("FIELD_CODE" => "BUILDING_PROVINCE", "FIELD_NAME" => Loc::getMessage("PROV_INPUT")),
@@ -298,6 +299,7 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 		array("FIELD_CODE" => "FRONT_WALL_QUANTITY", "FIELD_NAME" => Loc::getMessage("QUANTITY_INPUT")),
 		array("FIELD_CODE" => "REAR_WALL_QUANTITY", "FIELD_NAME" => Loc::getMessage("QUANTITY_INPUT")),
 		array("FIELD_CODE" => "BUILDING_COUNTRY", "FIELD_NAME" => Loc::getMessage("COUNTRY_INPUT")),
+		array("FIELD_CODE" => "COST", "FIELD_NAME" => Loc::getMessage("COST_INPUT")),
 	);
 	$errorResponse = array();
 	$emptyFields = array();
@@ -306,6 +308,12 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 		if(!isset($request[$field["FIELD_CODE"]]) || empty($request[$field["FIELD_CODE"]]))
 			$emptyFields[] =  $field;
 	}
+
+//    $cost = floatval(str_replace(['$'], [''], $request['COST']));
+//    if ($cost == 0) {
+//        $emptyFields[] = array("FIELD_CODE" => "COST", "FIELD_NAME" => Loc::getMessage("COST_INPUT"));
+//    }
+
 	if(count($emptyFields) > 0)
 	{
 
@@ -324,23 +332,23 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 		foreach ($constantsData as $constant)
 			$constants[$constant["ID"]] = $constant["UF_CONSTANT_VALUE"];
 		//PSF number
-		if(isset($request["PSF"]) && !empty($request["PSF"]))
-		{
-			$arResult["PSF"] = $request["PSF"];
-		}
-		else
-		{
-			$useExposure = array_shift(CHighData::GetList(USE_EXPOSURE_LIST_HIGHLOAD, array("ID" => $request["USE_EXPOSURE"])));
-			$PSFdata = array_shift(CHighData::GetList(
-				LOADING_TABLE_HIGHLOAD, 
-				array(
-					"UF_LOADING_TABLE_CITY" => $request["BUILDING_CITY"], 
-					"UF_LOADING_TABLE_PROVINCE" => $request["BUILDING_PROVINCE"]
-				),
-				array($useExposure["UF_LOADING_TABLE_FIELD_NAME"])
-			));
-			$arResult["PSF"] = array_shift($PSFdata);		
-		}
+        if(isset($request["PSF"]) && !empty($request["PSF"]))
+        {
+            $arResult["PSF"] = $request["PSF"];
+        }
+        else
+        {
+            $useExposure = array_shift(CHighData::GetList(USE_EXPOSURE_LIST_HIGHLOAD, array("ID" => $request["USE_EXPOSURE"])));
+            $PSFdata = array_shift(CHighData::GetList(
+                LOADING_TABLE_HIGHLOAD,
+                array(
+                    "UF_LOADING_TABLE_CITY" => $request["BUILDING_CITY"],
+                    "UF_LOADING_TABLE_PROVINCE" => $request["BUILDING_PROVINCE"]
+                ),
+                array($useExposure["UF_LOADING_TABLE_FIELD_NAME"])
+            ));
+            $arResult["PSF"] = array_shift($PSFdata);
+        }
 		//Gauge
 		$gaugeArray = array();
 		$gaugeData = array();
@@ -360,31 +368,37 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 			}
 		}
 		$gaugeMeaning = findNext($gaugeArray, $arResult["PSF"]);
-		if($gaugeMeaning > $arResult["PSF"])
-		{
-			foreach($gaugeData as $data)
-			{
-				if($data["MEANING"] == $gaugeMeaning)
-					$arResult["GAUGE_INDEX"] = $data["INDEX"];
-			}
-		}
-		else {
+        if($gaugeMeaning >= $arResult["PSF"])
+        {
+            foreach($gaugeData as $data)
+            {
+                if($data["MEANING"] == $gaugeMeaning)
+                {
+                    $arResult["GAUGE_INDEX"] = $data["INDEX"];
+                    //Real PSF number of the model to be displayed on calculations page
+                    $arResult["ACTUAL_MODEL_LIVE_LOAD_PSF"] = $data["MEANING"];
+                    //Use Exposure selected by user for use with error checking on calculations page
+                    $arResult["ACTUAL_USE_EXPOSURE"] = $request["USE_EXPOSURE"];
+                }
+            }
+        }
+        else {
 			$arResult["GAUGE_INDEX"] = 0;
 			$psfError = true;
-		}
+        }
 		//Front/rear wall
-		$model = array_shift(array_shift(CHighData::GetList(MODEL_HIGHLOAD, array("ID" => $request["MODEL"]), array("UF_MODEL"))));
-		$model = $model[1] . $model[2];
-		$price = array_shift(array_shift(CHighData::GetList(ENDWALL_EXTENSION_HIGHLOAD, array("UF_MODEL_WIDTH" => $model), array("UF_ENDWALL_PRICE_PER_VERTICAL"))));
-		$arResult["ENDWALL_EXTENSION"] = $price;
-		if($request["FRONT_WALL_OFFSET"] == "YES")
-			$arResult["FRONT_WALL_OFFSET"] = 1;
-		else 
-			$arResult["FRONT_WALL_OFFSET"] = 0;
-		if($request["REAR_WALL_OFFSET"] == "YES")
-			$arResult["REAR_WALL_OFFSET"] = 1;
-		else 
-			$arResult["REAR_WALL_OFFSET"] = 0;
+        $model = array_shift(array_shift(CHighData::GetList(MODEL_HIGHLOAD, array("ID" => $request["MODEL"]), array("UF_MODEL"))));
+        $model = $model[1] . $model[2];
+        $price = array_shift(array_shift(CHighData::GetList(ENDWALL_EXTENSION_HIGHLOAD, array("UF_MODEL_WIDTH" => $model), array("UF_ENDWALL_PRICE_PER_VERTICAL"))));
+        $arResult["ENDWALL_EXTENSION"] = $price;
+        if($request["FRONT_WALL_OFFSET"] == "YES")
+            $arResult["FRONT_WALL_OFFSET"] = 1;
+        else
+            $arResult["FRONT_WALL_OFFSET"] = 0;
+        if($request["REAR_WALL_OFFSET"] == "YES")
+            $arResult["REAR_WALL_OFFSET"] = 1;
+        else
+            $arResult["REAR_WALL_OFFSET"] = 0;
 
 		$endWallsData = array_shift(CHighData::GetList(RETAILED_PRICE_HIGHLOAD, 
 			array("UF_RETAILED_PRICE_MODEL" => $request["MODEL"], "UF_THICKNESS_GAUGE" => $arResult["GAUGE_INDEX"]), 
@@ -393,27 +407,33 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 		$arResult["ENDWALLS_REAR"] = $endWallsData["UF_SOLID_END_WALL"];
 		$arResult["OUTER_CA_FRONT"] = $endWallsData["UF_1_OUTER"];
 		$arResult["OUTER_CA_REAR"] = $endWallsData["UF_1_OUTER"];
-		$arResult["FRONT_WALL_SEA_HEIGHT"] = $request["FRONT_WALL_SEA_HEIGHT"];
+        $arResult["FRONT_WALL_SEA_HEIGHT"] = $request["FRONT_WALL_SEA_HEIGHT"];
 
 		$arResult["ENDWALL_FRONT_QUANTITY"] = $request["FRONT_WALL_TYPE"] == OPEN_WALL_TYPE ? 0 : 1;
 		$arResult["OUTER_CA_FRONT_QUANTITY"] = $arResult["ENDWALL_FRONT_QUANTITY"] == 1 ? 0 : 1;
 
 		$arResult["ENDWALL_REAR_QUANTITY"] = $request["REAR_WALL_TYPE"] == OPEN_WALL_TYPE ? 0 : 1;
 		$arResult["OUTER_CA_REAR_QUANTITY"] = $arResult["ENDWALL_REAR_QUANTITY"] == 1 ? 0 : 1;
-		$arResult["REAR_WALL_SEA_HEIGHT"] = $request["REAR_WALL_SEA_HEIGHT"];
+        $arResult["REAR_WALL_SEA_HEIGHT"] = $request["REAR_WALL_SEA_HEIGHT"];
 		$arResult["WALL_TOTAL"] = 
 		($arResult["ENDWALL_FRONT_QUANTITY"] * $arResult["ENDWALLS_FRONT"]) + 
 		($arResult["OUTER_CA_FRONT_QUANTITY"] * $arResult["OUTER_CA_FRONT"]) +
 		($arResult["ENDWALL_REAR_QUANTITY"] * $arResult["ENDWALLS_REAR"]) +
 		($arResult["OUTER_CA_REAR_QUANTITY"] * $arResult["OUTER_CA_REAR"]) +
-		($arResult["FRONT_WALL_SEA_HEIGHT"] * $arResult["ENDWALL_EXTENSION"]) +
-		($arResult["REAR_WALL_SEA_HEIGHT"] * $arResult["ENDWALL_EXTENSION"]) +
-		($arResult["FRONT_WALL_OFFSET"] * ($arResult["ENDWALLS_FRONT"] * 0.1)) +
-		($arResult["REAR_WALL_OFFSET"] * ($arResult["ENDWALLS_REAR"] * 0.1));
+        ($arResult["FRONT_WALL_OFFSET"] * ($arResult["ENDWALLS_FRONT"] * 0.1)) +
+		($arResult["ENDWALL_EXTENSION"] * ($arResult["FRONT_WALL_SEA_HEIGHT"])) +
+		($arResult["ENDWALL_EXTENSION"] * ($arResult["REAR_WALL_SEA_HEIGHT"])) +
 
+        ($arResult["REAR_WALL_OFFSET"] * ($arResult["ENDWALLS_REAR"] * 0.1));
 
 		//Arches
 		$arResult["ARCHES"] = $request["SERIES"] == MINI_SERIE ? $request["LENGTH"] / 1.5 - 1 : $request["LENGTH"] / 2 - 1;
+
+		//If MINI Series, Round Number of Arches to next highest whole number
+		if($request["SERIES"] == MINI_SERIE)
+		{
+		$arResult["ARCHES"] = ceil($arResult["ARCHES"]);
+		}
 
 		//Foundation system
 		if($request["FOUNDATION_SYSTEM"] != FOUNDATION_SYSTEM_THROUGH && $request["FOUNDATION_SYSTEM"] != FOUNDATION_SYSTEM_MONOLITHIC_POUR)
@@ -433,7 +453,8 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 			}
 
 			if($arResult["ARCH_BASEPLATE_UNIT_COST"] != 0)
-				$arResult["ARCH_BASEPLATE_LENGTH"] = ($arResult["ARCHES"] < 10 ? $arResult["ARCHES"] + 1 : ($arResult["ARCHES"]) * 49 + 24) / 12;
+				//$arResult["ARCH_BASEPLATE_LENGTH"] = ($arResult["ARCHES"] * 49 + 24) / 12;
+				$arResult["ARCH_BASEPLATE_LENGTH"] = (($arResult["ARCHES"] < 10 ? $arResult["ARCHES"] /*+ 1*/ : $arResult["ARCHES"]) * 49 + 24) / 12;
 			else
 				$arResult["ARCH_BASEPLATE_LENGTH"] = 0;
 
@@ -448,6 +469,9 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 				$arResult["ENDWALL_BASEPLATE_LENGTH"] = floatval($request["WIDTH"]);
 				$arResult["CHANNEL_ENDWALL_LENGTH"] = floatval($request["WIDTH"]);
 			}
+
+
+
 			else
 			{
 				$arResult["ENDWALL_BASEPLATE_LENGTH"] = floatval($request["WIDTH"]) * 2 - floatval($request["FRONT_WALL_WIDTH"]) - floatval($request["REAR_WALL_WIDTH"]);
@@ -459,14 +483,39 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 				if($request["SERIES"] == MINI_SERIE)
 					$arResult["CHANNEL_ARCH_LENGTH"] = (($arResult["ARCHES"] < 10 ? $arResult["ARCHES"] + 1 : $arResult["ARCHES"]) * 36 + 24) / 12;
 				else
-					$arResult["CHANNEL_ARCH_LENGTH"] = (($arResult["ARCHES"] < 10 ? $arResult["ARCHES"] + 1 : $arResult["ARCHES"]) * 49 + 24) / 12;
+					$arResult["CHANNEL_ARCH_LENGTH"] = (($arResult["ARCHES"] < 10 ? $arResult["ARCHES"] /*+ 1*/ : $arResult["ARCHES"]) * 49 + 24) / 12;
 			}
 			else
 				$arResult["CHANNEL_ARCH_LENGTH"] = 0;
 
 			$arResult["CHANNEL_ARCH_TOTAL"] = $arResult["CHANNEL_ARCH_LENGTH"] * $arResult["CHANNEL_ARCH_UNIT_COST"];
+
+			//Sets Endwall length to 0
+			if($request["FOUNDATION_SYSTEM"] != FOUNDATION_SYSTEM_CHANNEL)
+			{
+				$arResult["CHANNEL_ENDWALL_LENGTH"] = 0;
+			}
+			if($request["FOUNDATION_SYSTEM"] == FOUNDATION_SYSTEM_CHANNEL)
+			{
+				$arResult["ENDWALL_BASEPLATE_LENGTH"] = 0;
+			}
+
 			$arResult["CHANNEL_ENDWALL_TOTAL"] = $arResult["CHANNEL_ENDWALL_LENGTH"] * $arResult["CHANNEL_ENDWALL_UNIT_COST"];
+
+			//Added Logic for calculating ENDWALL Baseplate Unit using Building Country Factors
+			//if($request["BUILDING_COUNTRY"] == "СA")
+			//	$arResult["ENDWALL_UNIT_COST"] = $arResult["ENDWALL_UNIT_COST"] * $constants[CA_VARIABLE_1];
+			//elseif($request["BUILDING_COUNTRY"] == "US")
+			//	$arResult["ENDWALL_UNIT_COST"] = $arResult["ENDWALL_UNIT_COST"] * $constants[US_VARIABLE_1];
+
 			$arResult["ENDWALL_BASEPLATE_TOTAL"] = $arResult["ENDWALL_BASEPLATE_LENGTH"] * $arResult["ENDWALL_UNIT_COST"];
+
+			//Added Logic for calculating Arch Baseplate Unit using Building Country Factors
+			//if($request["BUILDING_COUNTRY"] == "СA")
+			//	$arResult["ARCH_BASEPLATE_UNIT_COST"] = $arResult["ARCH_BASEPLATE_UNIT_COST"] * $constants[CA_VARIABLE_1];
+			//elseif($request["BUILDING_COUNTRY"] == "US")
+			//	$arResult["ARCH_BASEPLATE_UNIT_COST"] = $arResult["ARCH_BASEPLATE_UNIT_COST"] * $constants[US_VARIABLE_1];
+
 			$arResult["ARCH_BASEPLATE_TOTAL"] = $arResult["ARCH_BASEPLATE_UNIT_COST"] * $arResult["ARCH_BASEPLATE_LENGTH"];
 
 			$arResult["FOUNDATION_SYSTEM_TOTAL"] = $arResult["CHANNEL_ARCH_TOTAL"] + $arResult["CHANNEL_ENDWALL_TOTAL"] + $arResult["ENDWALL_BASEPLATE_TOTAL"] + $arResult["ARCH_BASEPLATE_TOTAL"];
@@ -478,10 +527,12 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 
 		//Arches cost
 		//$arResult["ARCH_UNIT_COST"] = $endWallsData["UF_PER_ARCH_NO_CAULK"];
-		if($request["BUILDING_COUNTRY"] == "СA")
-			$arResult["ARCH_UNIT_COST"] = $endWallsData["UF_PIONEER_MODEL_PRICE"] * $constants[CA_VARIABLE_1] * $constants[CA_VARIABLE_2];
-		elseif($request["BUILDING_COUNTRY"] == "US")
-			$arResult["ARCH_UNIT_COST"] = $endWallsData["UF_PIONEER_MODEL_PRICE"] * $constants[US_VARIABLE_1] * $constants[US_VARIABLE_2];
+		//if($request["BUILDING_COUNTRY"] == "СA")
+		//	$arResult["ARCH_UNIT_COST"] = $endWallsData["UF_PIONEER_MODEL_PRICE"] * $constants[CA_VARIABLE_1] * $constants[CA_VARIABLE_2];
+		//elseif($request["BUILDING_COUNTRY"] == "US")
+		//	$arResult["ARCH_UNIT_COST"] = $endWallsData["UF_PIONEER_MODEL_PRICE"] * $constants[US_VARIABLE_1] * $constants[US_VARIABLE_2];
+
+		$arResult["ARCH_UNIT_COST"] = $endWallsData["UF_PIONEER_MODEL_PRICE"];
 
 		$arResult["ARCHES_COST"] = $arResult["ARCHES"] * $arResult["ARCH_UNIT_COST"];
 		$arResult["ARCHES_CAULKING"] = $endWallsData["UF_CAULK_PER_ARCH"];
@@ -501,7 +552,82 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 		$arResult["ARCH_ANCHOR_WEDGES_COST"] = $arResult["ARCH_ANCHOR_WEDGES"] != 0 ? $arResult["ARCH_ANCHOR_WEDGES_QUANTITY"] * $arResult["ARCH_ANCHOR_WEDGES"] : 0;
 
 		$arResult["ENDWALL_ANCHOR_WEDGES"] = isset($request["ANCHORS"]) && $request["ANCHORS"] == "Y" ? 4.7 : 0;
-		$arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? $request["WIDTH"] / 1.5 - 1 : 0;
+
+		//Title: Changed Logic for Endwall Quantity Calulation
+		//Decription: Calculates Anchor Wedges Quantity
+		//Formula: Round up( WIDTH OF BUILDING / 1.5 + 1) + Round up(( WIDTH OF BUILDING - FRAMED OPENING WIDTH )/1.5 + 2) = Endwall Anchor Quantity
+		//Edited 2022-06-15 by Reid
+		//OLD CODE: $arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? $request["WIDTH"] / 1.5 - 1 : 0;
+		if($request["ANCHORS"] == "Y")
+			{
+				//2 Solid Wall Type
+				if(($request["FRONT_WALL_TYPE"] == SOLID_WALL_TYPE && $request["REAR_WALL_TYPE"] == SOLID_WALL_TYPE))
+				{
+
+					$arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? ceil(($request["WIDTH"] * 2) / 1.5 + 1) : 0;
+
+				}
+				//1 Open, 1 Solid
+				if(($request["FRONT_WALL_TYPE"] == SOLID_WALL_TYPE && $request["REAR_WALL_TYPE"] == OPEN_WALL_TYPE) || ( $request["REAR_WALL_TYPE"] == SOLID_WALL_TYPE && $request["FRONT_WALL_TYPE"] == OPEN_WALL_TYPE ))
+				{
+
+					$arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? ceil(($request["WIDTH"] / 1.5 + 1)) : 0;
+
+				}
+
+				//1 Open Front, 1 Framed
+				if(($request["FRONT_WALL_TYPE"] == OPEN_WALL_TYPE && ($request["REAR_WALL_TYPE"] != SOLID_WALL_TYPE || $request["REAR_WALL_TYPE"] != OPEN_WALL_TYPE )))
+				{
+
+					$arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? ceil(($request["WIDTH"] - $request["REAR_WALL_WIDTH"]) / 1.5 + 2) : 0;
+
+				}
+
+				//1 Open Rear, 1 Framed
+				if(( $request["REAR_WALL_TYPE"] == OPEN_WALL_TYPE && ($request["FRONT_WALL_TYPE"] != SOLID_WALL_TYPE || $request["FRONT_WALL_TYPE"] != OPEN_WALL_TYPE )))
+				{
+
+					$arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? ceil(($request["WIDTH"] - $request["FRONT_WALL_WIDTH"]) / 1.5 + 2) : 0;
+
+				}
+
+				//2 Open
+				if( $request["REAR_WALL_TYPE"] == OPEN_WALL_TYPE && $request["FRONT_WALL_TYPE"] == OPEN_WALL_TYPE)
+				{
+
+					$arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = 0;
+				}
+
+
+				if(($request["FRONT_WALL_TYPE"] != OPEN_WALL_TYPE && $request["FRONT_WALL_TYPE"] != SOLID_WALL_TYPE))
+				{
+					//2 Framed Openings
+					if(($request["REAR_WALL_TYPE"] != OPEN_WALL_TYPE && $request["REAR_WALL_TYPE"] != SOLID_WALL_TYPE))
+					{
+					$arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? ceil(($request["WIDTH"] / 1.5 + 1)) + ceil(($request["WIDTH"] - ($request["FRONT_WALL_WIDTH"] + $request["REAR_WALL_WIDTH"]) ) / 1.5 + 2) : 0;
+
+					}
+
+				}
+
+				//Front wall is framed opening
+				if( ($request["REAR_WALL_TYPE"] == SOLID_WALL_TYPE)  && ($request["FRONT_WALL_TYPE"] != OPEN_WALL_TYPE && $request["FRONT_WALL_TYPE"] != SOLID_WALL_TYPE))
+				{
+					$arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? ceil(($request["WIDTH"] / 1.5 + 1)) + ceil(($request["WIDTH"] - $request["FRONT_WALL_WIDTH"]) / 1.5 + 2) : 0;
+
+				}
+
+				//Rear wall is framed opening
+				if( ($request["FRONT_WALL_TYPE"] == SOLID_WALL_TYPE)  && ($request["REAR_WALL_TYPE"] != OPEN_WALL_TYPE && $request["REAR_WALL_TYPE"] != SOLID_WALL_TYPE))
+				{
+					$arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? ceil(($request["WIDTH"] / 1.5 + 1)) + ceil(($request["WIDTH"] - $request["REAR_WALL_WIDTH"]) / 1.5 + 2) : 0;
+
+				}
+			}
+
+
+
+
 		$arResult["ENDWALL_ANCHOR_WEDGES_COST"] = $arResult["ENDWALL_ANCHOR_WEDGES"] != 0 ? $arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"] * $arResult["ENDWALL_ANCHOR_WEDGES"] : 0;
 		$arResult["ANCHORS_WEDGES_TOTAL"] = $arResult["ARCH_ANCHOR_WEDGES_COST"] + $arResult["ENDWALL_ANCHOR_WEDGES_COST"];
 
@@ -515,6 +641,17 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 			$arResult["COST"] = !empty($request['BUILDING_TOTAL_СOST']) ? str_replace(array("$", ","), array("", "") , $request['BUILDING_TOTAL_СOST']) : "";
 		else
 			$arResult["COST"] = $arResult["ARCHES_TOTAL"] + $arResult["WALL_TOTAL"] + $arResult["FOUNDATION_SYSTEM_TOTAL"] + $arResult["ANCHORS_WEDGES_TOTAL"] + $arResult["ACCESSORY_TOTAL"];
+
+		$arResult["COST_WITHOUT_FACTOR"] = $arResult["COST"];
+
+
+		//Building Total Multiplied by Factor
+		if($request["BUILDING_COUNTRY"] == "СA")
+			$arResult["COST"] = $arResult["COST"] * $constants[CA_VARIABLE_1];
+		elseif($request["BUILDING_COUNTRY"] == "US")
+			$arResult["COST"] = $arResult["COST"] * $constants[US_VARIABLE_1];
+
+
 
 		//Weight
 		$shippingWeight = array_shift(CHighData::GetList(SHIPPING_WEIGHT_HIGHLOAD, array("UF_SHIPPING_MODEL" => $request["MODEL"], "UF_SHIPPING_GAUGE" => $arResult["GAUGE_INDEX"]), array("UF_SHIPPING_PER_ARCH_NO_CAULK","UF_SHIPPING_SOLID_END_WALL", "UF_SHIPPING_1_OUTER")));
@@ -540,6 +677,10 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 
 		$arResult["ENDWALLS_FRONT_TOTAL_LBS"] = $arResult["ENDWALLS_FRONT_UNIT_LBS"] * $arResult["ENDWALL_FRONT_QUANTITY"];
 		$arResult["ENDWALLS_REAR_TOTAL_LBS"] = $arResult["ENDWALLS_REAR_UNIT_LBS"] * $arResult["ENDWALL_REAR_QUANTITY"];
+
+		//Endwall total weight
+		$arResult["ENDWALLS_TOTAL_LBS2"] = $arResult["ACTUAL_ARCHES_WEIGHT"] + ($arResult["ENDWALLS_FRONT_UNIT_LBS"] * $arResult["ENDWALL_FRONT_QUANTITY"]) + ($arResult["ENDWALLS_REAR_UNIT_LBS"] * $arResult["ENDWALL_REAR_QUANTITY"]) ;
+
 		$arResult["ENDWALLS_SKID"] = ($arResult["ENDWALL_REAR_QUANTITY"] == 1 || $arResult["ENDWALL_FRONT_QUANTITY"] == 1) ? 1 : 0;
 
 		$arResult["OUTER_CA_FRONT_UNIT_LBS"] = isset($shippingWeight["UF_SHIPPING_1_OUTER"]) ? $shippingWeight["UF_SHIPPING_1_OUTER"] : 0;
@@ -558,10 +699,71 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 		$arResult["BASEPLATES_TOTAL_LBS"] = $arResult["BASEPLATES_UNIT_LBS"] * $arResult["BASEPLATES_QUANTITY"];
 		$arResult["BASEPLATES_SKID"] = $arResult["BASEPLATES_QUANTITY"] > 0 || $arResult["BASEPLATES_MINI_QUANTITY"] > 0 ? 1 : 0;
 
-		
+		//EDIT FREIGHT MANUALLY CHECK
+
+		//if(isset($request["EDIT_FREIGHT_MANUALLY"]) && $request["EDIT_FREIGHT_MANUALLY"] == "Y")
+		//{
 			$arResult["ARCHES_FREIGHT_COST"] = isset($request["COST"]) && !empty($request["COST"]) ? floatval(str_replace(array("$", ","), array("", ""), $request["COST"])) : "";
+		//}
+		//else
+		//{
+		//$arResult["SHIPPING_ZONE"] = array_shift(array_shift(CHighData::GetList(CITIES_HIGHLOAD, array("ID" => $request['BUILDING_CITY']), array("UF_ZONE"))));
+			//$weightPrice = array_shift(CHighData::GetList(WEIGHT_HIGHLOAD, array("UF_WEIGHT_PROVINCE" => $request["BUILDING_PROVINCE"], "UF_WEIGHT_ZONE" => $arResult["SHIPPING_ZONE"])));
+		//$obEnum = new \CUserFieldEnum;
+		//$rsEnum = $obEnum->GetList(array(), array("USER_FIELD_NAME" => "UF_ZONE"));
+		//$UF_ZONE = array();
+		//while($arEnum = $rsEnum->Fetch())
+		//$UF_ZONE[$arEnum['VALUE']] = $arEnum['ID'];
 
+		//$weightPrice = array_shift(CHighData::GetList(FREIGHT_COST_HIGHLOAD, array("UF_PROVINCE_FREIGHTCOST" => $request["BUILDING_PROVINCE"], "UF_ZONE" => $UF_ZONE[$arResult["SHIPPING_ZONE"]])));
+		//if(!empty($weightPrice))
+		//{
+		//foreach($weightPrice as $key => $price)
+		//{
+		//$weightMeasure = explode("_", $key);
+		//if($arResult["RATED_ARCHES_WEIGHT"] == 5000)
+		//$weight = 500;
+		//else
+		//$weight = $arResult["RATED_ARCHES_WEIGHT"];
+		//if(in_array($weight,$weightMeasure))
+		//$arResult["ARCHES_FREIGHT_COST"] = floatval($price);
+		//if($key == "UF_ADDITIONAL")
+		//break;
+		//}
 
+		//if($weight == 500 && $weightPrice["UF_SMALL_1_SKID_LBS_RED"] == 1){
+		//$weightError = true;
+		//} 
+		//else if($weight == 9500 && $weightPrice["UF_SMALL_9500_LBS_RED"] == 1){
+		//$weightError = true;
+		//} 
+		//else if($weight == 12000 && $weightPrice["UF_MEDIUM_12000_LBS_RED"] == 1){
+		//$weightError = true;
+		//} 
+		//else if($weight == 14000 && $weightPrice["UF_LARGE_14000_LBS_RED"] == 1){
+		//$weightError = true;
+		//} 
+		//else if($weight >= 15000 && $weightPrice["UF_15000_LBS_RED"] == 1){
+		//$weightError = true;
+		//}
+
+		//if($request["FRONT_WALL_TYPE"] == 2 || $request["REAR_WALL_TYPE"] == 2){
+		//$arResult["ARCHES_FREIGHT_COST"] += $weightPrice["UF_ADDITIONAL"];
+		//}
+		//if($request["FOUNDATION_SYSTEM"] == 2 || $request["FOUNDATION_SYSTEM"] == 3){
+		//$arResult["ARCHES_FREIGHT_COST"] += $weightPrice["UF_ADDITIONAL"];
+		//}
+		//$doorAmount = $request["TOTAL_DOOR_AMOUNT"];
+		//$chars = array("$", ",");
+		//$doorAmount = floatval(str_replace($chars, '', $doorAmount));
+		//if($doorAmount > 0){
+		//$arResult["ARCHES_FREIGHT_COST"] += $weightPrice["UF_ADDITIONAL"];
+		//}
+
+		//}
+		//else
+		//$arResult["ARCHES_FREIGHT_COST"] = 0;
+		//}
 
 
 		$arResult["ENDWALL_FREIGHT"] = isset($arResult["ENDWALLS_SKID"]) && !empty($arResult["ENDWALLS_SKID"]) && $arResult["ENDWALLS_SKID"] == 1 ? floatval($constants[ENDWALL_FREIGHT]) : 0;
@@ -572,8 +774,12 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 		//Anchors wedges freight
 		$arResult["ANCHORS_SUMMARY_QUANTITY"] = $arResult["ARCH_ANCHOR_WEDGES_QUANTITY"] + $arResult["ENDWALL_ANCHOR_WEDGES_QUANTITY"];
 		//Totals
-		$arResult["SUB_TOTAL"] = $arResult["DRAWINGS"] + $arResult["ARCHES_FREIGHT_COST"] + $arResult["ENDWALL_BASEPLATE_FREIGHT"];
+		$arResult["SUB_TOTAL"] = $arResult["DRAWINGS"] + $arResult["ARCHES_FREIGHT_COST"]; //+ $arResult["ENDWALL_BASEPLATE_FREIGHT"];
 		$arResult["TOTAL_COST"] = $arResult["SUB_TOTAL"] + $arResult["COST"];
+
+		//Added Vendor Total Cost without Freight and Drawings
+		$arResult["VENDOR_BUILDING_COST"] = $arResult["COST"];
+
 		//Sold for 
 		if(isset($request['EDIT_SOLD_FOR']) && $request['EDIT_SOLD_FOR'] == "Y") 
 			$arResult["SOLD_FOR"] = !empty($request['SOLD_FOR']) ? str_replace(array("$", ","), array("", "") , $request['SOLD_FOR']) : "";
@@ -585,7 +791,11 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 		else
 			$arResult["ASKING"] = $arResult["SOLD_FOR"] / 1.43;
 		$arResult["DEPOSIT_REQUIRED"] = $arResult['ASKING'] * 0.25;
-		$arResult["PROFIT"] = $arResult['SOLD_FOR'] - $arResult['ASKING'];
+
+		//PROFIT CALCULATION
+		//$arResult["PROFIT"] = $arResult['SOLD_FOR'] - $arResult['ASKING'];
+		$arResult["PROFIT"] = $arResult['ASKING'] - $arResult['TOTAL_COST'];
+
 		$arAccessories = array();
 		$accessoriesID = array();
 		if(isset($request["ACCESSORIES_COUNT"]) && !empty($request["ACCESSORIES_COUNT"]))
@@ -622,11 +832,11 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 			}
 		}
 		if($psfError == true)
-		{
-			$arResult["SOLD_FOR"] = 0;
-			$arResult["ASKING"] = 0;
-			$arResult["COST"] = 0;
-			$arResult["ARCHES_FREIGHT_COST"] = 0;
+		 {
+			 $arResult["SOLD_FOR"] = 0;
+			 $arResult["ASKING"] = 0;
+			 $arResult["COST"] = 0;
+			 $arResult["ARCHES_FREIGHT_COST"] = 0;
 		}
 		//Saving
 		$savingData = array(
@@ -669,7 +879,7 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 					"LENGTH" => isset($request["LENGTH"]) && !empty($request["LENGTH"]) ? $request["LENGTH"] : "",
 					"HEIGHT" => isset($request["HEIGHT"]) && !empty($request["HEIGHT"]) ? $request["HEIGHT"] : "",
 					"ANCHORS" => isset($request["ANCHORS"]) && !empty($request["ANCHORS"]) ? "Y" : "N",
-					"PSF" => isset($request["PSF"]) && !empty($request["PSF"]) ? $request["PSF"] : "",
+                    "PSF" => isset($request["PSF"]) && !empty($request["PSF"]) ? $request["PSF"] : "",
 				)
 			),
 			"UF_FRONT_WALL_DATA" => serialize(
@@ -678,9 +888,9 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 					"FRONT_WALL_QUANTITY" => isset($request["FRONT_WALL_QUANTITY"]) && !empty($request["FRONT_WALL_QUANTITY"]) ? $request["FRONT_WALL_QUANTITY"] : "",
 					"FRONT_WALL_WIDTH" => isset($request["FRONT_WALL_WIDTH"]) && !empty($request["FRONT_WALL_WIDTH"]) ? $request["FRONT_WALL_WIDTH"] : "",
 					"FRONT_WALL_HEIGHT" => isset($request["FRONT_WALL_HEIGHT"]) && !empty($request["FRONT_WALL_HEIGHT"]) ? $request["FRONT_WALL_HEIGHT"] : "",
-					"FRONT_WALL_SEA_HEIGHT" => isset($request["FRONT_WALL_SEA_HEIGHT"]) && !empty($request["FRONT_WALL_SEA_HEIGHT"]) ? $request["FRONT_WALL_SEA_HEIGHT"] : "",
-					"FRONT_WALL_OFFSET" => isset($request["FRONT_WALL_OFFSET"]) && !empty($request["FRONT_WALL_OFFSET"]) ? $request["FRONT_WALL_OFFSET"] : "",
-				)
+                    "FRONT_WALL_SEA_HEIGHT" => isset($request["FRONT_WALL_SEA_HEIGHT"]) && !empty($request["FRONT_WALL_SEA_HEIGHT"]) ? $request["FRONT_WALL_SEA_HEIGHT"] : "",
+                    "FRONT_WALL_OFFSET" => isset($request["FRONT_WALL_OFFSET"]) && !empty($request["FRONT_WALL_OFFSET"]) ? $request["FRONT_WALL_OFFSET"] : "",
+                )
 			),
 			"UF_REAR_WALL_DATA" => serialize(
 				array(
@@ -688,9 +898,9 @@ if((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($req
 					"REAR_WALL_QUANTITY" => isset($request["REAR_WALL_QUANTITY"]) && !empty($request["REAR_WALL_QUANTITY"]) ? $request["REAR_WALL_QUANTITY"] : "",
 					"REAR_WALL_WIDTH" => isset($request["REAR_WALL_WIDTH"]) && !empty($request["REAR_WALL_WIDTH"]) ? $request["REAR_WALL_WIDTH"] : "",
 					"REAR_WALL_HEIGHT" => isset($request["REAR_WALL_HEIGHT"]) && !empty($request["REAR_WALL_HEIGHT"]) ? $request["REAR_WALL_HEIGHT"] : "",
-					"REAR_WALL_SEA_HEIGHT" => isset($request["REAR_WALL_SEA_HEIGHT"]) && !empty($request["REAR_WALL_SEA_HEIGHT"]) ? $request["REAR_WALL_SEA_HEIGHT"] : "",
-					"REAR_WALL_OFFSET" => isset($request["REAR_WALL_OFFSET"]) && !empty($request["REAR_WALL_OFFSET"]) ? $request["REAR_WALL_OFFSET"] : "",
-				)
+                    "REAR_WALL_SEA_HEIGHT" => isset($request["REAR_WALL_SEA_HEIGHT"]) && !empty($request["REAR_WALL_SEA_HEIGHT"]) ? $request["REAR_WALL_SEA_HEIGHT"] : "",
+                    "REAR_WALL_OFFSET" => isset($request["REAR_WALL_OFFSET"]) && !empty($request["REAR_WALL_OFFSET"]) ? $request["REAR_WALL_OFFSET"] : "",
+                )
 			),
 			"UF_QUOTATION_ACCESSORIES_DATA" => serialize($arAccessories),
 			"UF_QUOTATION_DOORS_DATA" => serialize($arDoors),
@@ -859,7 +1069,7 @@ foreach ($arDoors as $key => $item)
 
 $totalNum = $num <= 39 ? 39 : $num;
 if(count($arDoors) < 2)
-	$totalNum += 1;
+$totalNum += 1;
 // $total = $arResult['COST'] + $arResult['ARCHES_FREIGHT_COST'];
 $total = $arResult["ASKING"] + $arResult['ARCHES_FREIGHT_COST'];
 $worksheet->getCell('E'.($totalNum + 1))->setValue(!empty($request["INSULATION"]) && $request["INSULATION"] == "Y" ? "Included" : "Not included");

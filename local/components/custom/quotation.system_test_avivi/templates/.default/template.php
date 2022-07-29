@@ -18,7 +18,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
     <?
     if (isset($request["MODE_SWITCH"]) && ($request['MODE_SWITCH'] == 'Y')) 
         $APPLICATION->RestartBuffer();
-        
+      
     ?>
     <?$file = isset($arResult["QUOTATION_DATA"]["QUOTATION_PDF"]) && !empty($arResult["QUOTATION_DATA"]["QUOTATION_PDF"]) ? CFile::GetPath($arResult["QUOTATION_DATA"]["QUOTATION_PDF"]) : "";?>
     <?\Bitrix\UI\Toolbar\Facade\Toolbar::addButton(array("link" => $file,"text" => "DOWNLOAD QUOTATION", "color" => \Bitrix\UI\Buttons\Color::PRIMARY, 'dataset' => array("role" =>"download_quotation")));?>
@@ -592,7 +592,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                                 <label class="crm-offer-label" for="anchors"><?=GetMessage("ANCHORS_INPUT");?></label>
                             </div>
                         </td>
-                        
+
                         <td class="crm-offer-info-left">
                             <div class="crm-offer-info-label-wrap">
                                 <span class="crm-offer-info-label">PSF:</span>
@@ -607,8 +607,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                                 <?endif;?>
                             </div>
                         </td>
-                        
-                    <tr>
+
                     </tr>
                 </tbody>
             </table>
@@ -697,7 +696,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                                 <?if($request["ACTION"] != "EDIT" && $request["ACTION"] != "NEW"):?>
                                     <span class="crm-offer-item-span "><?=isset($arResult["QUOTATION_DATA"]["FRONT_WALL_SEA_HEIGHT"]) && !empty($arResult["QUOTATION_DATA"]["FRONT_WALL_SEA_HEIGHT"]) ? $arResult["QUOTATION_DATA"]["FRONT_WALL_SEA_HEIGHT"] : '';?></span>
                                 <?else:?>
-                                    <input type="text" class="crm-offer-item-inp narrow-input" name="FRONT_WALL_SEA_HEIGHT" value="<?=isset($arResult["QUOTATION_DATA"]["FRONT_WALL_SEA_HEIGHT"]) && !empty($arResult["QUOTATION_DATA"]["FRONT_WALL_SEA_HEIGHT"]) ? $arResult["QUOTATION_DATA"]["FRONT_WALL_SEA_HEIGHT"] : '';?>" size="50">  
+                                    <input type="text" class="crm-offer-item-inp narrow-input" name="FRONT_WALL_SEA_HEIGHT" value="<?=isset($arResult["QUOTATION_DATA"]["FRONT_WALL_SEA_HEIGHT"]) && !empty($arResult["QUOTATION_DATA"]["FRONT_WALL_SEA_HEIGHT"]) ? $arResult["QUOTATION_DATA"]["FRONT_WALL_SEA_HEIGHT"] : '';?>" size="50">
                                 <?endif;?>
                             </div>
                         </td>
@@ -711,11 +710,11 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                                 <?if($request["ACTION"] != "EDIT" && $request["ACTION"] != "NEW"):?>
                                     <span class="crm-offer-item-span"><?=isset($arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"]) && !empty($arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"]) ? $arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"] : '';?></span>
                                 <?else:?>
-                                    <select class="crm-item-table-select select2-list" id="front_wall_offset" name="FRONT_WALL_OFFSET" sale_order_marker="Y" style="width: 100%;">
-                                        <option <?=isset($arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"]) && $arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"] == "NO" ? "selected" : "";?> value="NO">No</option>
-                                        <option <?=isset($arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"]) && $arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"] == "YES" ? "selected" : "";?> value="YES">Yes</option>
+                                <select class="crm-item-table-select select2-list" id="front_wall_offset" name="FRONT_WALL_OFFSET" sale_order_marker="Y" style="width: 100%;">
+                                    <option <?=isset($arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"]) && $arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"] == "NO" ? "selected" : "";?> value="NO">No</option>
+                                    <option <?=isset($arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"]) && $arResult["QUOTATION_DATA"]["FRONT_WALL_OFFSET"] == "YES" ? "selected" : "";?> value="YES">Yes</option>
                                     <select>
-                                <?endif;?>
+                                        <?endif;?>
                             </div>
                         </td>
                     </tr>
@@ -806,7 +805,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                                 <?if($request["ACTION"] != "EDIT" && $request["ACTION"] != "NEW"):?>
                                     <span class="crm-offer-item-span "><?=isset($arResult["QUOTATION_DATA"]["REAR_WALL_SEA_HEIGHT"]) && !empty($arResult["QUOTATION_DATA"]["REAR_WALL_SEA_HEIGHT"]) ? $arResult["QUOTATION_DATA"]["REAR_WALL_SEA_HEIGHT"] : '';?></span>
                                 <?else:?>
-                                    <input type="text" class="crm-offer-item-inp narrow-input" name="REAR_WALL_SEA_HEIGHT" value="<?=isset($arResult["QUOTATION_DATA"]["REAR_WALL_SEA_HEIGHT"]) && !empty($arResult["QUOTATION_DATA"]["REAR_WALL_SEA_HEIGHT"]) ? $arResult["QUOTATION_DATA"]["REAR_WALL_SEA_HEIGHT"] : '';?>" size="50">  
+                                    <input type="text" class="crm-offer-item-inp narrow-input" name="REAR_WALL_SEA_HEIGHT" value="<?=isset($arResult["QUOTATION_DATA"]["REAR_WALL_SEA_HEIGHT"]) && !empty($arResult["QUOTATION_DATA"]["REAR_WALL_SEA_HEIGHT"]) ? $arResult["QUOTATION_DATA"]["REAR_WALL_SEA_HEIGHT"] : '';?>" size="50">
                                 <?endif;?>
                             </div>
                         </td>
@@ -820,11 +819,11 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                                 <?if($request["ACTION"] != "EDIT" && $request["ACTION"] != "NEW"):?>
                                     <span class="crm-offer-item-span"><?=isset($arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"]) && !empty($arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"]) ? $arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"] : '';?></span>
                                 <?else:?>
-                                    <select class="crm-item-table-select select2-list" id="rear_wall_offset" name="REAR_WALL_OFFSET" sale_order_marker="Y" style="width: 100%;">
-                                        <option <?=isset($arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"]) && $arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"] == "NO" ? "selected" : "";?> value="NO">No</option>
-                                        <option <?=isset($arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"]) && $arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"] == "YES" ? "selected" : "";?> value="YES">Yes</option>
+                                <select class="crm-item-table-select select2-list" id="rear_wall_offset" name="REAR_WALL_OFFSET" sale_order_marker="Y" style="width: 100%;">
+                                    <option <?=isset($arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"]) && $arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"] == "NO" ? "selected" : "";?> value="NO">No</option>
+                                    <option <?=isset($arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"]) && $arResult["QUOTATION_DATA"]["REAR_WALL_OFFSET"] == "YES" ? "selected" : "";?> value="YES">Yes</option>
                                     <select>
-                                <?endif;?>
+                                        <?endif;?>
                             </div>
                         </td>
                     </tr>
@@ -1260,6 +1259,8 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
 
 
 
+
+
                         <td class="crm-offer-info-left">
                             <div class="crm-offer-info-label-wrap">
                                 <span class="crm-offer-info-label"><?=GetMessage("COST_INPUT");?>:</span>
@@ -1270,7 +1271,8 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                                 <?if($request["ACTION"] != "EDIT" && $request["ACTION"] != "NEW"):?>
                                     <span class="crm-offer-item-span "><?=isset($arResult["QUOTATION_DATA"]["COST"]) && !empty($arResult["QUOTATION_DATA"]["COST"])? '$'.number_format($arResult["QUOTATION_DATA"]["COST"], 2, '.', ',') : '';?></span>
                                 <?else:?>
-                                    <input type="text" class="crm-offer-item-inp money-input" name="COST" value="<?=isset($arResult["QUOTATION_DATA"]["COST"]) && !empty($arResult["QUOTATION_DATA"]["COST"])? '$'.number_format($arResult["QUOTATION_DATA"]["COST"], 2, '.', ',') : '';?>" size="50">  
+                                    <!-- #19854 Removed Freight Logic - Quotation System - Zero fix -->
+                                    <input type="text" class="crm-offer-item-inp custom-money-input" name="COST" value="<?=isset($arResult["QUOTATION_DATA"]["COST"]) && !empty($arResult["QUOTATION_DATA"]["COST"])? '$'.number_format($arResult["QUOTATION_DATA"]["COST"], 2, '.', ',') : '';?>" size="50">
                                 <?endif;?>
                             </div>
                         </td>
@@ -1287,7 +1289,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                 <tr>
                     <td class="crm-offer-info-left">
                         <div class="crm-offer-info-label-wrap">
-                            <span class="crm-offer-info-label"><?=GetMessage("SOLD_FOR_INPUT");?>:</span>
+                            <span class="crm-offer-info-label">Building Retail Price:</span>
                         </div>
                     </td>
                     <td class="crm-offer-info-right">
@@ -1304,7 +1306,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                             <span class="crm-offer-info-label"></span>
                         </div>
                     </td>
-                    <td class="crm-offer-info-right">
+                    <td class="crm-edit-price-right">
                         <div class="crm-offer-info-data-wrap">
                             <input class="crm-offer-checkbox" id="edit_sold_for" type="checkbox" name="EDIT_SOLD_FOR" 
                             <?=$request["ACTION"] != "EDIT" && $request["ACTION"] != "NEW" ? "disabled='disabled'" : ""?> value="Y"
@@ -1314,7 +1316,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                     </td>
                     <td class="crm-offer-info-left">
                         <div class="crm-offer-info-label-wrap"> 
-                            <span class="crm-offer-info-label"><?=GetMessage("ASKING_INPUT");?>:</span>
+                            <span class="crm-offer-info-label">Suggested Sale Price:</span>
                         </div>
                     </td>
                     <td class="crm-offer-info-right">
@@ -1331,7 +1333,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                             <span class="crm-offer-info-label"></span>
                         </div>
                     </td>
-                    <td class="crm-offer-info-right">
+                    <td class="crm-edit-price-right">
                         <div class="crm-offer-info-data-wrap">
                             <input class="crm-offer-checkbox" id="edit_asking" type="checkbox" name="EDIT_ASKING" 
                             <?=$request["ACTION"] != "EDIT" && $request["ACTION"] != "NEW" ? "disabled='disabled'" : ""?> value="Y"
@@ -1341,7 +1343,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                     </td>
                     <td class="crm-offer-info-left">
                         <div class="crm-offer-info-label-wrap"> 
-                            <span class="crm-offer-info-label"><?=GetMessage('BUILDING_TOTAL_COST_INPUT');?></span>
+							<span class="crm-offer-info-label">Vendor Building Cost:</span>
                         </div>
                     </td>
                     <td class="crm-offer-info-right">
@@ -1358,7 +1360,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                             <span class="crm-offer-info-label"></span>
                         </div>
                     </td>
-                    <td class="crm-offer-info-right">
+                    <td class="crm-edit-price-right">
                         <div class="crm-offer-info-data-wrap">
                             <input class="crm-offer-checkbox" id="edit_building_total_cost" type="checkbox" name="EDIT_BUILDING_TOTAL_COST" 
                             <?=$request["ACTION"] != "EDIT" && $request["ACTION"] != "NEW" ? "disabled='disabled'" : ""?> value="Y"

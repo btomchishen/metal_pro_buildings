@@ -48,7 +48,7 @@ $(document).on('click', '.quatation-save-btn', function()
                 for(var i=0; i < res.FIELD.length; i++)
                 {
                     BX.UI.Notification.Center.notify({
-                        content: "The '" + res.FIELD[i].FIELD_NAME + "' filed is required!<br/>"
+                        content: "The '" + res.FIELD[i].FIELD_NAME + "' field is required!<br/>"
                     });
                     $('[name="'+ res.FIELD[i].FIELD_CODE +'"]').addClass("invalid");
                     $('[name="'+ res.FIELD[i].FIELD_CODE +'"]').siblings(".select2-container").addClass("invalid");
@@ -109,10 +109,10 @@ $(document).on("change", "#PSF", function()
     formData.append("SELECT_PSF", 'Y');
     formData.append("QUOTATION_ID", $(".quatation-form").attr('data'));
     formData.append("ENTITY_TYPE", $(".quatation-form").data("entity"));
-    
+
     $.ajax({
         type: 'POST',
-        url: component_path + "/ajax.php", 
+        url: component_path + "/ajax.php",
         data: formData,
         processData: false,
         contentType: false,
@@ -123,13 +123,13 @@ $(document).on("change", "#PSF", function()
             var cityContainer = $("#building_city");
             $.ajax({
                 type: 'POST',
-                url: component_path + "/ajax.php", 
+                url: component_path + "/ajax.php",
                 data: {"SELECT_CITY": "Y", "PROVINCE_ID": province.value},
                 success: function(data)
                 {
                     var cities = JSON.parse(data);
                     cityContainer.find('option').remove();
-                    for(var i=0; i < cities.length; i++) 
+                    for(var i=0; i < cities.length; i++)
                         cityContainer.append("<option value='" + cities[i].ID + "'>" + cities[i].UF_CITY + "</option>");
                     city.value = dataArray[1];
 
@@ -138,6 +138,7 @@ $(document).on("change", "#PSF", function()
         }
     })
 });
+
 
 $(document).on("change", "#building_province", function()
 {
@@ -230,17 +231,6 @@ $(document).on("change", "#foundation_system", function()
 
 $(document).on("change", "#front_wall", function()
 {
-    var frontWallType = document.getElementById('front_wall').value;
-    if(frontWallType == 3)
-    {
-        document.getElementById('front_wall_offset').disabled = false;
-    }
-    else
-    {
-        document.getElementById('front_wall_offset').disabled = true;
-        document.getElementById('front_wall_offset').value = "NO";
-    }
-
     var quotationID = $(".quatation-form").attr('data');
     var formContainer = $(".form-container");
     var formData = new FormData($(".quatation-form")[0]);
@@ -265,17 +255,6 @@ $(document).on("change", "#front_wall", function()
 
 $(document).on("change", "#rear_wall", function()
 {
-    var reartWallType = document.getElementById('rear_wall').value;
-    if(reartWallType == 3)
-    {
-        document.getElementById('rear_wall_offset').disabled = false;
-    }
-    else
-    {
-        document.getElementById('rear_wall_offset').disabled = true;
-        document.getElementById('rear_wall_offset').value = "NO";
-    }
-
     var quotationID = $(".quatation-form").attr('data');
     var formContainer = $(".form-container");
     var formData = new FormData($(".quatation-form")[0]);
@@ -477,7 +456,7 @@ $(document).on("mouseover", "#PSF", function()
     if(country == "US")
     {
         document.getElementById('PSF').removeAttribute("readonly");
-    } 
+    }
 });
 
 $(document).on("change", "#building_country", function()
@@ -536,22 +515,12 @@ $(document).on('click', '[data-role="edit_quotation"]', function()
             formContainer.html(data);
             $('[data-role="edit_quotation"]').attr("disabled", "disabled");
             showDeleteBtn();
-            var frontWallType = document.getElementById('front_wall').value;
-            var rearWallType = document.getElementById('rear_wall').value;
-            if(frontWallType == 3)
-                document.getElementById('front_wall_offset').disabled = false;
-            else
-                document.getElementById('front_wall_offset').disabled = true;
-            if(rearWallType == 3)
-                document.getElementById('rear_wall_offset').disabled = false;
-            else
-                document.getElementById('rear_wall_offset').disabled = true;
         }  
     })
 });
 $(document).on('click', '[data-role="show_calculation"]', function()
 {
-    BX.SidePanel.Instance.open('/local/components/custom/quotation.system_test_avivi/templates/.default/calculation.php',
+    BX.SidePanel.Instance.open(component_path + '/templates/.default/calculation.php',
     {
 
         requestMethod: "post",
@@ -589,7 +558,7 @@ function setAccessoriesAmount(accessoryInput, quantityInput, amountInput, access
     }
 }
 function setTotalCost(amountInput, amount){
-    amountInput.val("$" + amount);
+    // amountInput.val("$" + amount);
 }
 
 function sortDoors(container, height, width)
@@ -694,3 +663,41 @@ function showDeleteBtn()
     if($(".del-doors-btn").length > 1)
         $(".del-doors-btn").css("display","");
 }
+
+// #19854 Removed Freight Logic - Quotation System - Zero fix
+function commafy(num) {
+    var str = num.toString().split('.');
+    if (str[0].length >= 5) {
+        str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+    }
+    if (str[1] && str[1].length >= 5) {
+        str[1] = str[1].replace(/(\d{3})/g, '$1 ');
+    }
+    return str.join('.');
+}
+BX.ready(function(){
+    let custom_money_inputs = document.querySelectorAll('.custom-money-input');
+    if (custom_money_inputs != null) {
+        custom_money_inputs.forEach((input) => {
+            input.addEventListener('keyup', function (e) {
+                let value = e.target.value;
+                if (value != '') {
+                    value = value.replace(/[^\d]/g, "");
+                    if (value.length == 0) {
+                        value = '0.00';
+                    } else if (value.length == 1) {
+                        value = '0.0' + value;
+                    } else if (value.length == 2) {
+                        value = '0.' + value;
+                    } else {
+                        value = value.slice(0, -2) + '.' + value.slice(-2);
+                    }
+                    let value_parts = value.split('.');
+                    value = parseInt(value_parts[0]) + '.' + value_parts[1];
+                    value = commafy(value);
+                    e.target.value = value;
+                }
+            });
+        });
+    }
+});

@@ -32,6 +32,23 @@
 .crm-offer-info-right {
     white-space: nowrap;
 }
+
+.crm-edit-price-right {
+    white-space: nowrap;
+	width: 400px;
+	max-width: 120px;
+	width: 100%;
+	margin-top: initial;
+    position: relative;
+    left: -88px;
+    top: -14px;
+}
+@media all and (max-width: 1300px){
+    td.crm-edit-price-right{
+        width: 200px;
+    }
+}
+
 .add-doors-container {
     display: flex;
     justify-content: space-between;

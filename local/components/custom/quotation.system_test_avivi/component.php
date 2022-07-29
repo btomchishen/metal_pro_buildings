@@ -33,8 +33,8 @@ foreach ($constantsData as $constant)
 foreach($arResult["ACCESSORIES_LIST"] as &$accessory)
 {
    $price = explode( '|', $accessory["UF_PIONEER"])[0];
-   $accessory["CA_PRICE"] = round($price * $constants[CA_VARIABLE_1] * $constants[CA_VARIABLE_2], 2);
-   $accessory["US_PRICE"] = round($price * $constants[US_VARIABLE_1] * $constants[US_VARIABLE_2], 2);
+	$accessory["CA_PRICE"] = round($price); //* $constants[CA_VARIABLE_1] * $constants[CA_VARIABLE_2], 2);
+	$accessory["US_PRICE"] = round($price); //* $constants[US_VARIABLE_1] * $constants[US_VARIABLE_2], 2);
    if($accessory["UF_TYPE_FIELD"] == 1)
       $arResult["DOORS"][] = $accessory;
    else
@@ -94,22 +94,22 @@ if(!empty($arParams["ACTION"]))
 			"LENGTH" => unserialize($quotation["UF_QUOATION_EXPOSURE_DATA"])["LENGTH"],
 			"HEIGHT" => unserialize($quotation["UF_QUOATION_EXPOSURE_DATA"])["HEIGHT"],
 			"ANCHORS" => unserialize($quotation["UF_QUOATION_EXPOSURE_DATA"])["ANCHORS"],
-			"PSF" => unserialize($quotation["UF_QUOATION_EXPOSURE_DATA"])["PSF"],
+            "PSF" => unserialize($quotation["UF_QUOATION_EXPOSURE_DATA"])["PSF"],
 			"FRONT_WALL_TYPE" => unserialize($quotation["UF_FRONT_WALL_DATA"])["FRONT_WALL_TYPE"],
 			"FRONT_WALL_QUANTITY" => unserialize($quotation["UF_FRONT_WALL_DATA"])["FRONT_WALL_QUANTITY"],
 			"FRONT_WALL_WIDTH" => unserialize($quotation["UF_FRONT_WALL_DATA"])["FRONT_WALL_WIDTH"],
 			"FRONT_WALL_HEIGHT" => unserialize($quotation["UF_FRONT_WALL_DATA"])["FRONT_WALL_HEIGHT"],
 			"FRONT_WALL_AMOUNT" => unserialize($quotation["UF_CALCULATION"])["ENDWALLS_FRONT"] * unserialize($quotation["UF_CALCULATION"])["ENDWALL_FRONT_QUANTITY"],
-			"FRONT_WALL_SEA_HEIGHT" => unserialize($quotation["UF_FRONT_WALL_DATA"])["FRONT_WALL_SEA_HEIGHT"],
-			"FRONT_WALL_OFFSET" => unserialize($quotation["UF_FRONT_WALL_DATA"])["FRONT_WALL_OFFSET"],
-			"REAR_WALL_TYPE" => unserialize($quotation["UF_REAR_WALL_DATA"])["REAR_WALL_TYPE"],
+            "FRONT_WALL_SEA_HEIGHT" => unserialize($quotation["UF_FRONT_WALL_DATA"])["FRONT_WALL_SEA_HEIGHT"],
+            "FRONT_WALL_OFFSET" => unserialize($quotation["UF_FRONT_WALL_DATA"])["FRONT_WALL_OFFSET"],
+            "REAR_WALL_TYPE" => unserialize($quotation["UF_REAR_WALL_DATA"])["REAR_WALL_TYPE"],
 			"REAR_WALL_QUANTITY" => unserialize($quotation["UF_REAR_WALL_DATA"])["REAR_WALL_QUANTITY"],
 			"REAR_WALL_WIDTH" => unserialize($quotation["UF_REAR_WALL_DATA"])["REAR_WALL_WIDTH"],
 			"REAR_WALL_HEIGHT" => unserialize($quotation["UF_REAR_WALL_DATA"])["REAR_WALL_HEIGHT"],
 			"REAR_WALL_AMOUNT" => unserialize($quotation["UF_CALCULATION"])["ENDWALLS_REAR"] * unserialize($quotation["UF_CALCULATION"])["ENDWALL_REAR_QUANTITY"],
-			"REAR_WALL_SEA_HEIGHT" => unserialize($quotation["UF_REAR_WALL_DATA"])["REAR_WALL_SEA_HEIGHT"],
-			"REAR_WALL_OFFSET" => unserialize($quotation["UF_REAR_WALL_DATA"])["REAR_WALL_OFFSET"],
-			"ACCESSORIES" => unserialize($quotation["UF_QUOTATION_ACCESSORIES_DATA"]),
+            "REAR_WALL_SEA_HEIGHT" => unserialize($quotation["UF_REAR_WALL_DATA"])["REAR_WALL_SEA_HEIGHT"],
+            "REAR_WALL_OFFSET" => unserialize($quotation["UF_REAR_WALL_DATA"])["REAR_WALL_OFFSET"],
+            "ACCESSORIES" => unserialize($quotation["UF_QUOTATION_ACCESSORIES_DATA"]),
 			"ACCESSORIES_TOTAL_COST" => unserialize($quotation["UF_CALCULATION"])["ACCESSORIES_BLOCK_TOTAL"],
 			"DOORS" => unserialize($quotation["UF_QUOTATION_DOORS_DATA"]),
 			"DOORS_TOTAL_COST" => unserialize($quotation["UF_CALCULATION"])["DOORS_BLOCK_TOTAL"],
@@ -137,14 +137,29 @@ if(!empty($arParams["ACTION"]))
 				"UF_LOADING_TABLE_PROVINCE" => $arResult["QUOTATION_DATA"]["BUILDING_PROVINCE"],
 				"UF_LOADING_TABLE_CITY" => $arResult["QUOTATION_DATA"]["BUILDING_CITY"],
 			),  
-			array("UF_SNOW_LOAD_1", "UF_WIND_LOAD", "UF_SNOW_LOAD_2", "UF_LOW_SHELTERED", "UF_NORMAL_SHELTERED"))
+			array("UF_SNOW_LOAD_1", "UF_WIND_LOAD", "UF_SNOW_LOAD_2", "UF_LOW_SHELTERED", "UF_NORMAL_SHELTERED", "UF_LOW_EXPOSED", "UF_NORMAL_EXPOSED"))
 		);
 
 		$arResult["QUOTATION_DATA"]["CALCULATION"]["SNOW_LOAD"] = $loadingTableData["UF_SNOW_LOAD_1"];
 		$arResult["QUOTATION_DATA"]["CALCULATION"]["WIND_LOAD"] = $loadingTableData["UF_WIND_LOAD"];
 		$arResult["QUOTATION_DATA"]["CALCULATION"]["RAIN_LOAD"] = $loadingTableData["UF_SNOW_LOAD_2"];
+		//$arResult["QUOTATION_DATA"]["CALCULATION"]["REQUIRED_LIVE_LOAD_CATEGORY_I"] = $loadingTableData["UF_LOW_SHELTERED"];
+		//$arResult["QUOTATION_DATA"]["CALCULATION"]["REQUIRED_LIVE_LOAD_CATEGORY_II"] = $loadingTableData["UF_NORMAL_SHELTERED"];
+
+		//Check if set Use/Exposure to Exposed
+		if($arResult["QUOTATION_DATA"]["USE_EXPOSURE"] == 1 || $arResult["QUOTATION_DATA"]["USE_EXPOSURE"] == 3)
+		{
+		$arResult["QUOTATION_DATA"]["CALCULATION"]["REQUIRED_LIVE_LOAD_CATEGORY_I"] = $loadingTableData["UF_LOW_EXPOSED"];
+		$arResult["QUOTATION_DATA"]["CALCULATION"]["REQUIRED_LIVE_LOAD_CATEGORY_II"] = $loadingTableData["UF_NORMAL_EXPOSED"];
+		}
+		else
+		{
 		$arResult["QUOTATION_DATA"]["CALCULATION"]["REQUIRED_LIVE_LOAD_CATEGORY_I"] = $loadingTableData["UF_LOW_SHELTERED"];
 		$arResult["QUOTATION_DATA"]["CALCULATION"]["REQUIRED_LIVE_LOAD_CATEGORY_II"] = $loadingTableData["UF_NORMAL_SHELTERED"];
+		}
+
+
+
 	}
 }
 
