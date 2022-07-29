@@ -3,6 +3,7 @@ use Bitrix\Main\Context;
 use Bitrix\Main\Localization\Loc;
 
 require $_SERVER["DOCUMENT_ROOT"] . '/composer/vendor/autoload.php';
+require $_SERVER["DOCUMENT_ROOT"] . '/composer/vendor/fpdm-master/fpdm.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -956,6 +957,23 @@ if(!empty($request["FRONT_WALL_TYPE"]))
 	$frontWall = array_shift(array_shift(CHighData::GetList(WALL_TYPE_LIST, array("ID" => $request["FRONT_WALL_TYPE"]), array("UF_WALL_TYPE"))));
 if(!empty($request["REAR_WALL_TYPE"]))
 	$rearWall = array_shift(array_shift(CHighData::GetList(WALL_TYPE_LIST, array("ID" => $request["REAR_WALL_TYPE"]), array("UF_WALL_TYPE"))));
+
+$pdf = new FPDM('/quotation_new.pdf');
+
+$fields = array(
+    'Quote Date' => isset($request["DATE"]) && !empty($request["DATE"]) ? $request["DATE"]: "",
+    'Name' => isset($request["CUSTOMER_NAME"]) && !empty($request["CUSTOMER_NAME"]) ? $request["CUSTOMER_NAME"]: "",
+    'Company' => isset($request["CUSTOMER_COMPANY"]) && !empty($request["CUSTOMER_COMPANY"]) ? $request["CUSTOMER_COMPANY"]: "",
+    'Phone' => isset($request["CUSTOMER_TEL"]) && !empty($request["CUSTOMER_TEL"]) ? $request["CUSTOMER_TEL"]: "",
+    'Cell' => isset($request["CUSTOMER_CELL"]) && !empty($request["CUSTOMER_CELL"]) ? $request["CUSTOMER_CELL"]: "",
+    'Email' => isset($request["CUSTOMER_EMAIL"]) && !empty($request["CUSTOMER_EMAIL"]) ? $request["CUSTOMER_EMAIL"]: "",
+    'Address' => isset($request["CUSTOMER_ADDRESS"]) && !empty($request["CUSTOMER_ADDRESS"]) ? $request["CUSTOMER_ADDRESS"]: "",
+);
+
+$pdf->useCheckboxParser = true;
+$pdf->Load($fields, false); // second parameter: false if field values are in ISO-8859-1, true if UTF-8
+$pdf->Merge();
+$pdf->Output('F', '/quotation_new_test.pdf');
 
 $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/local/components/custom/quotation.system/quatation_example.xlsx');
 $worksheet = $spreadsheet->getActiveSheet();
