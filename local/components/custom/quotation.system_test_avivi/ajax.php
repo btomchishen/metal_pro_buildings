@@ -958,7 +958,7 @@ if(!empty($request["FRONT_WALL_TYPE"]))
 if(!empty($request["REAR_WALL_TYPE"]))
 	$rearWall = array_shift(array_shift(CHighData::GetList(WALL_TYPE_LIST, array("ID" => $request["REAR_WALL_TYPE"]), array("UF_WALL_TYPE"))));
 
-$pdf = new FPDM('/quotation_new.pdf');
+$pdf = new FPDM($_SERVER['DOCUMENT_ROOT'].'/local/components/custom/quotation.system_test_avivi/quotation_new.pdf');
 
 $fields = array(
     'Quote Date' => isset($request["DATE"]) && !empty($request["DATE"]) ? $request["DATE"]: "",
@@ -973,134 +973,8 @@ $fields = array(
 $pdf->useCheckboxParser = true;
 $pdf->Load($fields, false); // second parameter: false if field values are in ISO-8859-1, true if UTF-8
 $pdf->Merge();
-$pdf->Output('F', '/quotation_new_test.pdf');
+$pdf->Output('F', $_SERVER['DOCUMENT_ROOT'].'/local/components/custom/quotation.system_test_avivi/quotation_new_test.pdf');
 
-$spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($_SERVER['DOCUMENT_ROOT'].'/local/components/custom/quotation.system/quatation_example.xlsx');
-$worksheet = $spreadsheet->getActiveSheet();
-		//Quotation data
-$worksheet->getCell('C6')->setValue(isset($request["DATE"]) && !empty($request["DATE"]) ? $request["DATE"]: "");
-$worksheet->getCell('E6')->setValue(!empty($purchaseOrder) ? $purchaseOrder : "");
-$worksheet->getCell('H6')->setValue("Quote №.".$res);
-		//Customer data
-$worksheet->getCell('J6')->setValue(isset($request["CUSTOMER_ID"]) && !empty($request["CUSTOMER_ID"]) ? $request["CUSTOMER_ID"] : "");
-$worksheet->getCell('A8')->setValue(isset($request["CUSTOMER_NAME"]) && !empty($request["CUSTOMER_NAME"]) ? $request["CUSTOMER_NAME"] : "");
-$worksheet->getCell('D8')->setValue(isset($request["CUSTOMER_COMPANY"]) && !empty($request["CUSTOMER_COMPANY"]) ? $request["CUSTOMER_COMPANY"] : "");
-$worksheet->getCell('F8')->setValue(isset($request["CUSTOMER_TEL"]) && !empty($request["CUSTOMER_TEL"]) ? $request["CUSTOMER_TEL"] : "");
-$worksheet->getCell('G8')->setValue(isset($request["CUSTOMER_CELL"]) && !empty($request["CUSTOMER_CELL"]) ? $request["CUSTOMER_CELL"] : "");
-$worksheet->getCell('H8')->setValue(isset($request["CUSTOMER_WORK_TEL"]) && !empty($request["CUSTOMER_WORK_TEL"]) ? $request["CUSTOMER_WORK_TEL"] : "");
-$worksheet->getCell('I8')->setValue(isset($request["CUSTOMER_EMAIL"]) && !empty($request["CUSTOMER_EMAIL"]) ? $request["CUSTOMER_EMAIL"] : "");
-		//Customer address
-$worksheet->getCell('A10')->setValue(isset($request["CUSTOMER_ADDRESS"]) && !empty($request["CUSTOMER_ADDRESS"]) ? $request["CUSTOMER_ADDRESS"] : "");
-$worksheet->getCell('E10')->setValue(isset($request["CUSTOMER_CITY"]) && !empty($request["CUSTOMER_CITY"]) ? $request["CUSTOMER_CITY"] : "");
-$worksheet->getCell('G10')->setValue(isset($request["CUSTOMER_PROVINCE"]) && !empty($request["CUSTOMER_PROVINCE"]) ? $request["CUSTOMER_PROVINCE"] : "");
-$worksheet->getCell('I10')->setValue(isset($request["CUSTOMER_POSTAL_CODE"]) && !empty($request["CUSTOMER_POSTAL_CODE"]) ? $request["CUSTOMER_POSTAL_CODE"] : "");
-		//Building address
-$worksheet->getCell('A12')->setValue(isset($request["BUILDING_ADDRESS"]) && !empty($request["BUILDING_ADDRESS"]) ? $request["BUILDING_ADDRESS"] : "");
-$worksheet->getCell('E12')->setValue(!empty($buildingCity) ? $buildingCity : "");
-$worksheet->getCell('G12')->setValue(!empty($buildingProvince) ? $buildingProvince : "");
-$worksheet->getCell('I12')->setValue(isset($request["BUILDING_POSTAL_CODE"]) && !empty($request["BUILDING_POSTAL_CODE"]) ? $request["BUILDING_POSTAL_CODE"] : "");
-		//Ship to address
-$worksheet->getCell('A15')->setValue(isset($request["BUILDING_ADDRESS"]) && !empty($request["BUILDING_ADDRESS"]) ? $request["BUILDING_ADDRESS"] : "");
-$worksheet->getCell('E15')->setValue(!empty($buildingCity) ? $buildingCity : "");
-$worksheet->getCell('G15')->setValue(!empty($buildingProvince) ? $buildingProvince : "");
-$worksheet->getCell('I15')->setValue(isset($request["BUILDING_POSTAL_CODE"]) && !empty($request["BUILDING_POSTAL_CODE"]) ? $request["BUILDING_POSTAL_CODE"] : "");
-		//Exposure
-$worksheet->getCell('A18')->setValue(!empty($use) ? $use : "");
-$worksheet->getCell('C18')->setValue(!empty($serie) ? $serie : "");
-$worksheet->getCell('D18')->setValue(!empty($model) ? $model : "");
-$worksheet->getCell('E18')->setValue(!empty($foundationSystem) ? $foundationSystem : "");
-$worksheet->getCell('F18')->setValue(isset($request["ANCHORS"]) && !empty($request["ANCHORS"]) ? "ANCHORS" : "");
-$worksheet->getCell('G18')->setValue(isset($request["WIDTH"]) && !empty($request["WIDTH"]) ? $request["WIDTH"] : "");
-$worksheet->getCell('H18')->setValue(isset($request["LENGTH"]) && !empty($request["LENGTH"]) ? $request["LENGTH"] : "");
-$worksheet->getCell('I18')->setValue(isset($request["HEIGHT"]) && !empty($request["HEIGHT"]) ? $request["HEIGHT"] : "");
-$worksheet->getCell('J18')->setValue(isset($arResult["GAUGE_INDEX"]) && !empty($arResult["GAUGE_INDEX"]) ? $arResult["GAUGE_INDEX"] : "");
-		//Front wall
-$worksheet->getCell('C23')->setValue(!empty($frontWall) ? $frontWall : "");
-$worksheet->getCell('E23')->setValue(!empty($request["FRONT_WALL_TYPE"]) && $request["FRONT_WALL_TYPE"] == 1? "LARGE C/A" : "INCLUDED");
-$worksheet->getCell('C25')->setValue(isset($request["FRONT_WALL_QUANTITY"]) && !empty($request["FRONT_WALL_QUANTITY"]) ? $request["FRONT_WALL_QUANTITY"] : "");
-$worksheet->getCell('D25')->setValue(isset($request["FRONT_WALL_WIDTH"]) && !empty($request["FRONT_WALL_WIDTH"]) ? $request["FRONT_WALL_WIDTH"] : "");
-$worksheet->getCell('E25')->setValue(isset($request["FRONT_WALL_HEIGHT"]) && !empty($request["FRONT_WALL_HEIGHT"]) ? $request["FRONT_WALL_HEIGHT"] : "");
-		//Rear wall
-$worksheet->getCell('C26')->setValue(!empty($rearWall) ? $rearWall : "");
-$worksheet->getCell('E26')->setValue(!empty($request["REAR_WALL_TYPE"]) && $request["REAR_WALL_TYPE"] == 1? "LARGE C/A" : "INCLUDED");
-$worksheet->getCell('C28')->setValue(isset($request["REAR_WALL_QUANTITY"]) && !empty($request["REAR_WALL_QUANTITY"]) ? $request["REAR_WALL_QUANTITY"] : "");
-$worksheet->getCell('D28')->setValue(isset($request["REAR_WALL_WIDTH"]) && !empty($request["REAR_WALL_WIDTH"]) ? $request["REAR_WALL_WIDTH"] : "");
-$worksheet->getCell('E28')->setValue(isset($request["REAR_WALL_HEIGHT"]) && !empty($request["REAR_WALL_HEIGHT"]) ? $request["REAR_WALL_HEIGHT"] : "");
-		//Accessories
-$countAccessories = count($arAccessories);
-if($countAccessories >= 3 && $countAccessories <= 6) 
-{
-	$firstRow = 3;
-}
-elseif($countAccessories > 6)
-{
-	$addingRow = ceil(($countAccessories-6)/2);
-	$firstRow = 3 + $addingRow;
-	$worksheet->insertNewRowBefore(34,$addingRow);
-}
-else
-	$firstRow = 3;
-$accesoriesName = CHighData::GetList(ACCESSORIES_HIGHLOAD, array("ID" => $accessoriesID), array("UF_ACCESSORIES_TYPE", "ID"));	
-$first = 32;
-$second = 32;
-foreach ($arAccessories as $key => $item)
-{
-	foreach($accesoriesName as $name)
-	{
-		if($item['ACCESSORY'] == $name['ID'])
-		{
-			if($key+1 <= $firstRow)
-			{
-				$worksheet->getCell('A'.$first)->setValue($name['UF_ACCESSORIES_TYPE']);
-				$worksheet->getCell('E'.$first)->setValue($item['ACCESSORIES_QUANTITY']);
-				$first++;
-			}
-			else
-			{
-				$worksheet->getCell('G'.$second)->setValue($name['UF_ACCESSORIES_TYPE']);
-				$worksheet->getCell('J'.$second)->setValue($item['ACCESSORIES_QUANTITY']);
-				$second++;
-			}
-
-		}
-	}
-}
-$totalNum = $first <= 35 ? 35 : $first;
-if(count($arDoors) > 2)
-	$worksheet->insertNewRowBefore(($totalNum + 3), count($arDoors)-2);
-$doorsName = CHighData::GetList(ACCESSORIES_HIGHLOAD, array("ID" => $doorsID), array("UF_ACCESSORIES_TYPE", "ID"));	
-$num = $totalNum + 2;
-foreach ($arDoors as $key => $item)
-{
-	foreach($doorsName as $name)
-	{
-		if($item['DOOR'] == $name['ID'])
-		{
-			$worksheet->getCell('A'.$num)->setValue($name['UF_ACCESSORIES_TYPE']);
-		}
-	}
-	$worksheet->getCell('E'.$num)->setValue($item['DOOR_QUANTITY']);
-	$worksheet->getCell('F'.$num)->setValue($item['DOOR_WIDTH']);
-	$worksheet->getCell('G'.$num)->setValue($item['DOOR_HEIGHT']);
-	$num++;
-}
-
-$totalNum = $num <= 39 ? 39 : $num;
-if(count($arDoors) < 2)
-$totalNum += 1;
-// $total = $arResult['COST'] + $arResult['ARCHES_FREIGHT_COST'];
-$total = $arResult["ASKING"] + $arResult['ARCHES_FREIGHT_COST'];
-$worksheet->getCell('E'.($totalNum + 1))->setValue(!empty($request["INSULATION"]) && $request["INSULATION"] == "Y" ? "Included" : "Not included");
-$worksheet->getCell('A'.($totalNum + 7))->setValue(isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "");
-// $worksheet->getCell('J'.($totalNum + 11))->setValue(isset($arResult['COST']) && !empty($arResult['COST']) ? $arResult['COST'] : "");
-// $worksheet->getCell('J'.($totalNum + 12))->setValue(isset($arResult['ARCHES_FREIGHT_COST']) && !empty($arResult['ARCHES_FREIGHT_COST']) ? $arResult['ARCHES_FREIGHT_COST'] : "");
-$worksheet->getCell('J'.($totalNum + 11))->setValue(isset($arResult["ASKING"]) && !empty($arResult["ASKING"]) ? $arResult["ASKING"] : "");
-$worksheet->getCell('J'.($totalNum + 12))->setValue(isset($arResult['ARCHES_FREIGHT_COST']) && !empty($arResult['ARCHES_FREIGHT_COST']) ? $arResult['ARCHES_FREIGHT_COST'] : "");
-$worksheet->getCell('J'.($totalNum + 13))->setValue($total);
-
-$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-$writer->save($_SERVER['DOCUMENT_ROOT'].'/local/components/custom/quotation.system/quatation_print.xlsx');
-exec("libreoffice --headless --convert-to pdf:calc_pdf_Export --outdir /home/bitrix/www/local/components/custom/quotation.system /home/bitrix/www/local/components/custom/quotation.system/quatation_print.xlsx");
 $file = CFile::MakeFileArray($_SERVER['DOCUMENT_ROOT'].'/local/components/custom/quotation.system/quatation_print.pdf');
 $id = isset($request["QUOTATION_ID"]) && !empty($request["QUOTATION_ID"]) ? $request["QUOTATION_ID"] : $res;
 $res = CHighData::UpdateRecord(QUOTATION_SYSTEM_HIGHLOAD, $id, array("UF_DOCUMENT_PDF" => $file));
