@@ -967,15 +967,47 @@ $fields = array(
     'Phone' => isset($request["CUSTOMER_TEL"]) && !empty($request["CUSTOMER_TEL"]) ? $request["CUSTOMER_TEL"]: "",
     'Cell' => isset($request["CUSTOMER_CELL"]) && !empty($request["CUSTOMER_CELL"]) ? $request["CUSTOMER_CELL"]: "",
     'Email' => isset($request["CUSTOMER_EMAIL"]) && !empty($request["CUSTOMER_EMAIL"]) ? $request["CUSTOMER_EMAIL"]: "",
-    'Address' => isset($request["CUSTOMER_ADDRESS"]) && !empty($request["CUSTOMER_ADDRESS"]) ? $request["CUSTOMER_ADDRESS"]: "",
+    'Address' => isset($request["BUILDING_ADDRESS"]) && !empty($request["BUILDING_ADDRESS"]) ? $request["BUILDING_ADDRESS"]: "",
+    'City' => isset($buildingCity) && !empty($buildingCity) ? $buildingCity: "",
+    'State' => isset($buildingProvince) && !empty($buildingProvince) ? $buildingProvince: "",
+    'Zip' => isset($request["BUILDING_POSTAL_CODE"]) && !empty($request["BUILDING_POSTAL_CODE"]) ? $request["BUILDING_POSTAL_CODE"]: "",
+    'Series' => isset($serie) && !empty($serie) ? $serie: "",
+    'Model' => isset($model) && !empty($model) ? $model: "",
+    'Width' => isset($request["WIDTH"]) && !empty($request["WIDTH"]) ? $request["WIDTH"]: "",
+    'Length' => isset($request["LENGTH"]) && !empty($request["LENGTH"]) ? $request["LENGTH"]: "",
+    'Height' => isset($request["HEIGHT"]) && !empty($request["HEIGHT"]) ? $request["HEIGHT"]: "",
+    'Gauge' => isset($arResult["GAUGE_INDEX"]) && !empty($arResult["GAUGE_INDEX"]) ? $arResult["GAUGE_INDEX"]: "",
+    'Building Use' => isset($use) && !empty($use) ? $use: "",
+    'Building Exposure' => isset($use) && !empty($use) ? $use: "",
+    'Front Wall QTY 1' => isset($request["FRONT_WALL_QUANTITY"]) && !empty($request["FRONT_WALL_QUANTITY"]) ? $request["FRONT_WALL_QUANTITY"]: "",
+    'Front Wall WxH 1' => (isset($request["FRONT_WALL_WIDTH"]) && !empty($request["FRONT_WALL_WIDTH"])) &&
+        (isset($request["FRONT_WALL_HEIGHT"]) && !empty($request["FRONT_WALL_HEIGHT"])) ? $request['FRONT_WALL_WIDTH'] * $request["FRONT_WALL_HEIGHT"] : "",
+    'Rear Wall QTY 1' => isset($request['REAR_WALL_QUANTITY']) && !empty($request['REAR_WALL_QUANTITY']) ? $request['REAR_WALL_QUANTITY']: "",
+    'Rear Wall WxH 1' => (isset($request["REAR_WALL_WIDTH"]) && !empty($request["REAR_WALL_WIDTH"])) &&
+        (isset($request["REAR_WALL_HEIGHT"]) && !empty($request["REAR_WALL_HEIGHT"])) ? $request['REAR_WALL_WIDTH'] * $request["REAR_WALL_HEIGHT"] : "",
+    'Notes' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"]: "",
 );
+
+$accesoriesName = CHighData::GetList(ACCESSORIES_HIGHLOAD, array("ID" => $accessoriesID), array("UF_ACCESSORIES_TYPE", "ID"));
+
+$index = 1;
+foreach ($arAccessories as $key => $item) {
+    foreach ($accesoriesName as $name) {
+        if ($item['ACCESSORY'] == $name['ID'] && $index <= 7) {
+            $fields['Accessory QTY ' . $index] = $item['ACCESSORIES_QUANTITY'];
+            $fields['Accessory Description ' . $index] = $name['UF_ACCESSORIES_TYPE'];
+            $fields['Accessory Price ' . $index] = $item['ACCESSORIES_AMOUNT'];
+            $index++;
+        }
+    }
+}
 
 $pdf->useCheckboxParser = true;
 $pdf->Load($fields, false); // second parameter: false if field values are in ISO-8859-1, true if UTF-8
 $pdf->Merge();
 $pdf->Output('F', $_SERVER['DOCUMENT_ROOT'].'/local/components/custom/quotation.system_test_avivi/quotation_new_test.pdf');
 
-$file = CFile::MakeFileArray($_SERVER['DOCUMENT_ROOT'].'/local/components/custom/quotation.system/quatation_print.pdf');
+$file = CFile::MakeFileArray($_SERVER['DOCUMENT_ROOT'].'/local/components/custom/quotation.system_test_avivi/quotation_new_test.pdf');
 $id = isset($request["QUOTATION_ID"]) && !empty($request["QUOTATION_ID"]) ? $request["QUOTATION_ID"] : $res;
 $res = CHighData::UpdateRecord(QUOTATION_SYSTEM_HIGHLOAD, $id, array("UF_DOCUMENT_PDF" => $file));
 if($weightError == true){
