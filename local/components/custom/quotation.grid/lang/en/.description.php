@@ -1,0 +1,3 @@
+<?
+$MESS["QUOTATION_GRID_COMPONENT_TITLE"] = "Quoatation grid";
+$MESS["QUOTATION_GRID_COMPONENT_DESCRIPTION"] = "Quoatation grid";

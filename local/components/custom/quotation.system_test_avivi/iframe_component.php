@@ -1,0 +1,72 @@
+<?
+require_once($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php');
+use Bitrix\Main\Context;
+global $APPLICATION;
+$request = Context::getCurrent()->getRequest();
+$APPLICATION->IncludeComponent(
+    'bitrix:ui.sidepanel.wrapper',
+    '',
+    array(
+        'POPUP_COMPONENT_NAME' => "custom:quotation.system",
+        'POPUP_COMPONENT_TEMPLATE_NAME' => ".default",
+        'POPUP_COMPONENT_PARAMS' => array(
+            "ACTION" => $request["ACTION"],
+            "ENTITY_TYPE" => $request["ENTITY_TYPE"],
+			"QUATATION_ID" => $request["QUATATION_ID"],
+            "QUATATION_ENTITY_ID" => $request["QUATATION_ENTITY_ID"],
+            "QUATATION_CLIENT_NAME" => $request["QUATATION_CLIENT_NAME"],
+            "QUATATION_COMPANY_TITLE" => $request["QUATATION_COMPANY_TITLE"],
+            "QUATATION_CLIENT_TEL" => $request["QUATATION_CLIENT_TEL"],
+            "QUATATION_CLIENT_WORK_TEL" => $request["QUATATION_CLIENT_WORK_TEL"],
+            "QUATATION_CLIENT_CELL" => $request["QUATATION_CLIENT_CELL"],
+            "QUATATION_CLIENT_EMAIL" => $request["QUATATION_CLIENT_EMAIL"],
+            "QUATATION_CLIENT_CITY" => $request["QUATATION_CLIENT_CITY"],
+            "QUATATION_CLIENT_PROVINCE" => $request["QUATATION_CLIENT_CITY"],
+            "QUATATION_CLIENT_POSTAL_CODE" => $request["QUATATION_CLIENT_PROVINCE"],
+            "QUATATION_OWNER" => $request["QUATATION_OWNER"],
+            "QUATATION_DATE" => $request["QUATATION_DATE"],
+            "QUATATION_PURCHASE_ORDER" => $request["QUATATION_PURCHASE_ORDER"],
+            "QUATATION_BUILDING_PROVINCE" => $request["QUATATION_BUILDING_PROVINCE"],
+            "QUATATION_BUILDING_CITY" => $request["QUATATION_BUILDING_CITY"],
+            "QUATATION_BUILDING_POSTAL_CODE" => $request["QUATATION_BUILDING_POSTAL_CODE"],
+            "QUATATION_USE_EXPOSURE" => $request["QUATATION_USE_EXPOSURE"],
+            "QUATATION_SERIES" => $request["QUATATION_SERIES"],
+            "QUATATION_MODEL" => $request["QUATATION_MODEL"],
+            "QUATATION_FOUNDATION_SYSTEM" => $request["QUATATION_FOUNDATION_SYSTEM"],
+            "QUATATION_WIDTH" => $request["QUATATION_WIDTH"],
+            "QUATATION_LENGTH" => $request["QUATATION_LENGTH"],
+            "QUATATION_HEIGHT" => $request["QUATATION_HEIGHT"],
+            "QUATATION_ANCHORS" => $request["QUATATION_ANCHORS"],
+            "QUATATION_FRONT_WALL_TYPE" => $request["QUATATION_FRONT_WALL_TYPE"],
+            "QUATATION_FRONT_WALL_QUANTITY" => $request["QUATATION_FRONT_WALL_QUANTITY"],
+            "QUATATION_FRONT_WALL_WIDTH" => $request["QUATATION_FRONT_WALL_WIDTH"],
+            "QUATATION_FRONT_WALL_HEIGHT" => $request["QUATATION_FRONT_WALL_HEIGHT"],
+            "QUATATION_FRONT_WALL_AMOUNT" => $request["QUATATION_FRONT_WALL_AMOUNT"],
+            "QUATATION_REAR_WALL_TYPE" => $request["QUATATION_REAR_WALL_TYPE"],
+            "QUATATION_REAR_WALL_QUANTITY" => $request["QUATATION_REAR_WALL_QUANTITY"],
+            "QUATATION_REAR_WALL_WIDTH" => $request["QUATATION_REAR_WALL_WIDTH"],
+            "QUATATION_REAR_WALL_HEIGHT" => $request["QUATATION_REAR_WALL_HEIGHT"],
+            "QUATATION_REAR_WALL_AMOUNT" => $request["QUATATION_REAR_WALL_AMOUNT"],
+            "QUATATION_ACCESSORIES" => $request["QUATATION_ACCESSORIES"],
+            "QUATATION_ACCESSORIES_TOTAL_COST" => $request["QUATATION_ACCESSORIES_TOTAL_COST"],
+            "QUATATION_DOORS" => $request["QUATATION_DOORS"],
+            "QUATATION_DOORS_TOTAL_COST" => $request["QUATATION_DOORS_TOTAL_COST"],
+            "QUATATION_EDIT_FREIGHT_MANUALLY" => $request["QUATATION_EDIT_FREIGHT_MANUALLY"],
+            "QUATATION_SOLD_FOR" => $request["QUATATION_SOLD_FOR"],
+            "QUATATION_COST" => $request["QUATATION_COST"],
+            "QUATATION_ASKING" => $request["QUATATION_ASKING"],
+            "QUATATION_DRAWINGS" => $request["QUATATION_DRAWINGS"],
+            "QUATATION_ESTIMATED_DELIVERY" => $request["QUATATION_ESTIMATED_DELIVERY"],
+            "QUATATION_INSULATION" => $request["QUATATION_INSULATION"],
+            "QUATATION_CALCULATION" => $request["QUATATION_CALCULATION"],
+            "QUATATION_NOTES" => $request["QUATATION_NOTES"],
+
+        ),
+        'CLOSE_AFTER_SAVE' => true,
+        "RELOAD_PAGE_AFTER_SAVE" => true,
+        "RELOAD_GRID_AFTER_SAVE" => true,
+        "PAGE_MODE" => false,
+        "PAGE_MODE_OFF_BACK_URL" => "/quotation_system/"
+    )
+);?>
+

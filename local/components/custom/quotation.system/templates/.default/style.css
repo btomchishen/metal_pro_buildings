@@ -1,0 +1,165 @@
+.crm-offer-item-inp, .crm-item-table-select
+{
+    width: 80%;
+    border-radius: 5px;
+}
+.crm-offer-title-text
+{
+    font-weight: bold;
+}
+.add-accessories, .add-doors
+{
+    margin: 12px 0 12px 37px;
+}
+.crm-offer-info-left
+{
+    vertical-align: middle !important;
+    min-width: 95px;
+    width: auto !important;
+}
+.crm-offer-info-label, .crm-offer-label
+{
+    font-weight: 900;
+}
+.narrow-input {
+    width: 80px;
+}
+.crm-offer-title-del {
+    background-position: center -3226px;
+    height: 27px;
+    width: 12px;
+}
+.crm-offer-info-right {
+    white-space: nowrap;
+}
+
+.crm-edit-price-right {
+    white-space: nowrap;
+	width: 400px;
+	max-width: 120px;
+	width: 100%;
+	margin-top: initial;
+    position: relative;
+    left: -88px;
+    top: -14px;
+}
+@media all and (max-width: 1300px){
+    td.crm-edit-price-right{
+        width: 200px;
+    }
+}
+
+.add-doors-container {
+    display: flex;
+    justify-content: space-between;
+}
+.total-amount {
+    display: flex;
+    width: 250px;
+    margin-right: 37px;
+    text-align: right;
+}
+.total-amount-input-container {
+    align-self: center;
+    width: 60%;
+}
+.total-amount-label {
+    margin-right: 15px;
+    align-self: center;
+    width: 40%;
+}
+.total-amount-input {
+    width: 100%;
+}
+
+/* st */
+
+td.crm-offer-info-right{
+    width: 400px;
+}
+
+@media all and (max-width: 1300px){
+    td.crm-offer-info-right{
+        width: 200px;
+    }
+}
+
+.crm-offer-info-right .crm-offer-info-data-wrap{
+    max-width: 180px;
+}
+
+.crm-offer-info-right .crm-offer-info-data-wrap > input:not(.crm-offer-checkbox){
+    width: 100%;
+}
+
+ table:not(:first-of-type) > tbody > tr .crm-offer-info-left:not(:first-of-type){
+    min-width: 70px;
+}
+ 
+ .accessories-block > tr .crm-offer-info-left:not(:first-of-type){
+     min-width: 57px !important;
+}
+.invalid {
+    border: 3px solid #f38b87;
+    border-radius: 5px;
+}
+.select2-container *:focus {
+    outline: none;
+}
+.crm-offer-item-textarea {
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+}
+.crm-offer-item-textarea:focus {
+    outline: none;
+}
+
+.crm-offer-item-span{
+    color: #555;
+    white-space: normal;
+    font-weight: 400;
+    min-height: 16px;
+    display: block;
+}
+
+.crm-show-quatation .crm-offer-info-left{
+    vertical-align: top !important;
+}
+
+.crm-show-quatation .add-doors-container{
+    justify-content: flex-end !important;
+}
+
+.crm-show-quatation .total-amount-input-container{
+    width: auto;
+}
+
+.crm-show-quatation .total-amount-label{
+    flex-grow: 1;
+}
+span.ui-tile-selector-selector-wrap, #crm-CUSTOMER_ID-box {
+    border: none;
+    overflow: inherit;
+}
+.ui-tile-selector-selector-wrap span[data-role="tile-item"].ui-tile-selector-item {
+        background-color: #bcedfd;
+        color: #1266bb !important;
+}
+.money-span {
+    white-space: nowrap;
+}
+.other-block-table {
+    box-sizing: border-box;
+    display: block;
+}
+.other-block-table tbody {
+    display: block;
+    overflow: auto;
+}
+.other-block-table .crm-offer-info-right {
+    width: 200px;
+    min-width: 100px;
+}
+.other-block-table .crm-offer-info-right .crm-offer-checkbox, .crm-offer-info-right .crm-offer-label {
+    margin-top: initial;
+}

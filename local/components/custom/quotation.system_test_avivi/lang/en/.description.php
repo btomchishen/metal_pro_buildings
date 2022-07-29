@@ -1,0 +1,3 @@
+<?
+$MESS["QUOTATION_SYSTEM_COMPONENT_TITLE"] = "Quoatation system";
+$MESS["QUOTATION_SYSTEM_COMPONENT_DESCRIPTION"] = "Quoatation system";
