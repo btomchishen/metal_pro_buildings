@@ -910,12 +910,14 @@ if ((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($re
             'Gauge' => isset($arResult["GAUGE_INDEX"]) && !empty($arResult["GAUGE_INDEX"]) ? $arResult["GAUGE_INDEX"] : "",
             'Building Use' => isset($use) && !empty($use) ? $use : "",
             'Building Exposure' => isset($use) && !empty($use) ? $use : "",
+            'Front Wall' => isset($frontWall) && !empty($frontWall) ? $frontWall : "",
             'Front Wall QTY 1' => isset($request["FRONT_WALL_QUANTITY"]) && !empty($request["FRONT_WALL_QUANTITY"]) ? $request["FRONT_WALL_QUANTITY"] : "",
             'Front Wall WxH 1' => (isset($request["FRONT_WALL_WIDTH"]) && !empty($request["FRONT_WALL_WIDTH"])) &&
-            (isset($request["FRONT_WALL_HEIGHT"]) && !empty($request["FRONT_WALL_HEIGHT"])) ? $request['FRONT_WALL_WIDTH'] * $request["FRONT_WALL_HEIGHT"] . ' ' : "",
+            (isset($request["FRONT_WALL_HEIGHT"]) && !empty($request["FRONT_WALL_HEIGHT"])) ? $request['FRONT_WALL_WIDTH'] * $request["FRONT_WALL_HEIGHT"] : "",
+            'Rear Wall' => isset($rearWall) && !empty($rearWall) ? $rearWall : "",
             'Rear Wall QTY 1' => isset($request['REAR_WALL_QUANTITY']) && !empty($request['REAR_WALL_QUANTITY']) ? $request['REAR_WALL_QUANTITY'] : "",
             'Rear Wall WxH 1' => (isset($request["REAR_WALL_WIDTH"]) && !empty($request["REAR_WALL_WIDTH"])) &&
-            (isset($request["REAR_WALL_HEIGHT"]) && !empty($request["REAR_WALL_HEIGHT"])) ? $request['REAR_WALL_WIDTH'] * $request["REAR_WALL_HEIGHT"] . ' ' : "",
+            (isset($request["REAR_WALL_HEIGHT"]) && !empty($request["REAR_WALL_HEIGHT"])) ? $request['REAR_WALL_WIDTH'] * $request["REAR_WALL_HEIGHT"] : "",
             'Notes' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "",
             'Suggested Sale Price' => isset($request["ASKING"]) && !empty($request["ASKING"]) ? $request["ASKING"] : "",
             'Building Price' => isset($request["SOLD_FOR"]) && !empty($request["SOLD_FOR"]) ? $request["SOLD_FOR"] : "",
@@ -923,7 +925,7 @@ if ((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($re
 //            'Tax' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "",
 //            'Total Price' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "",
 //            'Initial Payment' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "",
-            'Drawing Payment' => isset($request["DRAWINGS"]) && !empty($request["DRAWINGS"]) ? $request["DRAWINGS"] : "",
+            'Drawing Payment' => isset($arResult["DRAWINGS"]) && !empty($arResult["DRAWINGS"]) ? '$' . number_format($arResult["DRAWINGS"], 2, '.', ',') : "",
             //    'Balance Due Before Delivery' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"]: "",
             'Representative Name' => (isset($quoteOwnerInfo["NAME"]) && !empty($quoteOwnerInfo["NAME"])) &&
             (isset($quoteOwnerInfo["LAST_NAME"]) && !empty($quoteOwnerInfo["LAST_NAME"])) ? $quoteOwnerInfo["NAME"] . ' ' . $quoteOwnerInfo["LAST_NAME"] : "",
@@ -939,7 +941,7 @@ if ((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($re
                 if ($item['ACCESSORY'] == $name['ID'] && $index <= 7) { // Only 7 Accessories fields exist in pdf
                     $fields['Accessory QTY ' . $index] = $item['ACCESSORIES_QUANTITY']; // Accessory Quantity
                     $fields['Accessory Description ' . $index] = str_replace('”', '"', $name['UF_ACCESSORIES_TYPE']); // Accessory Name
-                    $fields['Accessory Price ' . $index] = $item['ACCESSORIES_AMOUNT'] . '$'; // Equal to Accessory price * Accessory quantity
+                    $fields['Accessory Price ' . $index] = '$' . number_format($item['ACCESSORIES_AMOUNT'], 2, '.', ','); // Equal to Accessory price * Accessory quantity
                     $index++;
                 }
             }
