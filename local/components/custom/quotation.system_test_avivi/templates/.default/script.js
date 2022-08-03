@@ -465,7 +465,7 @@ $(document).on("change", "#building_country", function()
     if(country == "US")
     {
         document.getElementById('PSF').removeAttribute("readonly");
-        document.getElementById('edit_freight_manually').checked = true;
+        // document.getElementById('edit_freight_manually').checked = true;
     }
     else
     {

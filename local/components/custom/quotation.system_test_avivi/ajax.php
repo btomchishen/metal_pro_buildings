@@ -873,22 +873,23 @@ if ((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($re
 
         /**
          * Pdf output
-         * Script fill fields in quotation_new.pdf file
+         *
+         * Using FPDM library for filling PDF forms
          */
         $pdf = new FPDM($_SERVER['DOCUMENT_ROOT'] . '/local/components/custom/quotation.system_test_avivi/quotation_new.pdf');
 
-        // Convert country to full format
-        if (!empty($request["BUILDING_COUNTRY"])) {
-            if ($request["BUILDING_COUNTRY"] == 'US') {
-                $country = 'USA';
-            } else {
-                $country = 'Canada';
-            }
-        }
+        // Country refactoring
+        $country = (!empty($request["BUILDING_COUNTRY"]) && $request["BUILDING_COUNTRY"] == 'US') ? 'USA' : 'Canada';
 
-        // Get info about quote owner
+        // Getting info about quote owner
         $quoteOwnerId = str_replace('U', '', $request['QUOATION_OWNER']);
         $quoteOwnerInfo = \CUser::GetById($quoteOwnerId)->Fetch();
+
+        // Walls calculation
+        $frontWallCalc = (isset($request["FRONT_WALL_WIDTH"]) && !empty($request["FRONT_WALL_WIDTH"])) &&
+        (isset($request["FRONT_WALL_HEIGHT"]) && !empty($request["FRONT_WALL_HEIGHT"])) ? $request['FRONT_WALL_WIDTH'] * $request["FRONT_WALL_HEIGHT"] : "";
+        $rearWallCalc = (isset($request["REAR_WALL_WIDTH"]) && !empty($request["REAR_WALL_WIDTH"])) &&
+        (isset($request["REAR_WALL_HEIGHT"]) && !empty($request["REAR_WALL_HEIGHT"])) ? $request['REAR_WALL_WIDTH'] * $request["REAR_WALL_HEIGHT"] : "";
 
         $fields = array(
             'Quote Date' => isset($request["DATE"]) && !empty($request["DATE"]) ? $request["DATE"] : "",
@@ -912,12 +913,10 @@ if ((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($re
             'Building Exposure' => isset($use) && !empty($use) ? $use : "",
             'Front Wall' => isset($frontWall) && !empty($frontWall) ? $frontWall : "",
             'Front Wall QTY 1' => isset($request["FRONT_WALL_QUANTITY"]) && !empty($request["FRONT_WALL_QUANTITY"]) ? $request["FRONT_WALL_QUANTITY"] : "",
-            'Front Wall WxH 1' => (isset($request["FRONT_WALL_WIDTH"]) && !empty($request["FRONT_WALL_WIDTH"])) &&
-            (isset($request["FRONT_WALL_HEIGHT"]) && !empty($request["FRONT_WALL_HEIGHT"])) ? $request['FRONT_WALL_WIDTH'] * $request["FRONT_WALL_HEIGHT"] : "",
+            'Front Wall WxH 1' => $frontWallCalc,
             'Rear Wall' => isset($rearWall) && !empty($rearWall) ? $rearWall : "",
             'Rear Wall QTY 1' => isset($request['REAR_WALL_QUANTITY']) && !empty($request['REAR_WALL_QUANTITY']) ? $request['REAR_WALL_QUANTITY'] : "",
-            'Rear Wall WxH 1' => (isset($request["REAR_WALL_WIDTH"]) && !empty($request["REAR_WALL_WIDTH"])) &&
-            (isset($request["REAR_WALL_HEIGHT"]) && !empty($request["REAR_WALL_HEIGHT"])) ? $request['REAR_WALL_WIDTH'] * $request["REAR_WALL_HEIGHT"] : "",
+            'Rear Wall WxH 1' => $rearWallCalc,
             'Notes' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "",
             'Suggested Sale Price' => isset($request["ASKING"]) && !empty($request["ASKING"]) ? $request["ASKING"] : "",
             'Building Price' => isset($request["SOLD_FOR"]) && !empty($request["SOLD_FOR"]) ? $request["SOLD_FOR"] : "",
@@ -939,17 +938,17 @@ if ((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($re
         foreach ($arAccessories as $key => $item) {
             foreach ($accesoriesName as $name) {
                 if ($item['ACCESSORY'] == $name['ID'] && $index <= 7) { // Only 7 Accessories fields exist in pdf
-                    $fields['Accessory QTY ' . $index] = $item['ACCESSORIES_QUANTITY']; // Accessory Quantity
-                    $fields['Accessory Description ' . $index] = str_replace('”', '"', $name['UF_ACCESSORIES_TYPE']); // Accessory Name
-                    $fields['Accessory Price ' . $index] = '$' . number_format($item['ACCESSORIES_AMOUNT'], 2, '.', ','); // Equal to Accessory price * Accessory quantity
+                    $fields['Accessory QTY ' . $index] = $item['ACCESSORIES_QUANTITY'];
+                    $fields['Accessory Description ' . $index] = str_replace('”', '"', $name['UF_ACCESSORIES_TYPE']);
+                    $fields['Accessory Price ' . $index] = '$' . number_format($item['ACCESSORIES_AMOUNT'], 2, '.', ',');
                     $index++;
                 }
             }
         }
 
-        // Filling pdf
+        // Processing pdf
         $pdf->useCheckboxParser = true;
-        $pdf->Load($fields, false); // second parameter: false if field values are in ISO-8859-1, true if UTF-8
+        $pdf->Load($fields, true); // second parameter: false if field values are in ISO-8859-1, true if UTF-8
         $pdf->Merge();
         $pdf->Output('F', $_SERVER['DOCUMENT_ROOT'] . '/local/components/custom/quotation.system_test_avivi/quotation_new_test.pdf');
 
