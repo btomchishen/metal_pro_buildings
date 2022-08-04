@@ -48,7 +48,6 @@ class QuonsetPartsOrder extends PDFForm
         $result['SECONDARY_PHONE'] = parent::formatPhone($dealData[SECONDARY_PHONE]);
         $result['EMAIL'] = parent::getContactFMFields('EMAIL');
         $result['BUILDING_PRICE'] = '$' . number_format($dealData['OPPORTUNITY'], 2);
-//        $result['PARTS_PRICE'] = '$' . str_replace('|CAD', '', (number_format($dealData[BUILDING_PRICE], 2)));
 
         return $result;
     }
@@ -113,7 +112,6 @@ class QuonsetPartsOrder extends PDFForm
         $salesRep = parent::divideSalesRepInfo($request['SALES_REP']);
 
         $savingData = array(
-//            "UF_FORM_DATE" => date('m/d/Y h:i:s a', time()),
             "UF_FORM_MODIFIED" => date('m/d/Y h:i:s a', time()),
             "UF_FORM_TYPE" => isset($request["FORM_TYPE"]) && !empty($request["FORM_TYPE"]) ? $request["FORM_TYPE"] : "",
             "UF_DEAL_ID" => isset($request["DEAL_ID"]) && !empty($request["DEAL_ID"]) ? $request["DEAL_ID"] : "",
@@ -278,9 +276,7 @@ class QuonsetPartsOrder extends PDFForm
             "Work" => !empty($HLBTData['WORK']) ? $HLBTData['WORK'] : "",
             "Email" => !empty($HLBTData['EMAIL']) ? $HLBTData['EMAIL'] : "",
             // UF_FORM_BUILDING
-			//"Building Use" => !empty($HLBTData['BUILDING_USE']) ? $HLBTData['BUILDING_USE'] : "",
             "Revised Drawings" => !empty($HLBTData['REVISED_DRAWINGS']) ? $HLBTData['REVISED_DRAWINGS'] : "",
-			//"Anchor Wedges, Pins & Caps" => !empty($HLBTData['IS_ANCHOR_OR_INSULATION']) ? $HLBTData['IS_ANCHOR_OR_INSULATION'] : "",
             "Parts 1" => !empty($HLBTData['PARTS_1']) ? $HLBTData['PARTS_1'] : "",
             "Parts 1 QTY" => !empty($HLBTData['PARTS_QTY_1']) ? $HLBTData['PARTS_QTY_1'] : "",
             "Parts 2" => !empty($HLBTData['PARTS_2']) ? $HLBTData['PARTS_2'] : "",

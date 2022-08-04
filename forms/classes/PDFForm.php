@@ -173,15 +173,16 @@ class PDFForm
     /**
      * Attach file to record in HLBT
      *
-     * @return bool
+     * @param string $filePath File name with folder name
      */
-    protected function addFileToRecord()
+    protected function addFileToRecord($filePath)
     {
         $formData = array_shift(CHighData::GetList(FORMS_HIGHLOAD, array('UF_DEAL_ID' => $this->dealID, 'UF_ID' => $this->formID)));
 
-        $file = CFile::MakeFileArray($this->pathToFilesFolder . $this->createFileName());
+        $file = CFile::MakeFileArray($filePath);
 
         CHighData::UpdateRecord(FORMS_HIGHLOAD, $formData['ID'], array("UF_DOCUMENT_PDF" => $file));
+        unlink($filePath);
     }
 
     /**
@@ -198,7 +199,7 @@ class PDFForm
         $pdf->Merge();
         $pdf->Output('F', $this->pathToFilesFolder . $this->createFileName());
 
-        $this->addFileToRecord();
+        $this->addFileToRecord($this->pathToFilesFolder . $this->createFileName());
     }
 
     /**

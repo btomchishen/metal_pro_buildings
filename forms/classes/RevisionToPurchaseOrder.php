@@ -47,7 +47,6 @@ class RevisionToPurchaseOrder extends PDFForm
         $result['PRIMARY_PHONE'] = parent::formatPhone($dealData[PRIMARY_PHONE]);
         $result['SECONDARY_PHONE'] = parent::formatPhone($dealData[SECONDARY_PHONE]);
         $result['EMAIL'] = parent::getContactFMFields('EMAIL');
-//        $result['PARTS_PRICE'] = '$' . str_replace('|CAD', '', (number_format($dealData[BUILDING_PRICE], 2)));
         $result['BUILDING_PRICE'] = '$' . number_format($dealData['OPPORTUNITY'], 2);
 
         return $result;
@@ -134,7 +133,6 @@ class RevisionToPurchaseOrder extends PDFForm
         $salesRep = parent::divideSalesRepInfo($request['SALES_REP']);
 
         $savingData = array(
-//            "UF_FORM_DATE" => date('m/d/Y h:i:s a', time()),
             "UF_FORM_MODIFIED" => date('m/d/Y h:i:s a', time()),
             "UF_FORM_TYPE" => isset($request["FORM_TYPE"]) && !empty($request["FORM_TYPE"]) ? $request["FORM_TYPE"] : "",
             "UF_DEAL_ID" => isset($request["DEAL_ID"]) && !empty($request["DEAL_ID"]) ? $request["DEAL_ID"] : "",

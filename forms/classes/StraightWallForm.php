@@ -53,7 +53,6 @@ class StraightWallForm extends PDFForm
         $result['BUILDING_LENGTH'] = $dealData[BUILDING_LENGTH];
         $result['FRONT_WALL_HEIGHT'] = $dealData[BUILDING_HEIGHT];
         $result['REAR_WALL_HEIGHT'] = $dealData[BUILDING_HEIGHT];
-//        $result['BUILDING_PRICE'] = '$' . str_replace('|CAD', '', (number_format($dealData[BUILDING_PRICE], 2)));
         $result['BUILDING_PRICE'] = '$' . number_format($dealData['OPPORTUNITY'], 2);
 
         return $result;
@@ -115,7 +114,6 @@ class StraightWallForm extends PDFForm
         $salesRep = parent::divideSalesRepInfo($request['SALES_REP']);
 
         $savingData = array(
-//            "UF_FORM_DATE" => date('m/d/Y h:i:s a', time()),
             "UF_FORM_MODIFIED" => date('m/d/Y h:i:s a', time()),
             "UF_FORM_TYPE" => isset($request["FORM_TYPE"]) && !empty($request["FORM_TYPE"]) ? $request["FORM_TYPE"] : "",
             "UF_DEAL_ID" => isset($request["DEAL_ID"]) && !empty($request["DEAL_ID"]) ? $request["DEAL_ID"] : "",

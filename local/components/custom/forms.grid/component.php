@@ -23,12 +23,11 @@ $sort = $grid_options->GetSorting(
     array('sort' => array("ID" => "desc"), 'vars' => array('by' => 'by', 'order' => 'order'))
 );
 
-if (!empty($request["PARAMS"]["params"]["FORM_ENTITY_ID"]))
-{
+if (!empty($request["PARAMS"]["params"]["FORM_ENTITY_ID"])) {
     $session->set('DEAL_ID', $request["PARAMS"]["params"]["FORM_ENTITY_ID"]);
     $sort['sort'] = array('ID' => 'DESC');
 }
-fp($sort, 'tom_sort');
+
 $nav_params = $grid_options->GetNavParams();
 $entity = HLBT::compileEntity(FORMS_HIGHLOAD);
 $entity_data_class = $entity->getDataClass();
@@ -97,20 +96,20 @@ $arResult['FORMS_SELECT1'] = '<select class="s100" id="FORMS_SELECT1">
 
 ?>
 
-    <script>
-        function showForm(id) {
-            BX.SidePanel.Instance.open('/forms/index.php?FORM_TYPE=QuonsetForm&DEAL_ID=' + id,
-                {
-                    requestMethod: "post",
-                    cacheable: false,
-                    requestParams:
-                        {
-                            FORM_TYPE: "QuonsetForm",
-                            DEAL_ID: id,
-                        }
-                });
-        }
+<script>
+    function showForm(id) {
+        BX.SidePanel.Instance.open('/forms/index.php?FORM_TYPE=QuonsetForm&DEAL_ID=' + id,
+            {
+                requestMethod: "post",
+                cacheable: false,
+                requestParams:
+                    {
+                        FORM_TYPE: "QuonsetForm",
+                        DEAL_ID: id,
+                    }
+            });
+    }
 
-    </script>
+</script>
 
 <? $this->IncludeComponentTemplate(); ?>
