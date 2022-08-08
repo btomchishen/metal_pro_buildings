@@ -86,3 +86,65 @@ define("OPERATIONS", "14");
 define("ADMIN_MAILBOX_ID", "1");
 
 define("EXTERNAL_CALL_TYPE", "1");
+
+define("LEAD_MANAGEMENT_ROLE_ID", 6);
+
+// Avivi #48605 Check Mailbox and add to the Company card
+define('CRM_INCOMING_EMAIL_ACTIVITY_MAILBOX_ID', 1);
+define('CRM_INCOMING_EMAIL_ACTIVITY_EMAIL_FROM_FILTER', [
+    'docusign@metalprobuildings.com',
+    'engineering@metalprobuildings.com',
+    'delivery@metalprobuildings.com',
+    'Drawings@metalprobuildings.com',
+    'Costing@metalprobuildings.com',
+    'cmb@metalprobuildings.com',
+    'sbc-orders@metalprobuildings.com',
+    'iq@metalprobuildings.com',
+    'pioneerinvoice@metalprobuildings.com',
+]);
+define('CRM_INCOMING_EMAIL_ACTIVITY_EMAIL_FROM_FILTER_FIELDS', [
+    'FIELD_FROM',
+    'FIELD_REPLY_TO',
+    'FIELD_TO',
+    'FIELD_CC',
+    'FIELD_BCC',
+]);
+define('HB_CRM_IEA_EMAIL_COMPANY_BIND', 24);
+
+// Deparments ID
+define('SALES_DEPARTMENT_ID', 3);
+
+// Forms
+define('FORMS_HIGHLOAD', 29);
+define('COLORS_HIGHLOAD', 26);
+define('REQUESTED_DELIVERY_MONTH_HIGHLOAD', 27);
+define('TAX_RATE_HIGHLOAD', 28);
+define('FORM_ACCESSORY_HIGHLOAD', 31);
+define('PARTS_HIGHLOAD', 35);
+define('VENDOR_ID', 'UF_CRM_B08E81E8');
+define('LEAD_ID', 'UF_CRM_6D6DE9FF');
+define('MAILING_ADDRESS', 'UF_CRM_61DDDDE44BA87');
+define('SHIPPING_ADDRESS', 'UF_CRM_61DDDDE46CDF0');
+define('PRIMARY_PHONE', 'UF_CRM_601977A87EC73');
+define('SECONDARY_PHONE', 'UF_CRM_601977A8A72DB');
+define('MODEL_TYPE', 'UF_CRM_1637343846672');
+define('MODEL_TYPE_FIELD_ID', 856);
+define('BUILDING_USE', 'UF_CRM_601977A8D1631');
+define('BUILDING_WIDTH', 'UF_CRM_601977A9B99EF');
+define('BUILDING_LENGTH', 'UF_CRM_601977A9CD6DB');
+define('BUILDING_HEIGHT', 'UF_CRM_601977A9E2216');
+define('BUILDING_PRICE', 'UF_CRM_1638995468154');
+define('ADDENDUM_PERMIT_APPROVAL', 'Order conditional upon Permit Approval until _____________________. Buyer undertakes to use best efforts to obtain approval and shall provide contact information for City, Town, Municipality from which approval is sought. Buyer agrees to provide Permit Application to Seller, if requested. If conditional order is cancelled by Buyer, any deposits shall be reimbursed (less $_____________ for Certified Engineered Drawings). Deposit shall be non-refundable after the above noted expiry date. If Building Permit is denied, the Buyer undertakes to provide the Seller supporting documentation in order for refund to be processed. The Seller shall not provide Engineer Drawings to Buyer until Financing condition is waived, unless expressly consented to by Metal Pro Buildings’ management.');
+define('ADDENDUM_FINANCING_APPROVAL', 'Order conditional upon Financing Approval until _____________________. Buyer undertakes to provide requisite information for Application Processing and understands that this conditional agreement becomes firm upon Buyer’s financing approval. Buyer agrees to provide Financial Application to Seller, if requested. If conditional order is cancelled by Buyer, any deposits shall be reimbursed (less $_____________ for Certified Engineered Drawings). Deposit shall be non-refundable after the above noted expiry date. If financing application is denied, the Buyer undertakes to provide the Seller supporting documentation in order for refund to be processed. The Seller shall not provide Engineer Drawings to Buyer until Financing condition is waived, unless expressly consented to by Metal Pro Buildings’ management.');
+define('ADDENDUM_BUYER_APPROVAL', 'Order conditional upon Buyer Approval until _____________________. If conditional order is cancelled by Buyer, any deposits shall be reimbursed (less $_____________ for Certified Engineered Drawings). Deposit shall be non-refundable after the above noted expiry date. If Building Permit is denied, the Buyer undertakes to provide the Seller supporting documentation in order for refund to be processed. The Seller shall not provide Engineer Drawings to Buyer until Financing condition is waived, unless expressly consented to by Metal Pro Buildings’ management.');
+define('FOUNDATION_SYSTEM', 'UF_CRM_41A39AA');
+define('FOUNDATION_SYSTEM_FIELD_ID', 367);
+define('GAUGE', 'UF_CRM_1638985090885');
+define('GAUGE_FIELD_ID', 967);
+define('PROVINCE', 'UF_CRM_1645643434352');
+
+// Avivi #49545 CRM Analytics Report
+define('HB_NEW_LEADS', 30);
+define('NEW_LEAD_COUNT_STATUS_ID', 'E4B0A778');
+
+define('HB_REPORT_ANALYTICS_CONFIG', 36);

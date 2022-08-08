@@ -891,6 +891,18 @@ if ((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($re
         $rearWallCalc = (isset($request["REAR_WALL_WIDTH"]) && !empty($request["REAR_WALL_WIDTH"])) &&
         (isset($request["REAR_WALL_HEIGHT"]) && !empty($request["REAR_WALL_HEIGHT"])) ? $request['REAR_WALL_WIDTH'] * $request["REAR_WALL_HEIGHT"] : "";
 
+        // Prices calculation
+        $suggestedSalePrice = $arResult['ASKING'];
+        $buildingPrice = $arResult['SOLD_FOR'];
+        $freight = $arResult['TOTAL_FREIGHT'];
+        // Getting tax rate list
+        $taxRate = array_shift(CHighData::GetList(TAX_RATE_HIGHLOAD, array('UF_PROVINCE' => $request['CUSTOMER_PROVINCE']), array("*")));
+        $tax = $buildingPrice * ($taxRate['UF_TAX_RATE'] / 100);
+        $totalPrice = $arResult['SOLD_FOR'] + $tax;
+        $initialPayment = $arResult['SOLD_FOR'] * 0.25;
+        $drawingPayment = $arResult['SOLD_FOR'] * 0.25;
+        $balanceBeforeDelivery = $arResult['SOLD_FOR'] - $initialPayment;
+
         $fields = array(
             'Quote Date' => isset($request["DATE"]) && !empty($request["DATE"]) ? $request["DATE"] : "",
             'Name' => isset($request["CUSTOMER_NAME"]) && !empty($request["CUSTOMER_NAME"]) ? $request["CUSTOMER_NAME"] : "",
@@ -918,14 +930,14 @@ if ((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($re
             'Rear Wall QTY 1' => isset($request['REAR_WALL_QUANTITY']) && !empty($request['REAR_WALL_QUANTITY']) ? $request['REAR_WALL_QUANTITY'] : "",
             'Rear Wall WxH 1' => $rearWallCalc,
             'Notes' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "",
-            'Suggested Sale Price' => isset($request["ASKING"]) && !empty($request["ASKING"]) ? $request["ASKING"] : "",
-            'Building Price' => isset($request["SOLD_FOR"]) && !empty($request["SOLD_FOR"]) ? $request["SOLD_FOR"] : "",
-            'Consolidated Freight' => isset($arResult["ARCHES_FREIGHT_COST"]) && !empty($arResult["ARCHES_FREIGHT_COST"]) ? '$' . number_format($arResult["ARCHES_FREIGHT_COST"], 2, '.', ',') : "",
-//            'Tax' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "",
-//            'Total Price' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "",
-//            'Initial Payment' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"] : "",
-            'Drawing Payment' => isset($arResult["DRAWINGS"]) && !empty($arResult["DRAWINGS"]) ? '$' . number_format($arResult["DRAWINGS"], 2, '.', ',') : "",
-            //    'Balance Due Before Delivery' => isset($request["NOTES"]) && !empty($request["NOTES"]) ? $request["NOTES"]: "",
+            'Suggested Sale Price' => '$' . number_format($suggestedSalePrice, 2, '.', ','),
+            'Building Price' => '$' . number_format($buildingPrice, 2, '.', ','),
+            'Consolidated Freight' => '$' . number_format($freight, 2, '.', ','),
+            'Tax' => '$' . number_format($tax, 2, '.', ','),
+            'Total Price' => '$' . number_format($totalPrice, 2, '.', ','),
+            'Initial Payment' => '$' . number_format($initialPayment, 2, '.', ','),
+            'Drawing Payment' => '$' . number_format($drawingPayment, 2, '.', ','),
+            'Balance Due Before Delivery' => '$' . number_format($balanceBeforeDelivery, 2, '.', ','),
             'Representative Name' => (isset($quoteOwnerInfo["NAME"]) && !empty($quoteOwnerInfo["NAME"])) &&
             (isset($quoteOwnerInfo["LAST_NAME"]) && !empty($quoteOwnerInfo["LAST_NAME"])) ? $quoteOwnerInfo["NAME"] . ' ' . $quoteOwnerInfo["LAST_NAME"] : "",
             'Representative Phone' => isset($quoteOwnerInfo["WORK_PHONE"]) && !empty($quoteOwnerInfo["WORK_PHONE"]) ? $quoteOwnerInfo["WORK_PHONE"] : "",

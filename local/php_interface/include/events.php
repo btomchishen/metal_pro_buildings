@@ -1,141 +1,155 @@
 <?php
 if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) die();
 
-//AddEventHandler("crm", "OnBeforeCrmLeadAdd", array(
-//    "CRMHandlers",
-//    "OnBeforeLeadAddHandler"
-//));
-//
-//class CRMHandlers
-//{
-//    function OnBeforeLeadAddHandler(&$arFields)
-//    {
-//        fp($arFields, '$arFields');
-//        global $APPLICATION, $USER;
-//        $userId = $USER->GetId();іі
-//        Bitrix\Main\Loader::includeModule('crm');
-//
-//        if ($arFields["FM"]["PHONE"]) {
-//            $phoneFields = $arFields["FM"]["PHONE"];
-//            $number = array_shift($phoneFields);
-//            $chars = array('+', '-', ' ', '(', ')');
-//            $number = str_replace($chars, '', $number["VALUE"]);
-//        }
-//        if ($arFields["FM"]["EMAIL"]) {
-//            $emailFields = $arFields["FM"]["EMAIL"];
-//            $email = array_shift($emailFields);
-//            $email = $email["VALUE"];
-//        }
-//
-//        $dbResMultiFields = CCrmFieldMulti::GetList(
-//            array('ID' => 'desc'),
-//            array('ENTITY_ID' => 'LEAD', 'VALUE' => '+%' . $number)
-//        );
-//
-//        if ($arMultiFields = $dbResMultiFields->Fetch()) {
-//            $leadId = $arMultiFields['ELEMENT_ID'];
-//
-//            $entity = new CCrmLead(false);
-//            $fields = array(
-//                'STATUS_ID' => 'NEW'
-//            );
-//            $entity->update($leadId, $fields);
-//
-//            $text = $arFields["COMMENTS"];
-//            if (!empty($text)) {
-//                $resId = \Bitrix\Crm\Timeline\CommentEntry::create(
-//                    array(
-//                        'TEXT' => $text,
-//                        'SETTINGS' => array(),
-//                        'AUTHOR_ID' => 0,
-//                        'BINDINGS' => array(array('ENTITY_TYPE_ID' => CCrmOwnerType::Lead, 'ENTITY_ID' => $leadId))
-//                    )
-//                );
-//
-//                $resultUpdating = Bitrix\Crm\Timeline\Entity\TimelineBindingTable::update(
-//                    array('OWNER_ID' => $resId, 'ENTITY_ID' => $leadId, 'ENTITY_TYPE_ID' => CCrmOwnerType::Lead),
-//                    array('IS_FIXED' => 'N')
-//                );
-//            }
-//
-//
-//            $arFields = array(
-//                "MESSAGE_TYPE" => "S",
-//                "TO_USER_ID" => $userId,
-//                "FROM_USER_ID" => 0,
-//                "MESSAGE" => "Lead was not created. The system has lead with this phone number or mail - https://metalpro.site/crm/lead/details/" . $leadId . "/",
-//                "AUTHOR_ID" => 0,
-//
-//                "NOTIFY_TYPE" => 1,
-//                "NOTIFY_BUTTONS" =>
-//                    array(
-//                        array('TITLE' => 'OK', 'VALUE' => 'Y', 'TYPE' => 'accept'),
-//                    ),
-//                "NOTIFY_MODULE" => "main",
-//            );
-//            CModule::IncludeModule('im');
-//            // CIMMessenger::Add($arFields);
-//
-//            $APPLICATION->ThrowException("Lead was not created");
-//            return false;
-//        }
-//
-//        $dbResMultiFields = CCrmFieldMulti::GetList(
-//            array('ID' => 'asc'),
-//            array('ENTITY_ID' => 'LEAD', 'VALUE' => $email)
-//        );
-//
-//        if ($arMultiFields = $dbResMultiFields->Fetch()) {
-//            $leadId = $arMultiFields['ELEMENT_ID'];
-//
-//            $entity = new CCrmLead(false);
-//            $fields = array(
-//                'STATUS_ID' => 'NEW'
-//            );
-//            $entity->update($leadId, $fields);
-//
-//            $text = $arFields["COMMENTS"];
-//
-//            if (!empty($text)) {
-//                $resId = \Bitrix\Crm\Timeline\CommentEntry::create(
-//                    array(
-//                        'TEXT' => $text,
-//                        'SETTINGS' => array(),
-//                        'AUTHOR_ID' => 0,
-//                        'BINDINGS' => array(array('ENTITY_TYPE_ID' => CCrmOwnerType::Lead, 'ENTITY_ID' => $leadId))
-//                    )
-//                );
-//
-//                $resultUpdating = Bitrix\Crm\Timeline\Entity\TimelineBindingTable::update(
-//                    array('OWNER_ID' => $resId, 'ENTITY_ID' => $leadId, 'ENTITY_TYPE_ID' => CCrmOwnerType::Lead),
-//                    array('IS_FIXED' => 'N')
-//                );
-//            }
-//
-//
-//            $arFields = array(
-//                "MESSAGE_TYPE" => "S",
-//                "TO_USER_ID" => $userId,
-//                "FROM_USER_ID" => 0,
-//                "MESSAGE" => "Lead was not created. The system has lead with this phone number or mail - https://metalpro.site/crm/lead/details/" . $leadId . "/",
-//                "AUTHOR_ID" => 0,
-//
-//                "NOTIFY_TYPE" => 1,
-//                "NOTIFY_BUTTONS" =>
-//                    array(
-//                        array('TITLE' => 'OK', 'VALUE' => 'Y', 'TYPE' => 'accept'),
-//                    ),
-//                "NOTIFY_MODULE" => "main",
-//            );
-//            CModule::IncludeModule('im');
-//            // CIMMessenger::Add($arFields);
-//
-//            $APPLICATION->ThrowException("Lead was not created");
-//            return false;
-//        }
-//
-//    }
-//}
+use Bitrix\Main\Type\DateTime;
+
+// Avivi #49545 CRM Analytics Report
+
+// Preventing Duplication
+AddEventHandler("crm", "OnBeforeCrmLeadAdd", array(
+    "CRMHandlers",
+    "OnBeforeLeadAddHandler"
+));
+
+class CRMHandlers
+{
+    function OnBeforeLeadAddHandler(&$arFields)
+    {
+        global $APPLICATION, $USER;
+        $userId = $USER->GetId();
+        Bitrix\Main\Loader::includeModule('crm');
+
+        if ($arFields['ORIGINATOR_ID'] != 'email-tracker') {
+            $phoneFields = $arFields["FM"]["PHONE"];
+            $number = array_shift($phoneFields);
+
+            if (!empty($number['VALUE'])) {
+                $chars = array('+', '-', ' ', '(', ')');
+                $number = str_replace($chars, '', $number["VALUE"]);
+
+                $number = '1' . $number;
+
+                $dbResMultiFields = CCrmFieldMulti::GetListEx(
+                    array('ID' => 'desc'),
+                    array('ENTITY_ID' => 'LEAD', 'VALUE' => '+' . $number)
+                );
+
+                if ($arMultiFields = $dbResMultiFields->Fetch()) {
+                    $leadId = $arMultiFields['ELEMENT_ID'];
+
+                    $lead = CCrmLead::GetByID($leadId);
+                    $responsibleId = $lead['ASSIGNED_BY'];
+
+                    $entity = new CCrmLead(false);
+                    $fields = array(
+                        'STATUS_ID' => 'E4B0A778' // Incoming New Leads
+                    );
+                    $entity->update($leadId, $fields);
+
+                    $text = 'Lead contacted again - Matched by PHONE - Lead moved to Incoming New Leads';
+                    if (!empty($text)) {
+                        $resId = \Bitrix\Crm\Timeline\CommentEntry::create(
+                            array(
+                                'TEXT' => $text,
+                                'SETTINGS' => array(),
+                                'AUTHOR_ID' => 0,
+                                'BINDINGS' => array(array('ENTITY_TYPE_ID' => CCrmOwnerType::Lead, 'ENTITY_ID' => $leadId))
+                            )
+                        );
+
+                        $resultUpdating = Bitrix\Crm\Timeline\Entity\TimelineBindingTable::update(
+                            array('OWNER_ID' => $resId, 'ENTITY_ID' => $leadId, 'ENTITY_TYPE_ID' => CCrmOwnerType::Lead),
+                            array('IS_FIXED' => 'N')
+                        );
+                    }
+
+
+                    $arFields = array(
+                        "MESSAGE_TYPE" => "S",
+                        "TO_USER_ID" => $responsibleId,
+                        "FROM_USER_ID" => 0,
+                        "MESSAGE" => "Lead contacted again - Matched by PHONE - Lead moved to Incoming New Leads - https://metalpro.site/crm/lead/details/" . $leadId . "/",
+                        "AUTHOR_ID" => 0,
+
+                        "NOTIFY_TYPE" => 1,
+                        "NOTIFY_BUTTONS" =>
+                            array(
+                                array('TITLE' => 'OK', 'VALUE' => 'Y', 'TYPE' => 'accept'),
+                            ),
+                        "NOTIFY_MODULE" => "main",
+                    );
+                    CModule::IncludeModule('im');
+                    CIMMessenger::Add($arFields);
+
+                    $APPLICATION->ThrowException("Lead was not created");
+                    return false;
+                }
+            }
+
+            $emailFields = $arFields["FM"]["EMAIL"];
+            $email = array_shift($emailFields);
+            if (!empty($email['VALUE'])) {
+                $email = $email["VALUE"];
+
+                $dbResMultiFields = CCrmFieldMulti::GetList(
+                    array('ID' => 'asc'),
+                    array('ENTITY_ID' => 'LEAD', 'VALUE' => $email)
+                );
+
+                if ($arMultiFields = $dbResMultiFields->Fetch()) {
+                    $leadId = $arMultiFields['ELEMENT_ID'];
+
+                    $lead = CCrmLead::GetByID($leadId);
+                    $responsibleId = $lead['ASSIGNED_BY'];
+
+                    $entity = new CCrmLead(false);
+                    $fields = array(
+                        'STATUS_ID' => 'E4B0A778' // Incoming New Leads
+                    );
+                    $entity->update($leadId, $fields);
+
+                    $text = 'Lead contacted again - Matched by EMAIL - Lead moved to Incoming New Leads';
+
+                    if (!empty($text)) {
+                        $resId = \Bitrix\Crm\Timeline\CommentEntry::create(
+                            array(
+                                'TEXT' => $text,
+                                'SETTINGS' => array(),
+                                'AUTHOR_ID' => 0,
+                                'BINDINGS' => array(array('ENTITY_TYPE_ID' => CCrmOwnerType::Lead, 'ENTITY_ID' => $leadId))
+                            )
+                        );
+
+                        $resultUpdating = Bitrix\Crm\Timeline\Entity\TimelineBindingTable::update(
+                            array('OWNER_ID' => $resId, 'ENTITY_ID' => $leadId, 'ENTITY_TYPE_ID' => CCrmOwnerType::Lead),
+                            array('IS_FIXED' => 'N')
+                        );
+                    }
+
+                    $arFields = array(
+                        "MESSAGE_TYPE" => "S",
+                        "TO_USER_ID" => $responsibleId,
+                        "FROM_USER_ID" => 0,
+                        "MESSAGE" => "Lead contacted again - Matched by EMAIL - Lead moved to Incoming New Leads - https://metalpro.site/crm/lead/details/" . $leadId . "/",
+                        "AUTHOR_ID" => 0,
+
+                        "NOTIFY_TYPE" => 1,
+                        "NOTIFY_BUTTONS" =>
+                            array(
+                                array('TITLE' => 'OK', 'VALUE' => 'Y', 'TYPE' => 'accept'),
+                            ),
+                        "NOTIFY_MODULE" => "main",
+                    );
+                    CModule::IncludeModule('im');
+                    CIMMessenger::Add($arFields);
+
+                    $APPLICATION->ThrowException("Lead was not created");
+                    return false;
+                }
+            }
+        }
+    }
+}
 
 //Avivi: set last call time and duration to custom fields in lead
 AddEventHandler("voximplant", "onCallEnd", "onAfterCallEnd");
@@ -172,9 +186,7 @@ function onAfterCallEnd(&$arFields)
 AddEventHandler("crm", "OnActivityAdd", 'onAfterLetterReceive');
 function onAfterLetterReceive($ID, &$arFields)
 {
-
-    // fp($ID, 'tomchyshen_id');
-    // fp($arFields, 'tomchyshen_arFields');
+    $chars = array('+', '-', ' ', '(', ')');
     if ($arFields['OWNER_TYPE_ID'] == \CCrmOwnerType::Lead && $arFields["PROVIDER_ID"] == "CRM_EMAIL") {
         if (CModule::IncludeModule("crm")) {
             if (!empty($arFields["DESCRIPTION"])) {
@@ -208,6 +220,12 @@ function onAfterLetterReceive($ID, &$arFields)
                                     $leadFields["NAME"] = uniTrim($textKey[0]);
                                     $leadFields["LAST_NAME"] = uniTrim($textKey[1]);
                                 }
+                                if (empty($leadFields["NAME"])) {
+                                    $text = trim($valueArr[$key + 1]);
+                                    $textKey = explode(" ", $text);
+                                    $leadFields["NAME"] = uniTrim($textKey[0]);
+                                    $leadFields["LAST_NAME"] = uniTrim($textKey[1]);
+                                }
                                 break;
                             case "Company":
                             case "Company:":
@@ -237,9 +255,13 @@ function onAfterLetterReceive($ID, &$arFields)
                             case "Phone":
                             case "Phone number":
                                 if ($valueArr[$key + 1] != "") {
+                                    $phoneNumber = uniTrim($valueArr[$key + 1]);
+                                    $phoneNumber = str_replace($chars, '', $phoneNumber);
+                                    $phoneNumber = (strlen($phoneNumber) <= 10) ? '+1' . $phoneNumber : '+' . $phoneNumber;
+
                                     $leadFields["FM"]["PHONE"] = array(
                                         "n0" => array(
-                                            "VALUE" => uniTrim($valueArr[$key + 1]),
+                                            "VALUE" => $phoneNumber,
                                             "VALUE_TYPE" => "WORK",
                                         ),
                                     );
@@ -252,6 +274,15 @@ function onAfterLetterReceive($ID, &$arFields)
                                     $leadFields["FM"]["EMAIL"] = array(
                                         $email => array(
                                             "VALUE" => uniTrim($valueArr[$key + 1]),
+                                            "VALUE_TYPE" => "WORK",
+                                        ),
+                                    );
+                                }
+                                // Avivi Task #18452 Email parsing small issue
+                                if (!isset($leadFields['FM']['EMAIL'])) {
+                                    $leadFields["FM"]["EMAIL"] = array(
+                                        $email => array(
+                                            "VALUE" => $leadFields['NAME'] . '@pioneersteel.com',
                                             "VALUE_TYPE" => "WORK",
                                         ),
                                     );
@@ -334,8 +365,14 @@ function onAfterLetterReceive($ID, &$arFields)
                                 continue;
                             }
                             if (strpos($str, "From") !== false || strpos($str, "Name") !== false) {
-                                $leadFields["NAME"] = uniTrim($textKey[1]);
-                                $leadFields["LAST_NAME"] = uniTrim($textKey[2]);
+                                $text = $arFields['SETTINGS']['EMAIL_META']['from'];
+                                $explodedText = explode('<', $text);
+                                $email1 = str_replace('>', '', $explodedText[1]);
+
+                                if ($email1 == 'sales@pioneersteel.com' || $email1 == 'jbrenzil@braemarbuildings.com') {
+                                    $leadFields["NAME"] = uniTrim($textKey[1]);
+                                    $leadFields["LAST_NAME"] = uniTrim($textKey[2]);
+                                }
                                 continue;
                             }
                             if (strpos($str, "Company") !== false) {
@@ -389,15 +426,23 @@ function onAfterLetterReceive($ID, &$arFields)
                                 continue;
                             }
                             if (strpos($str, "Phone") !== false) {
+                                $text = str_replace("Phone:", '', $textKey[0]);
+                                $text = trim($text);
+
+                                $phoneNumber = uniTrim($text);
+                                $phoneNumber = str_replace($chars, '', $phoneNumber);
+                                $phoneNumber = (strlen($phoneNumber) <= 10) ? '+1' . $phoneNumber : '+' . $phoneNumber;
+
                                 $leadFields["FM"]["PHONE"] = array(
                                     "n0" => array(
-                                        "VALUE" => uniTrim($textKey[1]),
+                                        "VALUE" => $phoneNumber,
                                         "VALUE_TYPE" => "WORK",
                                     ),
                                 );
                                 continue;
                             }
                             if (strpos($str, "Email") !== false) {
+
                                 $leadFields["FM"]["EMAIL"] = array(
                                     $email => array(
                                         "VALUE" => uniTrim($textKey[1]),
@@ -517,9 +562,14 @@ function onAfterLetterReceive($ID, &$arFields)
                                     break;
                                 case "Phone number":
                                     if (!in_array($valueArr[$key + 1], $fieldsArr)) {
+
+                                        $phoneNumber = uniTrim($valueArr[$key + 1]);
+                                        $phoneNumber = str_replace($chars, '', $phoneNumber);
+                                        $phoneNumber = (strlen($phoneNumber) <= 10) ? '+1' . $phoneNumber : '+' . $phoneNumber;
+
                                         $leadFields["FM"]["PHONE"] = array(
                                             "n0" => array(
-                                                "VALUE" => uniTrim($valueArr[$key + 1]),
+                                                "VALUE" => $phoneNumber,
                                                 "VALUE_TYPE" => "WORK",
                                             ),
                                         );
@@ -624,26 +674,41 @@ function onAfterLetterReceive($ID, &$arFields)
                         }
                     }
 
-                    $entity = new CCrmLead(false);
-                    $entity->update($leadID, $leadFields);
-                    if ($leadID != $arFields["OWNER_ID"]) {
-                        $entity->delete($arFields["OWNER_ID"]);
+                    $text = $arFields['SETTINGS']['EMAIL_META']['from'];
+
+                    $explodedText = explode(' ', $text);
+
+                    $charsArray = array('<', '>', '&#60;', '&#62;', '&lt;', '&gt;');
+
+                    foreach ($explodedText as $key => $value) {
+                        if (strpos($value, '@') !== false) $res = $key;
                     }
-                    foreach ($changedFields as $field) {
-                        if (!empty($field["VALUE"])) {
-                            \Bitrix\Crm\Timeline\CommentEntry::create(
-                                array(
-                                    'TEXT' => $field["FIELD_NAME"] . " field " . $field["VALUE"] . " was updated",
-                                    'SETTINGS' => array('HAS_FILES' => 'N'),
-                                    'AUTHOR_ID' => 1,
-                                    'BINDINGS' => array(array('ENTITY_TYPE_ID' => \CCrmOwnerType::Lead, 'ENTITY_ID' => $leadID))
-                                ));
+
+                    $email = str_replace($charsArray, '', $explodedText[$res]);
+
+                    if ($email == 'sales@pioneersteel.com' || $email == 'jbrenzil@braemarbuildings.com') {
+                        $entity = new CCrmLead(false);
+                        $entity->update($leadID, $leadFields);
+                        if ($leadID != $arFields["OWNER_ID"]) {
+                            $entity->delete($arFields["OWNER_ID"]);
+                        }
+                        foreach ($changedFields as $field) {
+                            if (!empty($field["VALUE"])) {
+                                \Bitrix\Crm\Timeline\CommentEntry::create(
+                                    array(
+                                        'TEXT' => $field["FIELD_NAME"] . " field " . $field["VALUE"] . " was updated",
+                                        'SETTINGS' => array('HAS_FILES' => 'N'),
+                                        'AUTHOR_ID' => 1,
+                                        'BINDINGS' => array(array('ENTITY_TYPE_ID' => \CCrmOwnerType::Lead, 'ENTITY_ID' => $leadID))
+                                    ));
+                            }
                         }
                     }
                 }
             }
         }
     }
+
 }
 
 AddEventHandler("crm", "OnBeforeCrmLeadAdd", 'OnBeforeCrmLeadAddEvent');
@@ -743,3 +808,260 @@ function OnAfterCrmLeadUpdateEvent($arFields)
     }
 }
 
+AddEventHandler("crm", "OnBeforeCrmLeadAdd", 'createNewLeadByEmail');
+function createNewLeadByEmail($arFields)
+{
+    $emailFields = $arFields["FM"]["EMAIL"];
+    $email = array_shift($emailFields);
+    $email = $email["VALUE"];
+
+    if ($arFields['ORIGINATOR_ID'] == 'email-tracker') {
+        if ($email == "sales@pioneersteel.com" && $arFields['TITLE'] == 'Lead Assignment')
+            return true;
+        else if ($email == 'jbrenzil@braemarbuildings.com' && $arFields['TITLE'] == 'FW: Steel Building Canada Inc. Quote Request')
+            return true;
+        else if ($email == 'b.tomchyshen@avivi.com.ua')
+            return true;
+        else if ($email == 'b.tomchishen2003@gmail.com')
+            return true;
+        else
+            return false;
+    }
+}
+
+AddEventHandler("crm", "OnAfterCrmLeadAdd", array(
+    "PhoneFormatter",
+    "formattingPhoneNumber"
+));
+
+/**
+ * Class PhoneFormatter
+ */
+class PhoneFormatter
+{
+    protected const CHARS = array('+', '-', ' ', '(', ')');
+    protected const TYPE_ID = 'PHONE';
+
+    /**
+     * Formatting phone number to +countryXXXXXXXXXX
+     * @param $arFields
+     */
+    public function formattingPhoneNumber(&$arFields)
+    {
+        Bitrix\Main\Loader::includeModule('crm');
+
+        $phoneNumber = self::getNewPhoneNumber($arFields);
+        self::updatePhoneNumber($phoneNumber, $arFields);
+    }
+
+    /**
+     * @param $arFields
+     * @return string
+     */
+    protected function getNewPhoneNumber($arFields)
+    {
+        $phoneNumber = self::getPhoneNumber($arFields);
+        $phoneNumber = self::clearPhoneNumber($phoneNumber);
+        $phoneNumber = self::addFormatToNumber($phoneNumber);
+
+        return $phoneNumber;
+    }
+
+    /**
+     * Get incoming phone number from $arFields
+     * @param $arFields
+     * @return string
+     */
+    protected function getPhoneNumber($arFields)
+    {
+        return array_shift($arFields['FM']['PHONE'])['VALUE'];
+    }
+
+    /**
+     * Delete all characters from phone number
+     * @param $phoneNumber
+     * @return string
+     */
+    protected function clearPhoneNumber($phoneNumber)
+    {
+        return str_replace(self::CHARS, '', $phoneNumber);
+    }
+
+    /**
+     * Set phone format +1XXXXXXXXXX
+     * @param $phoneNumber
+     * @return string
+     */
+    protected function addFormatToNumber($phoneNumber)
+    {
+        return (strlen($phoneNumber) <= 10) ? '+1' . $phoneNumber : '+' . $phoneNumber;
+    }
+
+    /**
+     * Get lead ID
+     * @param $arFields
+     * @return int
+     */
+    protected function getLeadID($arFields)
+    {
+        return intval($arFields['ID']);
+    }
+
+    /**
+     * Get record ID in b_crm_field_multi
+     * @param $arFields
+     * @return int
+     */
+    protected function getFieldMultiID($arFields)
+    {
+        $leadID = self::getLeadID($arFields);
+        $dbRes = CCrmFieldMulti::GetList(array(), array('TYPE_ID' => 'PHONE', 'ELEMENT_ID' => $leadID));
+
+        $arRes = $dbRes->Fetch();
+
+        return intval($arRes['ID']);
+    }
+
+    /**
+     * Get phone Value Type, for example - WORK
+     * @param $arFields
+     * @return string
+     */
+    protected function getValueType($arFields)
+    {
+        return array_shift($arFields['FM']['PHONE'])['VALUE_TYPE'];
+    }
+
+    /**
+     * Update phone number in b_crm_field_multi
+     * @param $phoneNumber
+     * @param $arFields
+     * @return int
+     */
+    protected function updatePhoneNumber($phoneNumber, $arFields)
+    {
+        $fieldMultiID = self::getFieldMultiID($arFields);
+        $valueType = self::getValueType($arFields);
+        $complexID = self::TYPE_ID . '_' . $valueType;
+
+        $fieldsToUpdate = array(
+            'TYPE_ID' => self::TYPE_ID,
+            'VALUE_TYPE' => $valueType,
+            'COMPLEX_ID' => $complexID,
+            'VALUE' => $phoneNumber,
+        );
+        fp($fieldsToUpdate, 'fieldsToUpdate');
+        $cfm = new CCrmFieldMulti();
+
+        return $cfm->Update($fieldMultiID, $fieldsToUpdate);
+    }
+}
+
+// Avivi #49545 CRM Analytics Report
+AddEventHandler("crm", "OnAfterCrmLeadAdd", 'countNewLead');
+AddEventHandler("crm", "OnAfterCrmLeadUpdate", 'countNewLead');
+function countNewLead($arFields)
+{
+    if (!empty($arFields['STATUS_ID'])
+        && $arFields['STATUS_ID'] == NEW_LEAD_COUNT_STATUS_ID) {
+        $arFilter = ['UF_LEAD_ID' => $arFields['ID']];
+        $recordID = CHighData::IsRecordExist(HB_NEW_LEADS, $arFilter);
+        if (empty($recordID)) {
+            $data = [
+                'UF_CREATED' => new DateTime(),
+                'UF_LEAD_ID' => $arFields['ID'],
+            ];
+            CHighData::AddRecord(HB_NEW_LEADS, $data);
+        }
+    }
+}
+
+/*
+// Avivi #18300 Auto assigning leads in Bitrix Live Chat
+AddEventHandler("crm", "OnBeforeCrmLeadUpdate", 'checkResponsibleBeforeUpdate');
+function checkResponsibleBeforeUpdate($arFields) {
+    if (!empty($arFields['ASSIGNED_BY_ID'])
+        && $arFields['ASSIGNED_BY_ID'] == 1
+        && !empty($arFields['MODIFY_BY_ID'])
+        && $arFields['MODIFY_BY_ID'] == 1
+        && CModule::IncludeModule('crm')
+    ) {
+        $dbRes = CCrmLead::GetListEx([], ['ID' => $arFields['ID']], false, false, ['STATUS_ID', 'SOURCE_ID']);
+        if ($arRes = $dbRes->Fetch()) {
+//            fp($arRes, 'checkResponsibleArFields', true);
+            if ($arRes['STATUS_ID'] === 'NEW'
+                && $arRes['SOURCE_ID'] === 'WEBFORM'
+            ) {
+                return false;
+            }
+        }
+    }
+}
+*/
+
+AddEventHandler("crm", "OnBeforeCrmLeadUpdate", 'copyAddress');
+
+function copyAddress(&$arFields)
+{
+    \Bitrix\Main\Loader::includeModule('location');
+    $entity = new CCrmLead(false);
+
+    if (isset($arFields['ADDRESS_LOC_ADDR'])) {
+        $address = $arFields['ADDRESS_LOC_ADDR']->getAllFieldsValues();
+        $finalAddress = '';
+
+        if(isset($address['410']) && !empty($address['410']))
+            $finalAddress .= $address['410'] . ', ';
+        if(isset($address['300']) && !empty($address['300']))
+            $finalAddress .= $address['300'] . ', ';
+        if(isset($address['50']) && !empty($address['50']))
+            $finalAddress .= $address['50'] . ', ';
+        if(isset($address['100']) && !empty($address['100']))
+            $finalAddress .= $address['100'];
+
+        $fields['UF_CRM_1641930030902'] = $finalAddress;
+        $fields['UF_CRM_1641930153621'] = $finalAddress;
+
+        $entity->update($arFields['ID'], $fields);
+    } else {
+        $lead = CCrmLead::GetById($arFields['ID'], false);
+        $finalAddress = '';
+
+        if(isset($lead['ADDRESS']) && !empty($lead['ADDRESS']))
+            $finalAddress .= $lead['ADDRESS'] . ', ';
+        if(isset($lead['ADDRESS_CITY']) && !empty($lead['ADDRESS_CITY']))
+            $finalAddress .= $lead['ADDRESS_CITY'] . ', ';
+        if(isset($lead['ADDRESS_POSTAL_CODE']) && !empty($lead['ADDRESS_POSTAL_CODE']))
+            $finalAddress .= $lead['ADDRESS_POSTAL_CODE'] . ', ';
+        if(isset($lead['ADDRESS_COUNTRY']) && !empty($lead['ADDRESS_COUNTRY']))
+            $finalAddress .= $lead['ADDRESS_COUNTRY'];
+
+        $arFields['UF_CRM_1641930030902'] = $finalAddress;
+        $arFields['UF_CRM_1641930153621'] = $finalAddress;
+    }
+}
+
+//AddEventHandler("main", "OnBeforeProlog", 'test');
+function test()
+{
+//    global $USER;
+//    fp($USER, 'tom_USER');
+//    fp($_SERVER, 'tom_SERVER');
+//    fp($_SESSION, 'tom_SESSION');
+//    if($_SESSION['SESS_IP'] == '23.106.56.36'){
+//        header('Location: '.'https://metalpro.site/test_savin.php');
+//        die();
+//        http_response_code(403);
+//        die();
+//    }
+
+//    $ch = curl_init('https://ipwho.is/188.190.190.33');
+//    $ch = curl_init('https://maps.googleapis.com/maps/api/geocode/json?latlng=49.422983,26.987133&sensor=false&callback=myMap');
+//
+//    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//    $response = curl_exec($ch);
+//    curl_close($ch);
+//    $ipInfo = json_decode($response, true);
+//    fp($ipInfo, 'tom_ipInfo3');
+}
