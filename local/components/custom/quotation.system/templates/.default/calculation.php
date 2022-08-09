@@ -249,14 +249,14 @@ $request = Context::getCurrent()->getRequest();
 
             <tr class="section">
                 <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3">SUGGESTED SALE PRICE</td>
+                <td class="name" colspan="3">BUILDING PRICE WITH DISCOUNT</td>
                 <td colspan="1">=</td>
                 <td colspan="2"><?=isset($request["ASKING"]) && !empty($request["ASKING"]) ? '$'.number_format($request["ASKING"], 2, '.', ',') : '$0,00';?></td>
             </tr>
 
 			<tr class="section">
                 <td class="border_none" colspan="4"></td>
-                <td class="name" colspan="3">BUILDING RETAIL PRICE</td>
+                <td class="name" colspan="3">SUGGESTED SALE PRICE</td>
                 <td colspan="1">=</td>
                 <td colspan="2"><?=isset($request["SOLD_FOR"]) && !empty($request["SOLD_FOR"]) ? '$'.number_format($request["SOLD_FOR"], 2, '.', ',') : '$0,00';?></td>
             </tr>

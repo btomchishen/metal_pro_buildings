@@ -1289,7 +1289,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                 <tr>
                     <td class="crm-offer-info-left">
                         <div class="crm-offer-info-label-wrap">
-                            <span class="crm-offer-info-label">Building Retail Price:</span>
+                            <span class="crm-offer-info-label">Suggested Sale Price:</span>
                         </div>
                     </td>
                     <td class="crm-offer-info-right">
@@ -1316,7 +1316,7 @@ $APPLICATION->SetAdditionalCSS('/local/assets/select2/dist/css/select2.css');
                     </td>
                     <td class="crm-offer-info-left">
                         <div class="crm-offer-info-label-wrap"> 
-                            <span class="crm-offer-info-label">Suggested Sale Price:</span>
+                            <span class="crm-offer-info-label">Building Price with Discount:</span>
                         </div>
                     </td>
                     <td class="crm-offer-info-right">
