@@ -40,7 +40,7 @@
       <paths name="MPB dev">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$/../../MPB dev/" web="/" />
           </mappings>
         </serverdata>
       </paths>

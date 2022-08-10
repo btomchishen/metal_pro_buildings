@@ -892,8 +892,8 @@ if ((isset($request["SAVE_DATA"]) && $request["SAVE_DATA"] == "Y") || (isset($re
         (isset($request["REAR_WALL_HEIGHT"]) && !empty($request["REAR_WALL_HEIGHT"])) ? $request['REAR_WALL_WIDTH'] * $request["REAR_WALL_HEIGHT"] : "";
 
         // Prices calculation
-        $suggestedSalePrice = $arResult['ASKING'];
-        $buildingPrice = $arResult['SOLD_FOR'];
+        $suggestedSalePrice = $arResult['SOLD_FOR'];
+        $buildingPrice = $arResult['ASKING'];
         $freight = $arResult['TOTAL_FREIGHT'];
         // Getting tax rate list
         $taxRate = array_shift(CHighData::GetList(TAX_RATE_HIGHLOAD, array('UF_PROVINCE' => $request['CUSTOMER_PROVINCE']), array("*")));
