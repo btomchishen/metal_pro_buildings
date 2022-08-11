@@ -271,9 +271,9 @@ class StraightWallPartsOrder extends PDFForm
             "Account No" => !empty($HLBTData['ACCOUNT_NUMBER']) ? $HLBTData['ACCOUNT_NUMBER'] : "",
             "Old Vendor ID" => !empty($HLBTData['PIONEER_ID']) ? $HLBTData['PIONEER_ID'] : "",
             "Order Status" => !empty($HLBTData['ORDER_STATUS']) ? $HLBTData['ORDER_STATUS'] : "",
-            "Primary Number" => !empty($HLBTData['PRIMARY_PHONE']) ? $HLBTData['PRIMARY_PHONE'] : "",
-            "Secondary Number" => !empty($HLBTData['SECONDARY_PHONE']) ? $HLBTData['SECONDARY_PHONE'] : "",
-            "Work" => !empty($HLBTData['WORK']) ? $HLBTData['WORK'] : "",
+            "Primary Phone" => !empty($HLBTData['PRIMARY_PHONE']) ? $HLBTData['PRIMARY_PHONE'] : "",
+            "Secondary Phone" => !empty($HLBTData['SECONDARY_PHONE']) ? $HLBTData['SECONDARY_PHONE'] : "",
+//            "Work" => !empty($HLBTData['WORK']) ? $HLBTData['WORK'] : "",
             "Email" => !empty($HLBTData['EMAIL']) ? $HLBTData['EMAIL'] : "",
             // UF_FORM_BUILDING
             "Revised Drawings" => !empty($HLBTData['REVISED_DRAWINGS']) ? $HLBTData['REVISED_DRAWINGS'] : "",
@@ -294,7 +294,7 @@ class StraightWallPartsOrder extends PDFForm
             "Parts Price" => !empty($HLBTData['BUILDING_PRICE']) ? $HLBTData['BUILDING_PRICE'] : "",
             "Sub Total" => !empty($HLBTData['SUB_TOTAL']) ? $HLBTData['SUB_TOTAL'] : "",
             "Sub Total Status" => !empty($HLBTData['SUB_TOTAL_STATUS']) ? $HLBTData['SUB_TOTAL_STATUS'] : "",
-            "Pick Up" => !empty($HLBTData['PICK_UP']) ? $HLBTData['PICK_UP'] : "",
+//            "Pick Up" => !empty($HLBTData['PICK_UP']) ? $HLBTData['PICK_UP'] : "",
             "Tax" => !empty($HLBTData['TAX']) ? $HLBTData['TAX'] : "",
             "Tax Rate" => !empty($HLBTData['TAX_RATE']) ? explode("_", $HLBTData['TAX_RATE'])[1] . '%' : "",
             "Mailing Address" => !empty($HLBTData['MAILING_ADDRESS']) ? $HLBTData['MAILING_ADDRESS'] : "",
@@ -302,7 +302,7 @@ class StraightWallPartsOrder extends PDFForm
             "Shipping Address" => !empty($HLBTData['SHIPPING_ADDRESS']) ? $HLBTData['SHIPPING_ADDRESS'] : "",
             // UF_FORM_ADDITIONAL
             "Notes" => !empty($HLBTData['NOTES']) ? $HLBTData['NOTES'] : "",
-            "Addendum" => !empty($HLBTData['ADDENDUM']) ? parent::changeCharacters($HLBTData['ADDENDUM']) : "",
+//            "Addendum" => !empty($HLBTData['ADDENDUM']) ? parent::changeCharacters($HLBTData['ADDENDUM']) : "",
         );
 
         return $fields;

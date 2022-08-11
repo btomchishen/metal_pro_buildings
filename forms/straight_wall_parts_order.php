@@ -13,9 +13,7 @@ global $APPLICATION;
 $APPLICATION->SetTitle("Straight Wall Parts Order");
 // Js Files
 $APPLICATION->AddHeadScript('/forms/script/Form.js');
-$APPLICATION->AddHeadScript('/forms/script/QuonsetForm.js');
-$APPLICATION->AddHeadScript('/forms/script/StraightWallForm.js');
-$APPLICATION->AddHeadScript('/forms/script/QuonsetPartsOrder.js');
+$APPLICATION->AddHeadScript('/forms/script/StraightWallPartsOrder.js');
 $APPLICATION->AddHeadScript('/forms/script/events.js');
 $APPLICATION->AddHeadScript('/local/assets/js/jquery.maskMoney.js');
 // Style Files

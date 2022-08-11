@@ -410,7 +410,7 @@ class PDFForm
     protected function getSalesRepList($responsibleID, $isNewForm)
     {
         $dbRes = \Bitrix\Intranet\Util::GetDepartmentEmployees([
-            'DEPARTMENTS' => SALES_DEPARTMENT_ID,
+            'DEPARTMENTS' => 3,
             'RECURSIVE' => 'Y',
             'ACTIVE' => 'Y',
             'SELECT' => [
