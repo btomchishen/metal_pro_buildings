@@ -1,0 +1,156 @@
+.wall_form { /* вся форма */
+    max-width: 550px;
+    padding: 2%;
+    border-radius: 3px;
+    /*background: #f1f1f1;*/
+}
+
+.wall_form label { /* наименование полей */
+    float: left;
+    display: block;
+    clear: right;
+    max-width: 200px;
+}
+
+.wall_form .w100 { /* поля */
+    float: right;
+    max-width: 280px;
+    width: 97%;
+    margin-bottom: 1em;
+    padding: 1.5%;
+}
+
+.wall_form .c100 { /* поля */
+    display: flex;
+    justify-content: center;
+    float: right;
+    max-width: 280px;
+    width: 97%;
+    margin-bottom: 1em;
+    padding: 1.5%;
+}
+
+.wall_form .s100 { /* поля */
+    float: right;
+    max-width: 300px;
+    width: 97%;
+    margin-bottom: 1em;
+    padding: 1.5%;
+}
+
+.wall_form textarea {
+    /*resize: none;*/
+}
+
+.wall_form .border { /* граница полей */
+    border-radius: 1px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #C0C0C0 #D9D9D9 #D9D9D9;
+    box-shadow: 0 1px 1px rgba(255,255,255,.5), 0 1px 1px rgba(0,0,0,.1) inset;
+}
+
+.wall_form .border:focus {
+    outline: none;
+    border-color: #abd9f1 #bfe3f7 #bfe3f7;
+}
+
+.wall_form .border:hover {
+    border-color: #7eb4ea #97cdea #97cdea;
+}
+
+.wall_form .border:focus::-moz-placeholder { /* убрать при фокусе первоначальный текст поля */
+    color: transparent;
+}
+
+.wall_form .border:focus::-webkit-input-placeholder {
+    color: transparent;
+}
+
+.wall_form .border:not(:focus):not(:hover):valid { /* правильно заполненные поля */
+    opacity: .8;
+}
+
+.submitFF {
+    padding: 2%;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset;
+    background: #669aac;
+    color: #fff;
+}
+
+.wall_form br {
+    height: 0;
+    clear: both;
+}
+
+.submitFF:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    background: #5c90c2;
+    cursor: pointer;
+}
+
+.submitFF:focus {
+    box-shadow: 0 1px 1px #fff, inset 0 1px 2px rgba(0,0,0,.8), inset 0 -1px 0 rgba(0,0,0,.05);
+}
+
+.resetFF {
+    padding: 2%;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset;
+    background: #f1f1f1;
+    color: #000;
+}
+
+.resetFF:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    background: #f2f2f2;
+    cursor: pointer;
+}
+
+.resetFF:focus {
+    box-shadow: 0 1px 1px #fff, inset 0 1px 2px rgba(0,0,0,.8), inset 0 -1px 0 rgba(0,0,0,.05);
+}
+
+.deleteFF {
+    padding: 2%;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset;
+    background: #c25c5c;
+    color: #fff;
+}
+
+.deleteFF:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    background: #c23737;
+    cursor: pointer;
+}
+
+.deleteFF:focus {
+    box-shadow: 0 1px 1px #fff, inset 0 1px 2px rgba(0,0,0,.8), inset 0 -1px 0 rgba(0,0,0,.05);
+}
+
+.button {
+    margin-top: 10px;
+    padding: 2%;
+    border: none;
+    display: inline-block;
+    border-radius: 3px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset;
+    background: #f1f1f1;
+    color: #000;
+}
+
+.button:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    background: #f2f2f2;
+    cursor: pointer;
+    color: #000;
+}
+
+.button:focus {
+    box-shadow: 0 1px 1px #fff, inset 0 1px 2px rgba(0,0,0,.8), inset 0 -1px 0 rgba(0,0,0,.05);
+}

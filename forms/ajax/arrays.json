@@ -1,0 +1,450 @@
+{
+  "IS_USA_ORDER": {
+    "yes": [
+      {
+        "id": "USA_BUILDING_DRAWINGS",
+        "style": "block"
+      },
+      {
+        "id": "USA_BUILDING_USE",
+        "style": "block"
+      }
+    ],
+    "no": [
+      {
+        "id": "USA_BUILDING_DRAWINGS",
+        "style": "none"
+      },
+      {
+        "id": "USA_BUILDING_USE",
+        "style": "none"
+      }
+    ]
+  },
+  "IS_SEA_CONTAINER_BUILDING": {
+    "yes": [
+      {
+        "id": "SEA_CONTAINER_STYLE",
+        "style": "block"
+      },
+      {
+        "id": "SEA_CONTAINER_DESIGN",
+        "style": "block"
+      },
+      {
+        "id": "FRONT_WALL_EXTENSION",
+        "style": "block"
+      },
+      {
+        "id": "FRONT_WALL_SEA_CONTAINER_HEIGHT",
+        "style": "block"
+      },
+      {
+        "id": "REAR_WALL_EXTENSION",
+        "style": "block"
+      },
+      {
+        "id": "REAR_WALL_SEA_CONTAINER_HEIGHT",
+        "style": "block"
+      }
+    ],
+    "no": [
+      {
+        "id": "SEA_CONTAINER_STYLE",
+        "style": "none"
+      },
+      {
+        "id": "SEA_CONTAINER_DESIGN",
+        "style": "none"
+      },
+      {
+        "id": "FRONT_WALL_EXTENSION",
+        "style": "none"
+      },
+      {
+        "id": "FRONT_WALL_SEA_CONTAINER_HEIGHT",
+        "style": "none"
+      },
+      {
+        "id": "REAR_WALL_EXTENSION",
+        "style": "none"
+      },
+      {
+        "id": "REAR_WALL_SEA_CONTAINER_HEIGHT",
+        "style": "none"
+      }
+    ]
+  },
+  "IS_ACCESSORIES1": {
+    "yes": [
+      {
+        "id": "ACCESSORY_1",
+        "style": "block"
+      },
+      {
+        "id": "ACCESSORY_2",
+        "style": "block"
+      },
+      {
+        "id": "ACCESSORY_3",
+        "style": "block"
+      },
+      {
+        "id": "ACCESSORY_4",
+        "style": "block"
+      },
+      {
+        "id": "ACCESSORY_5",
+        "style": "block"
+      }
+    ],
+    "no": [
+      {
+        "id": "ACCESSORY_1",
+        "style": "none"
+      },
+      {
+        "id": "ACCESSORY_QTY_1",
+        "style": "none"
+      },
+      {
+        "id": "ACCESSORY_2",
+        "style": "none"
+      },
+      {
+        "id": "ACCESSORY_QTY_2",
+        "style": "none"
+      },
+      {
+        "id": "ACCESSORY_3",
+        "style": "none"
+      },
+      {
+        "id": "ACCESSORY_QTY_3",
+        "style": "none"
+      },
+      {
+        "id": "ACCESSORY_4",
+        "style": "none"
+      },
+      {
+        "id": "ACCESSORY_QTY_4",
+        "style": "none"
+      },
+      {
+        "id": "ACCESSORY_5",
+        "style": "none"
+      },
+      {
+        "id": "ACCESSORY_QTY_5",
+        "style": "none"
+      }
+    ]
+  },
+  "IS_INSULATION": {
+    "yes": [
+      {
+        "id": "ROOF_INSULATION",
+        "style": "block"
+      },
+      {
+        "id": "WALL_INSULATION",
+        "style": "block"
+      },
+      {
+        "id": "ROOF_LINER",
+        "style": "block"
+      },
+      {
+        "id": "WALL_LINER",
+        "style": "block"
+      }
+    ],
+    "no": [
+      {
+        "id": "ROOF_INSULATION",
+        "style": "none"
+      },
+      {
+        "id": "WALL_INSULATION",
+        "style": "none"
+      },
+      {
+        "id": "ROOF_LINER",
+        "style": "none"
+      },
+      {
+        "id": "WALL_LINER",
+        "style": "none"
+      }
+    ]
+  },
+  "IS_ACCESSORIES": {
+    "yes": [
+      {
+        "id": "SERVICE_DOOR",
+        "style": "block"
+      },
+      {
+        "id": "SERVICE_DOOR_FRAME",
+        "style": "block"
+      },
+      {
+        "id": "WINDOW_FRAME",
+        "style": "block"
+      },
+      {
+        "id": "OTHERS_1",
+        "style": "block"
+      },
+      {
+        "id": "OTHERS_2",
+        "style": "block"
+      },
+      {
+        "id": "OTHERS_3",
+        "style": "block"
+      }
+    ],
+    "no": [
+      {
+        "id": "SERVICE_DOOR",
+        "style": "none"
+      },
+      {
+        "id": "SERVICE_DOOR_FRAME",
+        "style": "none"
+      },
+      {
+        "id": "WINDOW_FRAME",
+        "style": "none"
+      },
+      {
+        "id": "OTHERS_1",
+        "style": "none"
+      },
+      {
+        "id": "OTHERS_2",
+        "style": "none"
+      },
+      {
+        "id": "OTHERS_3",
+        "style": "none"
+      }
+    ]
+  },
+  "SERIES": {
+    "yes": [
+      {
+        "id": "IS_SEA_CONTAINER_BUILDING",
+        "style": "block"
+      }
+    ],
+    "no": [
+      {
+        "id": "IS_SEA_CONTAINER_BUILDING",
+        "style": "none"
+      },
+      {
+        "id": "SEA_CONTAINER_STYLE",
+        "style": "none"
+      },
+      {
+        "id": "SEA_CONTAINER_DESIGN",
+        "style": "none"
+      },
+      {
+        "id": "FRONT_WALL_EXTENSION",
+        "style": "none"
+      },
+      {
+        "id": "FRONT_WALL_SEA_CONTAINER_HEIGHT",
+        "style": "none"
+      },
+      {
+        "id": "REAR_WALL_EXTENSION",
+        "style": "none"
+      },
+      {
+        "id": "REAR_WALL_SEA_CONTAINER_HEIGHT",
+        "style": "none"
+      }
+    ]
+  },
+  "MODEL_TYPE": {
+    "RigidArray": [
+      {
+        "id": "RAIN_LOAD",
+        "style": "block"
+      },
+      {
+        "id": "SA_02",
+        "style": "block"
+      },
+      {
+        "id": "SA_05",
+        "style": "block"
+      },
+      {
+        "id": "SA_1",
+        "style": "block"
+      },
+      {
+        "id": "SA_2",
+        "style": "block"
+      },
+      {
+        "id": "LEW_AREAS",
+        "style": "block"
+      },
+      {
+        "id": "REW_AREAS",
+        "style": "block"
+      },
+      {
+        "id": "FSW_AREAS",
+        "style": "block"
+      },
+      {
+        "id": "BSW_AREAS",
+        "style": "block"
+      },
+      {
+        "id": "PRIMER_COLOR",
+        "style": "block"
+      },
+      {
+        "id": "FRAME_COLUMN",
+        "style": "block"
+      },
+      {
+        "id": "FRAME_RAFTER",
+        "style": "block"
+      },
+      {
+        "id": "RIGID_FRAMES",
+        "style": "block"
+      },
+      {
+        "id": "BASE_CONDITIONS",
+        "style": "block"
+      }
+    ],
+    "ChannelArray": [
+      {
+        "id": "RAIN_LOAD",
+        "style": "none"
+      },
+      {
+        "id": "SA_02",
+        "style": "block"
+      },
+      {
+        "id": "SA_05",
+        "style": "block"
+      },
+      {
+        "id": "SA_1",
+        "style": "block"
+      },
+      {
+        "id": "SA_2",
+        "style": "block"
+      },
+      {
+        "id": "LEW_AREAS",
+        "style": "none"
+      },
+      {
+        "id": "REW_AREAS",
+        "style": "none"
+      },
+      {
+        "id": "FSW_AREAS",
+        "style": "none"
+      },
+      {
+        "id": "BSW_AREAS",
+        "style": "none"
+      },
+      {
+        "id": "PRIMER_COLOR",
+        "style": "none"
+      },
+      {
+        "id": "FRAME_COLUMN",
+        "style": "none"
+      },
+      {
+        "id": "FRAME_RAFTER",
+        "style": "none"
+      },
+      {
+        "id": "RIGID_FRAMES",
+        "style": "none"
+      },
+      {
+        "id": "BASE_CONDITIONS",
+        "style": "none"
+      }
+    ],
+    "Default": [
+      {
+        "id": "RAIN_LOAD",
+        "style": "none"
+      },
+      {
+        "id": "SA_02",
+        "style": "none"
+      },
+      {
+        "id": "SA_05",
+        "style": "none"
+      },
+      {
+        "id": "SA_1",
+        "style": "none"
+      },
+      {
+        "id": "SA_2",
+        "style": "none"
+      },
+      {
+        "id": "LEW_AREAS",
+        "style": "none"
+      },
+      {
+        "id": "REW_AREAS",
+        "style": "none"
+      },
+      {
+        "id": "FSW_AREAS",
+        "style": "none"
+      },
+      {
+        "id": "BSW_AREAS",
+        "style": "none"
+      },
+      {
+        "id": "PRIMER_COLOR",
+        "style": "none"
+      },
+      {
+        "id": "FRAME_COLUMN",
+        "style": "none"
+      },
+      {
+        "id": "FRAME_RAFTER",
+        "style": "none"
+      },
+      {
+        "id": "RIGID_FRAMES",
+        "style": "none"
+      },
+      {
+        "id": "BASE_CONDITIONS",
+        "style": "none"
+      }
+    ]
+  }
+}
