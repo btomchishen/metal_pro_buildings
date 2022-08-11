@@ -1,0 +1,15 @@
+#widow-supplier td{
+    padding: 5px 0;
+}
+#widow-supplier a:hover{
+    text-decoration: underline;
+}
+.disable_btn_wrap{
+    pointer-events: none;
+}
+.disable_btn_wrap:hover{
+    cursor: revert;
+}
+.disable_btn{
+    color: #DCDCDC;
+}
