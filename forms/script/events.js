@@ -19,6 +19,9 @@ $(document).ready(function () {
         case 'RevisionToPurchaseOrder':
             form = new RevisionToPurchaseOrder(formType, dealID, ID);
             break;
+        case 'StraightWallPartsOrder':
+            form = new StraightWallPartsOrder(formType, dealID, ID);
+            break;
     }
 
     form.fillLeadsFromDeal();

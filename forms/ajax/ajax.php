@@ -27,6 +27,9 @@ switch ($formType) {
     case 'RevisionToPurchaseOrder':
         $form = new RevisionToPurchaseOrder($dealID, $formType, $formID);
         break;
+    case 'StraightWallPartsOrder':
+        $form = new StraightWallPartsOrder($dealID, $formType, $formID);
+        break;
 }
 
 if ($action == 'GET_DATA') {
@@ -60,7 +63,7 @@ if ($action == 'RECALCULATE_PRICES') {
 
         $result['prices'] = $form->calculatePrices($totalAmount, $originalAmount, $taxRate);
     } else {
-        if($request['CALCULATE_BY'] == 'SUB_TOTAL')
+        if ($request['CALCULATE_BY'] == 'SUB_TOTAL')
             $result['prices'] = $form->calculatePricesBySubTotal($taxRate, $subTotal);
         else
             $result['prices'] = $form->calculatePrices($buildingPrice, $taxRate);

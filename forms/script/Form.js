@@ -85,7 +85,7 @@ class Form {
                     });
 
                     window.open(response.filePath, '_blank');
-                    window.location.replace('https://metalpro.site/crm/deal/details/' + $this.dealID + '/');
+                    window.location.replace('https://dev.metalpro.site/crm/deal/details/' + $this.dealID + '/');
                 } catch (e) {
                     BX.UI.Notification.Center.notify({
                         content: data,
@@ -125,7 +125,7 @@ class Form {
                     content: "PO Deleted",
                 });
 
-                window.location.replace('https://metalpro.site/crm/deal/details/' + $this.dealID + '/');
+                window.location.replace('https://dev.metalpro.site/crm/deal/details/' + $this.dealID + '/');
 
                 console.log(response);
             },
