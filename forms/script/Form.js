@@ -15,7 +15,6 @@ class Form {
                 "ID": this.ID
             },
             beforeSend: function () {
-                // Show image container
                 $("#loader").show();
             },
             success: function (data) {
@@ -47,7 +46,6 @@ class Form {
                 $this.fillChangedFields();
             },
             complete: function (data) {
-                // Hide image container
                 $("#loader").hide();
             }
         })

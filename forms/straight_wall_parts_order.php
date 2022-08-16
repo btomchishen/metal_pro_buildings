@@ -66,13 +66,6 @@ $request = Context::getCurrent()->getRequest();
         <label for="WORK">Work</label><input type="text" class="w100" name="WORK"><br>
         <!-- Email Field -->
         <label for="EMAIL">Email</label><input type="email" class="w100" name="EMAIL"><br>
-        <!-- Building Use Static List -->
-        <label for="BUILDING_USE">Building Use</label><select type="text" class="s100" name="BUILDING_USE">
-            <option value="Please Select" >Please Select</option>
-            <option value="Category I" >Low Human Occupancy</option>
-            <option value="Category II" >Medium Human Occupancy</option>
-            <option value="Category III" >High Human Occupancy</option>
-        </select><br>
         <!-- Accessory 1 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
         <label for="ACCESSORY_1">Accessory 1</label><select id="ACCESSORY_1" type="text" class="s100" name="ACCESSORY_1">
         </select><br>
@@ -109,19 +102,6 @@ $request = Context::getCurrent()->getRequest();
             <option value="Included" >Included</option>
             <option value="Not Included" >Not Included</option>
         </select>
-        <!-- Exposure Conditions Static List -->
-        <label for="EXPOSURE_CONDITIONS">Exposure Conditions</label><select id="EXPOSURE_CONDITIONS" type="text" class="s100" name="EXPOSURE_CONDITIONS">
-            <option value="" selected></option>
-            <option value="Sheltered" >Sheltered</option>
-            <option value="Shadow / Drift" >Shadow / Drift</option>
-        </select>
-        <!-- Is Anchor Wedges or Insulation Included Static List -->
-        <label for="IS_ANCHOR_OR_INSULATION">Is Anchor Wedges or Insulation Included</label><select id="IS_ANCHOR_OR_INSULATION" type="text" class="s100" name="IS_ANCHOR_OR_INSULATION">
-            <option value="Please Select" >Please Select</option>
-            <option value="Anchor Wedges" >Anchor Wedges</option>
-            <option value="Pins & Caps" >Pins & Caps</option>
-            <option value="Anchor Wedges and Pins & Caps" >Anchor Wedges and Pins & Caps</option>
-        </select>
         <!-- Requested Delivery Month Dynamic List, get from HighLoadBlock with ID = REQUESTED_DELIVERY_MONTH_HIGHLOAD (constant) -->
         <label for="REQUESTED_DELIVERY_MONTH">Requested Delivery Month</label><select type="text" class="s100" name="REQUESTED_DELIVERY_MONTH"></select><br>
         <!-- Payment Method Static List -->
@@ -130,14 +110,6 @@ $request = Context::getCurrent()->getRequest();
             <option value="Bill Pay / Wire Transfer">Bill Pay / Wire Transfer&nbsp;&nbsp;</option>
             <option value="Pay Pal">Pay Pal&nbsp;&nbsp;</option>
         </select><br>
-        <!-- Is Pick Up checkbox -->
-        <label for="IS_PICK_UP">Pick up from Storage Yard</label>
-        <div class="c100">
-            <div>Yes</div>
-            <input type="checkbox" id="IS_PICK_UP" class="" name="IS_PICK_UP"><br>
-        </div>
-        <!-- Pick Up Field -->
-        <label for="PICK_UP">Pick Up</label><input type="text" id="PICK_UP" class="w100" name="PICK_UP"><br>
         <!-- Parts Price Field -->
         <label for="BUILDING_PRICE">Parts Price</label><input id="BUILDING_PRICE" type="text" class="w100 money-input" name="BUILDING_PRICE" placeholder="$0.00"><br>
         <!-- Tax Rate Dynamic List, get from HighLoadBlock with ID = TAX_RATE_HIGHLOAD (constant) -->

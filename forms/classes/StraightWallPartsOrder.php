@@ -136,7 +136,6 @@ class StraightWallPartsOrder extends PDFForm
             ),
             "UF_FORM_BUILDING" => serialize(
                 array(
-                    "BUILDING_USE" => isset($request["BUILDING_USE"]) && !empty($request["BUILDING_USE"]) ? $request["BUILDING_USE"] : "",
                     "ACCESSORY_1" => isset($request["ACCESSORY_1"]) && !empty($request["ACCESSORY_1"]) ? $request["ACCESSORY_1"] : "",
                     "ACCESSORY_QTY_1" => isset($request["ACCESSORY_QTY_1"]) && !empty($request["ACCESSORY_QTY_1"]) ? $request["ACCESSORY_QTY_1"] : "",
                     "ACCESSORY_2" => isset($request["ACCESSORY_2"]) && !empty($request["ACCESSORY_2"]) ? $request["ACCESSORY_2"] : "",
@@ -150,16 +149,12 @@ class StraightWallPartsOrder extends PDFForm
                     "ACCESSORY_6" => isset($request["ACCESSORY_6"]) && !empty($request["ACCESSORY_6"]) ? $request["ACCESSORY_6"] : "",
                     "ACCESSORY_QTY_6" => isset($request["ACCESSORY_QTY_6"]) && !empty($request["ACCESSORY_QTY_6"]) ? $request["ACCESSORY_QTY_6"] : "",
                     "REVISED_DRAWINGS" => isset($request["REVISED_DRAWINGS"]) && !empty($request["REVISED_DRAWINGS"]) ? $request["REVISED_DRAWINGS"] : "",
-                    "EXPOSURE_CONDITIONS" => isset($request["EXPOSURE_CONDITIONS"]) && !empty($request["EXPOSURE_CONDITIONS"]) ? $request["EXPOSURE_CONDITIONS"] : "",
-                    "IS_ANCHOR_OR_INSULATION" => isset($request["IS_ANCHOR_OR_INSULATION"]) && !empty($request["IS_ANCHOR_OR_INSULATION"]) ? $request["IS_ANCHOR_OR_INSULATION"] : "",
                 )
             ),
             "UF_FORM_PAYMENT" => serialize(
                 array(
                     "REQUESTED_DELIVERY_MONTH" => isset($request["REQUESTED_DELIVERY_MONTH"]) && !empty($request["REQUESTED_DELIVERY_MONTH"]) ? $request["REQUESTED_DELIVERY_MONTH"] : "",
                     "PAYMENT_METHOD" => isset($request["PAYMENT_METHOD"]) && !empty($request["PAYMENT_METHOD"]) ? $request["PAYMENT_METHOD"] : "",
-                    "IS_PICK_UP" => isset($request["IS_PICK_UP"]) && !empty($request["IS_PICK_UP"]) ? 'Yes' : 'No',
-                    "PICK_UP" => isset($request["PICK_UP"]) && !empty($request["IS_PICK_UP"]) ? $request["PICK_UP"] : '',
                     "BUILDING_PRICE" => isset($request["BUILDING_PRICE"]) && !empty($request["BUILDING_PRICE"]) ? $request["BUILDING_PRICE"] : "",
                     "TAX_RATE" => isset($request["TAX_RATE"]) && !empty($request["TAX_RATE"]) ? $request["TAX_RATE"] : "",
                     "TAX" => isset($request["TAX"]) && !empty($request["TAX"]) ? $request["TAX"] : "",
@@ -213,7 +208,6 @@ class StraightWallPartsOrder extends PDFForm
             "WORK" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['WORK'],
             "EMAIL" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['EMAIL'],
             // UF_FORM_BUILDING
-            "BUILDING_USE" => unserialize($formData['UF_FORM_BUILDING'])['BUILDING_USE'],
             "ACCESSORY_1" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_1'],
             "ACCESSORY_QTY_1" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_QTY_1'],
             "ACCESSORY_2" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_2'],
@@ -227,13 +221,9 @@ class StraightWallPartsOrder extends PDFForm
             "ACCESSORY_6" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_6'],
             "ACCESSORY_QTY_6" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_QTY_6'],
             "REVISED_DRAWINGS" => unserialize($formData['UF_FORM_BUILDING'])['REVISED_DRAWINGS'],
-            "EXPOSURE_CONDITIONS" => unserialize($formData['UF_FORM_BUILDING'])['EXPOSURE_CONDITIONS'],
-            "IS_ANCHOR_OR_INSULATION" => unserialize($formData['UF_FORM_BUILDING'])['IS_ANCHOR_OR_INSULATION'],
             // UF_FORM_PAYMENT
             "REQUESTED_DELIVERY_MONTH" => unserialize($formData['UF_FORM_PAYMENT'])['REQUESTED_DELIVERY_MONTH'],
             "PAYMENT_METHOD" => unserialize($formData['UF_FORM_PAYMENT'])['PAYMENT_METHOD'],
-            "IS_PICK_UP" => unserialize($formData['UF_FORM_PAYMENT'])['IS_PICK_UP'],
-            "PICK_UP" => unserialize($formData['UF_FORM_PAYMENT'])['PICK_UP'],
             "BUILDING_PRICE" => unserialize($formData['UF_FORM_PAYMENT'])['BUILDING_PRICE'],
             "TAX_RATE" => unserialize($formData['UF_FORM_PAYMENT'])['TAX_RATE'],
             "TAX" => unserialize($formData['UF_FORM_PAYMENT'])['TAX'],
@@ -276,7 +266,7 @@ class StraightWallPartsOrder extends PDFForm
             "Order Status" => !empty($HLBTData['ORDER_STATUS']) ? $HLBTData['ORDER_STATUS'] : "",
             "Primary Phone" => !empty($HLBTData['PRIMARY_PHONE']) ? $HLBTData['PRIMARY_PHONE'] : "",
             "Secondary Phone" => !empty($HLBTData['SECONDARY_PHONE']) ? $HLBTData['SECONDARY_PHONE'] : "",
-//            "Work" => !empty($HLBTData['WORK']) ? $HLBTData['WORK'] : "",
+            "Work" => !empty($HLBTData['WORK']) ? $HLBTData['WORK'] : "",
             "Email" => !empty($HLBTData['EMAIL']) ? $HLBTData['EMAIL'] : "",
             // UF_FORM_BUILDING
             "Revised Drawings" => !empty($HLBTData['REVISED_DRAWINGS']) ? $HLBTData['REVISED_DRAWINGS'] : "",
@@ -297,7 +287,6 @@ class StraightWallPartsOrder extends PDFForm
             "Parts Price" => !empty($HLBTData['BUILDING_PRICE']) ? $HLBTData['BUILDING_PRICE'] : "",
             "Sub Total" => !empty($HLBTData['SUB_TOTAL']) ? $HLBTData['SUB_TOTAL'] : "",
             "Sub Total Status" => !empty($HLBTData['SUB_TOTAL_STATUS']) ? $HLBTData['SUB_TOTAL_STATUS'] : "",
-//            "Pick Up" => !empty($HLBTData['PICK_UP']) ? $HLBTData['PICK_UP'] : "",
             "Tax" => !empty($HLBTData['TAX']) ? $HLBTData['TAX'] : "",
             "Tax Rate" => !empty($HLBTData['TAX_RATE']) ? explode("_", $HLBTData['TAX_RATE'])[1] . '%' : "",
             "Mailing Address" => !empty($HLBTData['MAILING_ADDRESS']) ? $HLBTData['MAILING_ADDRESS'] : "",
@@ -305,7 +294,7 @@ class StraightWallPartsOrder extends PDFForm
             "Shipping Address" => !empty($HLBTData['SHIPPING_ADDRESS']) ? $HLBTData['SHIPPING_ADDRESS'] : "",
             // UF_FORM_ADDITIONAL
             "Notes" => !empty($HLBTData['NOTES']) ? $HLBTData['NOTES'] : "",
-//            "Addendum" => !empty($HLBTData['ADDENDUM']) ? parent::changeCharacters($HLBTData['ADDENDUM']) : "",
+            "Addendum" => !empty($HLBTData['ADDENDUM']) ? parent::changeCharacters($HLBTData['ADDENDUM']) : "",
         );
 
         return $fields;
