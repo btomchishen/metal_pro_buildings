@@ -61,12 +61,12 @@ class StraightWallPartsOrder extends PDFForm
     {
         $dealData = parent::getDealData();
 
-        $result['PARTS_1'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
-        $result['PARTS_2'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
-        $result['PARTS_3'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
-        $result['PARTS_4'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
-        $result['PARTS_5'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
-        $result['PARTS_6'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
+        $result['ACCESSORY_1'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
+        $result['ACCESSORY_2'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
+        $result['ACCESSORY_3'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
+        $result['ACCESSORY_4'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
+        $result['ACCESSORY_5'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
+        $result['ACCESSORY_6'] = parent::getHighLoadList(PARTS_HIGHLOAD, 'none', 'UF_VALUE', true);
 
         $result['SALES_REP'] = parent::getSalesRepList($dealData['ASSIGNED_BY_ID'], true);
         $result['REQUESTED_DELIVERY_MONTH'] = parent::getHighLoadList(REQUESTED_DELIVERY_MONTH_HIGHLOAD, $dealData['REQUESTED_DELIVERY_MONTH'], 'UF_MONTH', true);
@@ -84,12 +84,12 @@ class StraightWallPartsOrder extends PDFForm
     {
         $HLBTData = self::getDataFromHLBT();
 
-        $result['PARTS_1'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['PARTS_1'], 'UF_VALUE', false);
-        $result['PARTS_2'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['PARTS_2'], 'UF_VALUE', false);
-        $result['PARTS_3'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['PARTS_3'], 'UF_VALUE', false);
-        $result['PARTS_4'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['PARTS_4'], 'UF_VALUE', false);
-        $result['PARTS_5'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['PARTS_5'], 'UF_VALUE', false);
-        $result['PARTS_6'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['PARTS_6'], 'UF_VALUE', false);
+        $result['ACCESSORY_1'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['ACCESSORY_1'], 'UF_VALUE', false);
+        $result['ACCESSORY_2'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['ACCESSORY_2'], 'UF_VALUE', false);
+        $result['ACCESSORY_3'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['ACCESSORY_3'], 'UF_VALUE', false);
+        $result['ACCESSORY_4'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['ACCESSORY_4'], 'UF_VALUE', false);
+        $result['ACCESSORY_5'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['ACCESSORY_5'], 'UF_VALUE', false);
+        $result['ACCESSORY_6'] = parent::getHighLoadList(PARTS_HIGHLOAD, $HLBTData['ACCESSORY_6'], 'UF_VALUE', false);
 
         $result['SALES_REP'] = parent::getSalesRepList($HLBTData['SALES_REP'], false);
         $result['REQUESTED_DELIVERY_MONTH'] = parent::getHighLoadList(REQUESTED_DELIVERY_MONTH_HIGHLOAD, $HLBTData['REQUESTED_DELIVERY_MONTH'], 'UF_MONTH', false);
@@ -124,6 +124,7 @@ class StraightWallPartsOrder extends PDFForm
                     "SALES_REP_EMAIL" => isset($request["SALES_REP_EMAIL"]) && !empty($request["SALES_REP_EMAIL"]) ? $request["SALES_REP_EMAIL"] : "",
                     "CUSTOMER" => isset($request["CUSTOMER"]) && !empty($request["CUSTOMER"]) ? $request["CUSTOMER"] : "",
                     "COMPANY" => isset($request["COMPANY"]) && !empty($request["COMPANY"]) ? $request["COMPANY"] : "",
+                    "PROJECT_NAME" => isset($request["PROJECT_NAME"]) && !empty($request["PROJECT_NAME"]) ? $request["PROJECT_NAME"] : "",
                     "ACCOUNT_NUMBER" => isset($request["ACCOUNT_NUMBER"]) && !empty($request["ACCOUNT_NUMBER"]) ? $request["ACCOUNT_NUMBER"] : "",
                     "PIONEER_ID" => isset($request["PIONEER_ID"]) && !empty($request["PIONEER_ID"]) ? $request["PIONEER_ID"] : "",
                     "ORDER_STATUS" => isset($request["ORDER_STATUS"]) && !empty($request["ORDER_STATUS"]) ? $request["ORDER_STATUS"] : "",
@@ -136,18 +137,18 @@ class StraightWallPartsOrder extends PDFForm
             "UF_FORM_BUILDING" => serialize(
                 array(
                     "BUILDING_USE" => isset($request["BUILDING_USE"]) && !empty($request["BUILDING_USE"]) ? $request["BUILDING_USE"] : "",
-                    "PARTS_1" => isset($request["PARTS_1"]) && !empty($request["PARTS_1"]) ? $request["PARTS_1"] : "",
-                    "PARTS_QTY_1" => isset($request["PARTS_QTY_1"]) && !empty($request["PARTS_QTY_1"]) ? $request["PARTS_QTY_1"] : "",
-                    "PARTS_2" => isset($request["PARTS_2"]) && !empty($request["PARTS_2"]) ? $request["PARTS_2"] : "",
-                    "PARTS_QTY_2" => isset($request["PARTS_QTY_2"]) && !empty($request["PARTS_QTY_2"]) ? $request["PARTS_QTY_2"] : "",
-                    "PARTS_3" => isset($request["PARTS_3"]) && !empty($request["PARTS_3"]) ? $request["PARTS_3"] : "",
-                    "PARTS_QTY_3" => isset($request["PARTS_QTY_3"]) && !empty($request["PARTS_QTY_3"]) ? $request["PARTS_QTY_3"] : "",
-                    "PARTS_4" => isset($request["PARTS_4"]) && !empty($request["PARTS_4"]) ? $request["PARTS_4"] : "",
-                    "PARTS_QTY_4" => isset($request["PARTS_QTY_4"]) && !empty($request["PARTS_QTY_4"]) ? $request["PARTS_QTY_4"] : "",
-                    "PARTS_5" => isset($request["PARTS_5"]) && !empty($request["PARTS_5"]) ? $request["PARTS_5"] : "",
-                    "PARTS_QTY_5" => isset($request["PARTS_QTY_5"]) && !empty($request["PARTS_QTY_5"]) ? $request["PARTS_QTY_5"] : "",
-                    "PARTS_6" => isset($request["PARTS_6"]) && !empty($request["PARTS_6"]) ? $request["PARTS_6"] : "",
-                    "PARTS_QTY_6" => isset($request["PARTS_QTY_6"]) && !empty($request["PARTS_QTY_6"]) ? $request["PARTS_QTY_6"] : "",
+                    "ACCESSORY_1" => isset($request["ACCESSORY_1"]) && !empty($request["ACCESSORY_1"]) ? $request["ACCESSORY_1"] : "",
+                    "ACCESSORY_QTY_1" => isset($request["ACCESSORY_QTY_1"]) && !empty($request["ACCESSORY_QTY_1"]) ? $request["ACCESSORY_QTY_1"] : "",
+                    "ACCESSORY_2" => isset($request["ACCESSORY_2"]) && !empty($request["ACCESSORY_2"]) ? $request["ACCESSORY_2"] : "",
+                    "ACCESSORY_QTY_2" => isset($request["ACCESSORY_QTY_2"]) && !empty($request["ACCESSORY_QTY_2"]) ? $request["ACCESSORY_QTY_2"] : "",
+                    "ACCESSORY_3" => isset($request["ACCESSORY_3"]) && !empty($request["ACCESSORY_3"]) ? $request["ACCESSORY_3"] : "",
+                    "ACCESSORY_QTY_3" => isset($request["ACCESSORY_QTY_3"]) && !empty($request["ACCESSORY_QTY_3"]) ? $request["ACCESSORY_QTY_3"] : "",
+                    "ACCESSORY_4" => isset($request["ACCESSORY_4"]) && !empty($request["ACCESSORY_4"]) ? $request["ACCESSORY_4"] : "",
+                    "ACCESSORY_QTY_4" => isset($request["ACCESSORY_QTY_4"]) && !empty($request["ACCESSORY_QTY_4"]) ? $request["ACCESSORY_QTY_4"] : "",
+                    "ACCESSORY_5" => isset($request["ACCESSORY_5"]) && !empty($request["ACCESSORY_5"]) ? $request["ACCESSORY_5"] : "",
+                    "ACCESSORY_QTY_5" => isset($request["ACCESSORY_QTY_5"]) && !empty($request["ACCESSORY_QTY_5"]) ? $request["ACCESSORY_QTY_5"] : "",
+                    "ACCESSORY_6" => isset($request["ACCESSORY_6"]) && !empty($request["ACCESSORY_6"]) ? $request["ACCESSORY_6"] : "",
+                    "ACCESSORY_QTY_6" => isset($request["ACCESSORY_QTY_6"]) && !empty($request["ACCESSORY_QTY_6"]) ? $request["ACCESSORY_QTY_6"] : "",
                     "REVISED_DRAWINGS" => isset($request["REVISED_DRAWINGS"]) && !empty($request["REVISED_DRAWINGS"]) ? $request["REVISED_DRAWINGS"] : "",
                     "EXPOSURE_CONDITIONS" => isset($request["EXPOSURE_CONDITIONS"]) && !empty($request["EXPOSURE_CONDITIONS"]) ? $request["EXPOSURE_CONDITIONS"] : "",
                     "IS_ANCHOR_OR_INSULATION" => isset($request["IS_ANCHOR_OR_INSULATION"]) && !empty($request["IS_ANCHOR_OR_INSULATION"]) ? $request["IS_ANCHOR_OR_INSULATION"] : "",
@@ -203,6 +204,7 @@ class StraightWallPartsOrder extends PDFForm
             "SALES_REP_EMAIL" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['SALES_REP_EMAIL'],
             "CUSTOMER" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['CUSTOMER'],
             "COMPANY" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['COMPANY'],
+            "PROJECT_NAME" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['PROJECT_NAME'],
             "ACCOUNT_NUMBER" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['ACCOUNT_NUMBER'],
             "PIONEER_ID" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['PIONEER_ID'],
             "ORDER_STATUS" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['ORDER_STATUS'],
@@ -212,18 +214,18 @@ class StraightWallPartsOrder extends PDFForm
             "EMAIL" => unserialize($formData['UF_FORM_DEAL_INFORMATION'])['EMAIL'],
             // UF_FORM_BUILDING
             "BUILDING_USE" => unserialize($formData['UF_FORM_BUILDING'])['BUILDING_USE'],
-            "PARTS_1" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_1'],
-            "PARTS_QTY_1" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_QTY_1'],
-            "PARTS_2" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_2'],
-            "PARTS_QTY_2" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_QTY_2'],
-            "PARTS_3" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_3'],
-            "PARTS_QTY_3" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_QTY_3'],
-            "PARTS_4" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_4'],
-            "PARTS_QTY_4" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_QTY_4'],
-            "PARTS_5" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_5'],
-            "PARTS_QTY_5" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_QTY_5'],
-            "PARTS_6" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_6'],
-            "PARTS_QTY_6" => unserialize($formData['UF_FORM_BUILDING'])['PARTS_QTY_6'],
+            "ACCESSORY_1" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_1'],
+            "ACCESSORY_QTY_1" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_QTY_1'],
+            "ACCESSORY_2" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_2'],
+            "ACCESSORY_QTY_2" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_QTY_2'],
+            "ACCESSORY_3" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_3'],
+            "ACCESSORY_QTY_3" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_QTY_3'],
+            "ACCESSORY_4" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_4'],
+            "ACCESSORY_QTY_4" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_QTY_4'],
+            "ACCESSORY_5" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_5'],
+            "ACCESSORY_QTY_5" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_QTY_5'],
+            "ACCESSORY_6" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_6'],
+            "ACCESSORY_QTY_6" => unserialize($formData['UF_FORM_BUILDING'])['ACCESSORY_QTY_6'],
             "REVISED_DRAWINGS" => unserialize($formData['UF_FORM_BUILDING'])['REVISED_DRAWINGS'],
             "EXPOSURE_CONDITIONS" => unserialize($formData['UF_FORM_BUILDING'])['EXPOSURE_CONDITIONS'],
             "IS_ANCHOR_OR_INSULATION" => unserialize($formData['UF_FORM_BUILDING'])['IS_ANCHOR_OR_INSULATION'],
@@ -268,6 +270,7 @@ class StraightWallPartsOrder extends PDFForm
             "Customer" => !empty($HLBTData['CUSTOMER']) ? $HLBTData['CUSTOMER'] : "",
             "Sales Rep Name" => $salesRep[0],
             "Company" => !empty($HLBTData['COMPANY']) ? $HLBTData['COMPANY'] : "",
+            "Project Name" => !empty($HLBTData['PROJECT_NAME']) ? $HLBTData['PROJECT_NAME'] : "",
             "Account No" => !empty($HLBTData['ACCOUNT_NUMBER']) ? $HLBTData['ACCOUNT_NUMBER'] : "",
             "Old Vendor ID" => !empty($HLBTData['PIONEER_ID']) ? $HLBTData['PIONEER_ID'] : "",
             "Order Status" => !empty($HLBTData['ORDER_STATUS']) ? $HLBTData['ORDER_STATUS'] : "",
@@ -277,18 +280,18 @@ class StraightWallPartsOrder extends PDFForm
             "Email" => !empty($HLBTData['EMAIL']) ? $HLBTData['EMAIL'] : "",
             // UF_FORM_BUILDING
             "Revised Drawings" => !empty($HLBTData['REVISED_DRAWINGS']) ? $HLBTData['REVISED_DRAWINGS'] : "",
-            "Parts 1" => !empty($HLBTData['PARTS_1']) ? $HLBTData['PARTS_1'] : "",
-            "Parts 1 QTY" => !empty($HLBTData['PARTS_QTY_1']) ? $HLBTData['PARTS_QTY_1'] : "",
-            "Parts 2" => !empty($HLBTData['PARTS_2']) ? $HLBTData['PARTS_2'] : "",
-            "Parts 2 QTY" => !empty($HLBTData['PARTS_QTY_2']) ? $HLBTData['PARTS_QTY_2'] : "",
-            "Parts 3" => !empty($HLBTData['PARTS_3']) ? $HLBTData['PARTS_3'] : "",
-            "Parts 3 QTY" => !empty($HLBTData['PARTS_QTY_3']) ? $HLBTData['PARTS_QTY_3'] : "",
-            "Parts 4" => !empty($HLBTData['PARTS_4']) ? $HLBTData['PARTS_4'] : "",
-            "Parts 4 QTY" => !empty($HLBTData['PARTS_QTY_4']) ? $HLBTData['PARTS_QTY_4'] : "",
-            "Parts 5" => !empty($HLBTData['PARTS_5']) ? $HLBTData['PARTS_5'] : "",
-            "Parts 5 QTY" => !empty($HLBTData['PARTS_QTY_5']) ? $HLBTData['PARTS_QTY_5'] : "",
-            "Parts 6" => !empty($HLBTData['PARTS_6']) ? $HLBTData['PARTS_6'] : "",
-            "Parts 6 QTY" => !empty($HLBTData['PARTS_QTY_6']) ? $HLBTData['PARTS_QTY_6'] : "",
+            "Parts 1" => !empty($HLBTData['ACCESSORY_1']) ? $HLBTData['ACCESSORY_1'] : "",
+            "Parts 1 QTY" => !empty($HLBTData['ACCESSORY_QTY_1']) ? $HLBTData['ACCESSORY_QTY_1'] : "",
+            "Parts 2" => !empty($HLBTData['ACCESSORY_2']) ? $HLBTData['ACCESSORY_2'] : "",
+            "Parts 2 QTY" => !empty($HLBTData['ACCESSORY_QTY_2']) ? $HLBTData['ACCESSORY_QTY_2'] : "",
+            "Parts 3" => !empty($HLBTData['ACCESSORY_3']) ? $HLBTData['ACCESSORY_3'] : "",
+            "Parts 3 QTY" => !empty($HLBTData['ACCESSORY_QTY_3']) ? $HLBTData['ACCESSORY_QTY_3'] : "",
+            "Parts 4" => !empty($HLBTData['ACCESSORY_4']) ? $HLBTData['ACCESSORY_4'] : "",
+            "Parts 4 QTY" => !empty($HLBTData['ACCESSORY_QTY_4']) ? $HLBTData['ACCESSORY_QTY_4'] : "",
+            "Parts 5" => !empty($HLBTData['ACCESSORY_5']) ? $HLBTData['ACCESSORY_5'] : "",
+            "Parts 5 QTY" => !empty($HLBTData['ACCESSORY_QTY_5']) ? $HLBTData['ACCESSORY_QTY_5'] : "",
+            "Parts 6" => !empty($HLBTData['ACCESSORY_6']) ? $HLBTData['ACCESSORY_6'] : "",
+            "Parts 6 QTY" => !empty($HLBTData['ACCESSORY_QTY_6']) ? $HLBTData['ACCESSORY_QTY_6'] : "",
             // UF_FORM_PAYMENT
             "Requested Delivery Month" => !empty($HLBTData['REQUESTED_DELIVERY_MONTH']) ? $HLBTData['REQUESTED_DELIVERY_MONTH'] : "",
             "Parts Price" => !empty($HLBTData['BUILDING_PRICE']) ? $HLBTData['BUILDING_PRICE'] : "",

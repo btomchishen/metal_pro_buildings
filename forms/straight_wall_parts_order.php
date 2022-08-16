@@ -38,6 +38,8 @@ $request = Context::getCurrent()->getRequest();
         <label for="CUSTOMER">Customer Name</label><input type="text" class="w100" name="CUSTOMER"><br>
         <!-- Company Field -->
         <label for="COMPANY">Company</label><input type="text" class="w100" name="COMPANY"><br>
+        <!-- Project Name Field -->
+        <label for="PROJECT_NAME">Project Name</label><input type="text" class="w100" name="PROJECT_NAME"><br>
         <!-- Order Status Field -->
         <label for="ORDER_STATUS">Order Status</label><select type="text" class="s100" name="ORDER_STATUS">
             <option value="Parts New Order" >Parts New Order</option>
@@ -71,36 +73,36 @@ $request = Context::getCurrent()->getRequest();
             <option value="Category II" >Medium Human Occupancy</option>
             <option value="Category III" >High Human Occupancy</option>
         </select><br>
-        <!-- Parts 1 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
-        <label for="PARTS_1">Parts 1</label><select id="PARTS_1" type="text" class="s100" name="PARTS_1">
+        <!-- Accessory 1 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
+        <label for="ACCESSORY_1">Accessory 1</label><select id="ACCESSORY_1" type="text" class="s100" name="ACCESSORY_1">
         </select><br>
-        <!-- Parts 1 Quantity Field (showing only if #PARTS_1.value != '') -->
-        <label for="PARTS_QTY_1" style="display: none;">Parts 1 QTY</label><input id="PARTS_QTY_1" type="text" class="w100" name="PARTS_QTY_1" style="display: none;"><br>
-        <!-- Parts 2 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
-        <label for="PARTS_2">Parts 2</label><select id="PARTS_2" type="text" class="s100" name="PARTS_2"">
+        <!-- Accessory 1 Quantity Field (showing only if #ACCESSORY_1.value != '') -->
+        <label for="ACCESSORY_QTY_1" style="display: none;">Accessory 1 QTY</label><input id="ACCESSORY_QTY_1" type="text" class="w100" name="ACCESSORY_QTY_1" style="display: none;"><br>
+        <!-- Accessory 2 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
+        <label for="ACCESSORY_2">Accessory 2</label><select id="ACCESSORY_2" type="text" class="s100" name="ACCESSORY_2"">
         </select><br>
-        <!-- Parts 2 Quantity Field (showing only if #PARTS_2.value != '') -->
-        <label for="PARTS_QTY_2" style="display: none;">Parts 2 QTY</label><input id="PARTS_QTY_2" type="text" class="w100" name="PARTS_QTY_2" style="display: none;"><br>
-        <!-- Parts 3 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
-        <label for="PARTS_3">Parts 3</label><select id="PARTS_3" type="text" class="s100" name="PARTS_3">
+        <!-- Accessory 2 Quantity Field (showing only if #ACCESSORY_2.value != '') -->
+        <label for="ACCESSORY_QTY_2" style="display: none;">Accessory 2 QTY</label><input id="ACCESSORY_QTY_2" type="text" class="w100" name="ACCESSORY_QTY_2" style="display: none;"><br>
+        <!-- Accessory 3 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
+        <label for="ACCESSORY_3">Accessory 3</label><select id="ACCESSORY_3" type="text" class="s100" name="ACCESSORY_3">
         </select><br>
-        <!-- Parts 3 Quantity Field (showing only if #PARTS_3.value != '') -->
-        <label for="PARTS_QTY_3" style="display: none;">Parts 3 QTY</label><input id="PARTS_QTY_3" type="text" class="w100" name="PARTS_QTY_3" style="display: none;"><br>
-        <!-- Parts 4 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
-        <label for="PARTS_4">Parts 4</label><select id="PARTS_4" type="text" class="s100" name="PARTS_4">
+        <!-- Accessory 3 Quantity Field (showing only if #ACCESSORY_3.value != '') -->
+        <label for="ACCESSORY_QTY_3" style="display: none;">Accessory 3 QTY</label><input id="ACCESSORY_QTY_3" type="text" class="w100" name="ACCESSORY_QTY_3" style="display: none;"><br>
+        <!-- Accessory 4 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
+        <label for="ACCESSORY_4">Accessory 4</label><select id="ACCESSORY_4" type="text" class="s100" name="ACCESSORY_4">
         </select><br>
-        <!-- Parts 4 Quantity Field (showing only if #PARTS_4.value != '') -->
-        <label for="PARTS_QTY_4" style="display: none;">Parts 4 QTY</label><input id="PARTS_QTY_4" type="text" class="w100" name="PARTS_QTY_4" style="display: none;"><br>
-        <!-- Parts 5 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
-        <label for="PARTS_5">Parts 5</label><select id="PARTS_5" type="text" class="s100" name="PARTS_5">
+        <!-- Accessory 4 Quantity Field (showing only if #ACCESSORY_4.value != '') -->
+        <label for="ACCESSORY_QTY_4" style="display: none;">Accessory 4 QTY</label><input id="ACCESSORY_QTY_4" type="text" class="w100" name="ACCESSORY_QTY_4" style="display: none;"><br>
+        <!-- Accessory 5 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
+        <label for="ACCESSORY_5">Accessory 5</label><select id="ACCESSORY_5" type="text" class="s100" name="ACCESSORY_5">
         </select><br>
-        <!-- Parts 5 Quantity Field (showing only if #PARTS_5.value != '') -->
-        <label for="PARTS_QTY_5" style="display: none;">Parts 5 QTY</label><input id="PARTS_QTY_5" type="text" class="w100" name="PARTS_QTY_5" style="display: none;"><br>
-        <!-- Parts 6 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
-        <label for="PARTS_6">Parts 6</label><select id="PARTS_6" type="text" class="s100" name="PARTS_6">
+        <!-- Accessory 5 Quantity Field (showing only if #ACCESSORY_5.value != '') -->
+        <label for="ACCESSORY_QTY_5" style="display: none;">Accessory 5 QTY</label><input id="ACCESSORY_QTY_5" type="text" class="w100" name="ACCESSORY_QTY_5" style="display: none;"><br>
+        <!-- Accessory 6 Dynamic List, get from HighLoadBlock with ID = ... (constant) (showing only if #.checked == true) -->
+        <label for="ACCESSORY_6">Accessory 6</label><select id="ACCESSORY_6" type="text" class="s100" name="ACCESSORY_6">
         </select><br>
-        <!-- Parts 6 Quantity Field (showing only if #PARTS_6.value != '') -->
-        <label for="PARTS_QTY_6" style="display: none;">Parts 6 QTY</label><input id="PARTS_QTY_6" type="text" class="w100" name="PARTS_QTY_6" style="display: none;"><br>
+        <!-- Accessory 6 Quantity Field (showing only if #ACCESSORY_6.value != '') -->
+        <label for="ACCESSORY_QTY_6" style="display: none;">Accessory 6 QTY</label><input id="ACCESSORY_QTY_6" type="text" class="w100" name="ACCESSORY_QTY_6" style="display: none;"><br>
         <!-- Revised Drawings Static List -->
         <label for="REVISED_DRAWINGS">Revised Drawings</label><select id="REVISED_DRAWINGS" type="text" class="s100" name="REVISED_DRAWINGS">
             <option value="" selected></option>

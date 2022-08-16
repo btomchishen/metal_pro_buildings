@@ -190,8 +190,13 @@ class Form {
             this.changeFieldsByChange('CHANGE_3');
             this.changeFieldsByChange('CHANGE_4');
             this.changeFieldsByChange('CHANGE_5');
-        } else if (this.formType == 'StraightWallParstOrder') {
-
+        } else if (this.formType == 'StraightWallPartsOrder') {
+            this.showAccessory('ACCESSORY_1');
+            this.showAccessory('ACCESSORY_2');
+            this.showAccessory('ACCESSORY_3');
+            this.showAccessory('ACCESSORY_4');
+            this.showAccessory('ACCESSORY_5');
+            this.showAccessory('ACCESSORY_6');
         }
     }
 

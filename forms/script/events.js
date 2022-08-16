@@ -292,6 +292,31 @@ $(document).ready(function () {
         $(document).on('change', '#CHANGE_5', function () {
             form.changeFieldsByChange(this.id);
         });
+    }
 
+    if (formType == 'StraightWallPartsOrder') {
+        $(document).on('change', '#ACCESSORY_1', function () {
+            form.showAccessory(this.id);
+        });
+
+        $(document).on('change', '#ACCESSORY_2', function () {
+            form.showAccessory(this.id);
+        });
+
+        $(document).on('change', '#ACCESSORY_3', function () {
+            form.showAccessory(this.id);
+        });
+
+        $(document).on('change', '#ACCESSORY_4', function () {
+            form.showAccessory(this.id);
+        });
+
+        $(document).on('change', '#ACCESSORY_5', function () {
+            form.showAccessory(this.id);
+        });
+
+        $(document).on('change', '#ACCESSORY_6', function () {
+            form.showAccessory(this.id);
+        });
     }
 });
