@@ -2,7 +2,6 @@
 require($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_before.php');
 
 use Bitrix\Main\Context;
-use PHPMailer\PHPMailer\PHPMailer;
 
 Bitrix\Main\Loader::includeModule('crm');
 Bitrix\Main\Loader::includeModule('main');
@@ -63,7 +62,7 @@ if ($action == 'RECALCULATE_PRICES') {
 
         $result['prices'] = $form->calculatePrices($totalAmount, $originalAmount, $taxRate);
     } else {
-        if($request['CALCULATE_BY'] == 'SUB_TOTAL')
+        if ($request['CALCULATE_BY'] == 'SUB_TOTAL')
             $result['prices'] = $form->calculatePricesBySubTotal($taxRate, $subTotal);
         else
             $result['prices'] = $form->calculatePrices($buildingPrice, $taxRate);

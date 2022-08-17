@@ -1,15 +1,5 @@
 <?php
 
-require $_SERVER["DOCUMENT_ROOT"] . '/composer/vendor/autoload.php';
-require $_SERVER["DOCUMENT_ROOT"] . '/composer/vendor/fpdm-master/fpdm.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-
-/**
- * Class StraightWallPartsOrder extends from PDFForm
- *
- * All used constants located in /home/bitrix/www/local/php_interface/include/constants.php
- */
 class StraightWallPartsOrder extends PDFForm
 {
     protected const PATH_TO_PDF_TEMPLATE = '/home/bitrix/www/forms/pdf_templates/straight_wall_parts_order.pdf';

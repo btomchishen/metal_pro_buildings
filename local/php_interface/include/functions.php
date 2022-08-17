@@ -55,3 +55,117 @@ function p($array, $header = "")
     echo htmlspecialcharsEx(print_r($array, true));
     echo '</pre>';
 }
+
+function checkAccessForDelete(){
+    global $USER;
+    $currentUserId = $USER->GetId();
+
+    $userArray = array();
+    $depArray = array();
+
+    // get from relation table b_crm_role_relation
+    $res = CCrmRole::GetRelation();
+    while($item = $res->fetch()) {
+        if($item['ROLE_ID'] == LEAD_MANAGEMENT_ROLE_ID){
+            $relation = str_split($item['RELATION']);
+
+            if($relation[0] == 'U'){
+                $userId = '';
+
+                for($i = 1; $i < count($relation); $i++){
+                    $userId .= $relation[$i];
+                }
+
+                $userArray[] = intval($userId);
+            }
+            else if($relation[0] == 'D' && $relation[1] != 'R'){
+                $depId = '';
+
+                for($i = 1; $i < count($relation); $i++){
+                    $depId .= $relation[$i];
+                }
+
+                $depArray[] = intval($depId);
+            }
+            else if($relation[0] == 'D' && $relation[1] == 'R'){
+                $depId = '';
+
+                for($i = 2; $i < count($relation); $i++){
+                    $depId .= $relation[$i];
+                }
+
+                $depArray[] = intval($depId);
+            }
+        }
+    }
+
+    $db = \Bitrix\Intranet\Util::GetDepartmentEmployees([
+        'DEPARTMENTS' => $depArray,
+        'RECURSIVE'   => 'Y',
+        'ACTIVE'      => 'Y',
+        'SELECT'      => [
+            'EMAIL'
+        ]
+    ]);
+
+    $tempUserArray = array();
+
+    while($item = $db->fetch()) {
+        $tempUserArray[] = $item['ID'];
+    }
+
+    // array_unique - for prevent duplicating id after merge array with single user's and user's from departments
+    $userIdArray = array_unique(array_merge($userArray, $tempUserArray));
+
+    foreach ($userIdArray as $user){
+        if($user == $currentUserId){
+            return false;
+        }
+    }
+    return true;
+}
+
+function validate_date($date, $format) {
+    $date_obj = DateTime::createFromFormat($format, $date);
+    return $date_obj && $date_obj->format($format) == $date;
+}
+
+function convert_date($date, $from_format, $to_format) {
+    $date_obj = DateTime::createFromFormat($from_format, $date);
+    return $date_obj->format($to_format);
+}
+
+function fixEndDate(&$DateTime) {
+    $input_format = 'Y-m-d 23:59:59';
+    $output_format = 'Y-m-d H:i:s';
+    $DateTime = new Bitrix\Main\Type\DateTime($DateTime->format($input_format), $output_format);
+}
+
+function fixAnalyticsFilter(&$control, $GUID) {
+    if (empty($control['filter']['periodType'])) {
+        $GUID_parts = explode('_', $GUID);
+        $filter_name = 'crm-vc-myreports-crm-' . $GUID_parts[0];
+        CModule::IncludeModule('crm');
+        global $USER;
+        $user_id = $USER->GetID();
+        $filters = \CUserOptions::getOption("main.ui.filter", $filter_name, [], $user_id);
+        if (!empty($filters)) {
+            foreach ($filters['filters'] as $filter_key => $filter) {
+                if ($filter_key == 'tmp_filter') {
+                    if (!empty($filter['fields']['PERIOD_datesel'])) {
+                        $control['filter']['periodType'] = Bitrix\Crm\Widget\FilterPeriodType::convertFromDateType($filter['fields']['PERIOD_datesel']);
+                        if (!empty($filter['fields']['PERIOD_year'])) {
+                            $control['filter']['year'] = $filter['fields']['PERIOD_year'];
+                        }
+                        if (!empty($filter['fields']['PERIOD_month'])) {
+                            $control['filter']['month'] = $filter['fields']['PERIOD_month'];
+                        }
+                        if (!empty($filter['fields']['PERIOD_quarter'])) {
+                            $control['filter']['quarter'] = $filter['fields']['PERIOD_quarter'];
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

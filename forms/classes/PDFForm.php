@@ -2,15 +2,10 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
-/**
- * Class PDFForm
- */
 class PDFForm
 {
     /**
      * Make new Form ID (+1)
-     *
-     * @return int|mixed New form ID
      */
     public function getNewFormID()
     {
@@ -28,10 +23,6 @@ class PDFForm
 
     /**
      * Calculate all prices by Building Price and Tax Rate
-     *
-     * @param string $buildingPrice Building Price
-     * @param int $taxRate Tax Rate
-     * @return array
      */
     public function calculatePrices($buildingPrice, $taxRate)
     {
@@ -56,6 +47,9 @@ class PDFForm
         return $result;
     }
 
+    /**
+     * Calculate all prices by Sub Total and Tax Rate
+     */
     public function calculatePricesBySubTotal($taxRate, $subTotal)
     {
         $subTotal = str_replace(array('$', ','), '', $subTotal);
@@ -101,8 +95,6 @@ class PDFForm
 
     /**
      * Get Deal Fields by ID
-     *
-     * @return array Deal Fields
      */
     protected function getDealData()
     {
@@ -111,8 +103,6 @@ class PDFForm
 
     /**
      * Get Company Name by Deal to filling PDF field
-     *
-     * @return string Company Name
      */
     protected function getCompanyFields()
     {
@@ -140,9 +130,6 @@ class PDFForm
 
     /**
      * Formatting phone number to format (XXX) XXX-XXXX
-     *
-     * @param int $phoneNumber Phone Number
-     * @return string Formatted phone number
      */
     protected function formatPhone($phoneNumber)
     {
@@ -150,8 +137,7 @@ class PDFForm
     }
 
     /**
-     * @param string $text Input text with
-     * @return string|string[] Formatted text
+     * ’ - don't readable by FPDM library
      */
     protected function changeCharacters($text)
     {
@@ -160,8 +146,6 @@ class PDFForm
 
     /**
      * Create file name for saving pdf file
-     *
-     * @return string File name
      */
     protected function createFileName()
     {
@@ -172,8 +156,6 @@ class PDFForm
 
     /**
      * Attach file to record in HLBT
-     *
-     * @param string $filePath File name with folder name
      */
     protected function addFileToRecord($filePath)
     {
@@ -187,8 +169,6 @@ class PDFForm
 
     /**
      * Create PDF file and fill fields
-     *
-     * @param array $fields Fields to filling form
      */
     protected function createPDF($fields)
     {
@@ -205,22 +185,27 @@ class PDFForm
     /**
      * Send email with attached file to Client email
      *
-     * @return boolean Is Mail sent
+     * @throws \PHPMailer\PHPMailer\Exception
      */
     protected function sendMail()
     {
         $responsibleID = $this->getDealData()['ASSIGNED_BY_ID'];
         $responsible = \CUser::GetByID($responsibleID)->Fetch();
+        $formData = array_shift(CHighData::GetList(FORMS_HIGHLOAD, array('UF_DEAL_ID' => $this->dealID, 'UF_ID' => $this->formID)));
 
         $mail = new PHPMailer;
 
         $mail->setFrom('bitrix@metalprobuildings.com', 'Admin MetalPro');
         if (!empty($responsible))
-            $mail->addAddress($responsible['EMAIL'], $responsible['NAME'] . $responsible['LAST_NAME']);
+            $mail->addAddress($responsible['EMAIL'], $responsible['NAME'] . ' ' . $responsible['LAST_NAME']);
         $mail->addAddress('orders@metalprobuildings.com', 'Orders MetalPro');
         $mail->Subject = 'PO created';
         $mail->msgHTML($this->createFileName());
-        $mail->addAttachment($this->pathToFilesFolder . $this->createFileName());
+
+        $file = CFile::GetByID($formData['UF_DOCUMENT_PDF'])->Fetch();
+        $pathToFile = '/home/bitrix/www/upload/' . $file['SUBDIR'] . '/' . $file['FILE_NAME'];
+
+        $mail->addAttachment($pathToFile);
 
         return $mail->send();
     }
@@ -256,9 +241,6 @@ class PDFForm
 
     /**
      * Get all employees ID from department
-     *
-     * @param $departmentID
-     * @return array
      */
     protected function getDepartmentEmployeesID($departmentID)
     {
@@ -281,8 +263,6 @@ class PDFForm
 
     /**
      * Get Chat ID from HLBT
-     *
-     * @return int|mixed Chat ID
      */
     protected function getChatID()
     {
@@ -296,37 +276,12 @@ class PDFForm
 
     /**
      * Add Chat ID to HLBT
-     *
-     * @param int $chatID Chat ID
      */
     protected function addChatIDToHLBT($chatID)
     {
         $formData = array_shift(CHighData::GetList(FORMS_HIGHLOAD, array('UF_DEAL_ID' => $this->dealID, 'UF_ID' => $this->formID)));
 
         CHighData::UpdateRecord(FORMS_HIGHLOAD, $formData['ID'], array("UF_CHAT_ID" => $chatID));
-    }
-
-    /**
-     * Get folder name with files by FormType
-     *
-     * @return string Folder Name
-     */
-    protected function getFolderName()
-    {
-        switch ($this->formType) {
-            case 'QuonsetForm':
-                return 'quonset';
-                break;
-            case 'QuonsetPartsOrder':
-                return 'quonset_parts_order';
-                break;
-            case 'RevisionToPurchaseOrder':
-                return 'revision_to_purchase_order';
-                break;
-            case 'StraightWallForm':
-                return 'straight_wall';
-                break;
-        }
     }
 
     /**
@@ -359,10 +314,15 @@ class PDFForm
             ));
         }
 
+        $formData = array_shift(CHighData::GetList(FORMS_HIGHLOAD, array('UF_DEAL_ID' => $this->dealID, 'UF_ID' => $this->formID)));
+
+        $file = CFile::GetByID($formData['UF_DOCUMENT_PDF'])->Fetch();
+        $pathToFile = 'upload/' . $file['SUBDIR'] . '/' . $file['FILE_NAME'];
+
         $chat->AddMessage(array(
             'FROM_USER_ID' => 1,
             'TO_CHAT_ID' => $chatID,
-            'MESSAGE' => '[URL=https://metalpro.site/forms/files/' . $this->getFolderName() . '/' . $this->createFileName() . ']Order In (Click to see file)[/URL]',
+            'MESSAGE' => '[URL=https://metalpro.site/' . $pathToFile . ']Order In (Click to see file)[/URL]',
         ));
 
         $this->addChatIDToHLBT($chatID);
