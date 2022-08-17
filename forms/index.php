@@ -14,8 +14,11 @@ switch ($request['FORM_TYPE']) {
     case 'QuonsetPartsOrder':
         $formType = 'quonset_parts_order';
         break;
-        case 'RevisionToPurchaseOrder':
+    case 'RevisionToPurchaseOrder':
         $formType = 'revision_to_purchase_order';
+        break;
+    case 'StraightWallPartsOrder':
+        $formType = 'straight_wall_parts_order';
         break;
 }
 

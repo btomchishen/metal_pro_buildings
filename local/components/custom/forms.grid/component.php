@@ -92,6 +92,7 @@ $arResult['FORMS_SELECT1'] = '<select class="s100" id="FORMS_SELECT1">
             <option value="StraightWallForm&ID=' . $formID . '">Straight Form</option>
             <option value="QuonsetPartsOrder&ID=' . $formID . '">Quonset Parts Order</option>
             <option value="RevisionToPurchaseOrder&ID=' . $formID . '">Revision to Purchase Order</option>
+             <option value="StraightWallPartsOrder&ID=' . $formID . '">Straight Wall Parts Order</option>
             </select>';
 
 ?>

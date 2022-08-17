@@ -27,6 +27,9 @@ switch ($formType) {
     case 'RevisionToPurchaseOrder':
         $form = new RevisionToPurchaseOrder($dealID, $formType, $formID);
         break;
+    case 'StraightWallPartsOrder':
+        $form = new StraightWallPartsOrder($dealID, $formType, $formID);
+        break;
 }
 
 if ($action == 'GET_DATA') {
