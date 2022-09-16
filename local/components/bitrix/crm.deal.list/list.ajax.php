@@ -38,6 +38,7 @@ if (!CModule::IncludeModule('crm'))
 	return;
 }
 
+$currentUserID = CCrmSecurityHelper::GetCurrentUserID();
 $userPerms = CCrmPerms::GetCurrentUserPermissions();
 if(!CCrmPerms::IsAuthorized())
 {
@@ -243,6 +244,16 @@ elseif ($action === 'SAVE_PROGRESS')
 	{
 		__CrmDealListEndResponse(array('ERROR' => 'Access denied.'));
 	}
+
+	// Avivi - deny access for editing deal
+	$deniedUsers = CHighData::GetList(DENIED_USERS_HLBT, array());
+
+	foreach ($deniedUsers as $user) {
+		if ($currentUserID == $user['UF_USER_ID']) {
+			__CrmDealListEndResponse(array('ERROR' => 'You do not have permission to edit this item'));
+		}
+	}
+	// End Avivi
 
 	$dbResult = CCrmDeal::GetListEx(array(), array('=ID' => $ID,'CHECK_PERMISSIONS' => 'N'));
 	$arPreviousFields = $dbResult->Fetch();

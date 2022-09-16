@@ -401,6 +401,13 @@ if(typeof BX.Crm.EntityDetailProgressControl === "undefined")
 		onSaveRequestSuccess: function(data)
 		{
 			var checkErrors = BX.prop.getObject(data, "CHECK_ERRORS", null);
+			// Avivi - deny access for editing deal
+			if (data.ERROR == 'You do not have permission to edit this item') {
+				BX.UI.Notification.Center.notify({
+					content: data.ERROR
+				});
+			}
+			// End Avivi
 			if(checkErrors)
 			{
 				this.openEntityEditorDialog(

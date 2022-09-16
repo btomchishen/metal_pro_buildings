@@ -410,7 +410,7 @@ foreach($arResult['DEAL'] as $sKey =>  $arDeal)
 					'ENTITY_ID' => $arDeal['~ID'],
 					'CURRENT_ID' => $arDeal['~STAGE_ID'],
 					'CATEGORY_ID' => $arDeal['~CATEGORY_ID'],
-					'SERVICE_URL' => '/bitrix/components/bitrix/crm.deal.list/list.ajax.php',
+					'SERVICE_URL' => '/local/components/bitrix/crm.deal.list/list.ajax.php',
 					'READ_ONLY' => !(isset($arDeal['EDIT']) && $arDeal['EDIT'] === true)
 				)
 			),
@@ -1107,8 +1107,8 @@ $APPLICATION->IncludeComponent(
 		'FILTER_PRESETS' => $arResult['FILTER_PRESETS'],
 		'FILTER_PARAMS' => [
 			'LAZY_LOAD' => [
-				'GET_LIST' => '/bitrix/components/bitrix/crm.deal.list/filter.ajax.php?action=list&filter_id='.urlencode($arResult['GRID_ID']).'&category_id='.$arResult['CATEGORY_ID'].'&is_recurring='.$arParams['IS_RECURRING'].'&siteID='.SITE_ID.'&'.bitrix_sessid_get(),
-				'GET_FIELD' => '/bitrix/components/bitrix/crm.deal.list/filter.ajax.php?action=field&filter_id='.urlencode($arResult['GRID_ID']).'&category_id='.$arResult['CATEGORY_ID'].'&is_recurring='.$arParams['IS_RECURRING'].'&siteID='.SITE_ID.'&'.bitrix_sessid_get(),
+				'GET_LIST' => '/local/components/bitrix/crm.deal.list/filter.ajax.php?action=list&filter_id='.urlencode($arResult['GRID_ID']).'&category_id='.$arResult['CATEGORY_ID'].'&is_recurring='.$arParams['IS_RECURRING'].'&siteID='.SITE_ID.'&'.bitrix_sessid_get(),
+				'GET_FIELD' => '/local/components/bitrix/crm.deal.list/filter.ajax.php?action=field&filter_id='.urlencode($arResult['GRID_ID']).'&category_id='.$arResult['CATEGORY_ID'].'&is_recurring='.$arParams['IS_RECURRING'].'&siteID='.SITE_ID.'&'.bitrix_sessid_get(),
 			],
 			'ENABLE_FIELDS_SEARCH' => 'Y',
 			'HEADERS_SECTIONS' => $arResult['HEADERS_SECTIONS'],
@@ -1181,7 +1181,7 @@ $APPLICATION->IncludeComponent(
 				'activityEditorId' => $activityEditorID,
 				'activityServiceUrl' => '/bitrix/components/bitrix/crm.activity.editor/ajax.php?siteID='.SITE_ID.'&'.bitrix_sessid_get(),
 				'taskCreateUrl'=> isset($arResult['TASK_CREATE_URL']) ? $arResult['TASK_CREATE_URL'] : '',
-				'serviceUrl' => '/bitrix/components/bitrix/crm.deal.list/list.ajax.php?siteID='.SITE_ID.'&'.bitrix_sessid_get(),
+				'serviceUrl' => '/local/components/bitrix/crm.deal.list/list.ajax.php?siteID='.SITE_ID.'&'.bitrix_sessid_get(),
 				'loaderData' => isset($arParams['AJAX_LOADER']) ? $arParams['AJAX_LOADER'] : null
 			),
 			'MESSAGES' => array(
@@ -1233,7 +1233,7 @@ $APPLICATION->IncludeComponent(
 
 			BX.Crm.PartialEditorDialog.registerEntityEditorUrl(
 				"<?=CCrmOwnerType::DealName?>",
-				"<?='/bitrix/components/bitrix/crm.deal.details/ajax.php?'.bitrix_sessid_get()?>"
+				"<?='/local/components/bitrix/crm.deal.details/ajax.php?'.bitrix_sessid_get()?>"
 			);
 
 			var gridId = "<?= CUtil::JSEscape($arResult['GRID_ID'])?>";
@@ -1367,7 +1367,7 @@ if(!$isInternal):
 					};
 				var manager = BX.AutorunProcessManager.create("rebuildDealSearch",
 					{
-						serviceUrl: "<?='/bitrix/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
+						serviceUrl: "<?='/local/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
 						actionName: "REBUILD_SEARCH_CONTENT",
 						container: "rebuildDealSearchWrapper",
 						enableLayout: true
@@ -1414,7 +1414,7 @@ if(!$isInternal):
 				BX.AutorunProcessManager.createIfNotExists(
 					"rebuildDealSecurityAttrs",
 					{
-						serviceUrl: "<?='/bitrix/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
+						serviceUrl: "<?='/local/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
 						actionName: "REBUILD_SECURITY_ATTRS",
 						container: "rebuildDealSecurityAttrsWrapper",
 						title: "<?=GetMessageJS('CRM_DEAL_REBUILD_SECURITY_ATTRS_DLG_TITLE')?>",
@@ -1443,7 +1443,7 @@ if(!$isInternal):
 				};
 				var manager = BX.AutorunProcessManager.create("buildDealTimeline",
 					{
-						serviceUrl: "<?='/bitrix/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
+						serviceUrl: "<?='/local/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
 						actionName: "<?=$isRecurring ? 'BUILD_RECURRING_TIMELINE' : 'BUILD_TIMELINE'?>",
 						container: "buildDealTimelineWrapper",
 						enableLayout: true
@@ -1471,7 +1471,7 @@ if(!$isInternal):
 				};
 				var manager = BX.AutorunProcessManager.create("refreshDealAccounting",
 					{
-						serviceUrl: "<?='/bitrix/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
+						serviceUrl: "<?='/local/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
 						actionName: "REFRESH_ACCOUNTING",
 						container: "refreshDealAccountingWrapper",
 						enableLayout: true
@@ -1499,7 +1499,7 @@ if(!$isInternal):
 				};
 				var manager = BX.AutorunProcessManager.create("rebuildDealSemantics",
 					{
-						serviceUrl: "<?='/bitrix/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
+						serviceUrl: "<?='/local/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get()?>",
 						actionName: "REBUILD_SEMANTICS",
 						container: "rebuildDealSemanticsWrapper",
 						enableLayout: true

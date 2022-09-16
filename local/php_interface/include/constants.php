@@ -148,3 +148,6 @@ define('HB_NEW_LEADS', 30);
 define('NEW_LEAD_COUNT_STATUS_ID', 'E4B0A778');
 
 define('HB_REPORT_ANALYTICS_CONFIG', 36);
+
+// Avivi #30293 Limit Access to Edit Deal Card
+define('DENIED_USERS_HLBT', 37);

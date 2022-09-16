@@ -75,7 +75,7 @@ class CCrmEntityProgressBarComponent extends CBitrixComponent
 		elseif($this->entityTypeID === CCrmOwnerType::Deal || $this->entityTypeID === CCrmOwnerType::DealRecurring)
 		{
 			$this->arResult['ENTITY_FIELD_NAME'] = 'STAGE_ID';
-			$this->serviceUrl = '/bitrix/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get();
+			$this->serviceUrl = '/local/components/bitrix/crm.deal.list/list.ajax.php?'.bitrix_sessid_get();
 			$dbResult = Bitrix\Crm\DealTable::getList(
 				array('select' => array('ID', 'STAGE_ID', 'CATEGORY_ID'), 'filter' => array('=ID' => $this->entityID))
 			);

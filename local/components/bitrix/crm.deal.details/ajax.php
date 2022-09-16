@@ -174,6 +174,16 @@ elseif($action === 'SAVE')
 		__CrmDealDetailsEndJsonResonse(['ERROR'=> \Bitrix\Main\Localization\Loc::getMessage('CRM_TYPE_ITEM_PERMISSIONS_UPDATE_DENIED')]);
 	}
 
+    // Avivi - deny access for editing deal
+    $deniedUsers = CHighData::GetList(DENIED_USERS_HLBT, array());
+
+    foreach ($deniedUsers as $user) {
+        if ($currentUserID == $user['UF_USER_ID']) {
+            __CrmDealDetailsEndJsonResonse(['ERROR' => \Bitrix\Main\Localization\Loc::getMessage('CRM_TYPE_ITEM_PERMISSIONS_UPDATE_DENIED')]);
+        }
+    }
+    // End Avivi
+
 	$diskQuotaRestriction = \Bitrix\Crm\Restriction\RestrictionManager::getDiskQuotaRestriction();
 	if (!$diskQuotaRestriction->hasPermission())
 	{
