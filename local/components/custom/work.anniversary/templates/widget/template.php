@@ -70,6 +70,7 @@ foreach ($arResult['USERS'] as $arUser)
                     );
                     }
                     ?></span>
+         <span class="user-birth-date"><?=$arUser['WORKED_TIME'];?></span>
 			</span>
     </a><?php
 }
