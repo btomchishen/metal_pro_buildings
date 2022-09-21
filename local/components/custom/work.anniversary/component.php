@@ -20,9 +20,10 @@ if (!$arParams['DETAIL_URL'])
 
 $arResult['USERS'] = array();
 
-$users = \AviviWorkAnniversary::getCurrentMonthAnniversaries();
+\AviviWorkAnniversary::setCurrentMonthAnniversaries();
+$anniversaries = \AviviWorkAnniversary::getAnniversaries();
 
-foreach ($users as $arUser) {
+foreach ($anniversaries as $arUser) {
     $arAnniversaryDate = ParseDateTime($arUser[\AviviWorkAnniversary::WORK_ANNIVERSARY], CSite::GetDateFormat('SHORT'));
 
     $arUser['IS_ANNIVERSARY'] = (intval($arAnniversaryDate['MM']) == date('n', time() + CTimeZone::GetOffset())) && (intval($arAnniversaryDate['DD']) == date('j', time() + CTimeZone::GetOffset()));

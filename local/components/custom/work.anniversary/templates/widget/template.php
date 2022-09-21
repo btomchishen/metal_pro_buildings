@@ -70,6 +70,7 @@ $frame = $this->createFrame()->begin();
 						);
 					}
 				?></span>
+                <span class="user-birth-date"><?=$arUser['WORKED_TIME'];?></span>
 			</span>
 		</a><?php
 	}
