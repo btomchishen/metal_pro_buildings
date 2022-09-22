@@ -376,6 +376,24 @@ class CCrmEntityEditorComponent extends UIFormComponent
 
 		$fieldsInfo['available'] = $availableFields;
 
+		// Avivi: deny access for tab
+        $currentUserID = CCrmSecurityHelper::GetCurrentUserID();
+
+        $deniedTabs = array('bUILDING', 'Payment', 'BluePrints', 'Profit');
+        $deniedUsers = CHighData::GetList(DENIED_USERS_HLBT, array());
+
+        foreach ($deniedUsers as $user) {
+            if ($currentUserID == $user['UF_USER_ID']) {
+                foreach ($scheme[0]['elements'] as &$section)
+                {
+                    if(in_array($section['title'], $deniedTabs)) {
+                        $section = '';
+                    }
+                }
+            }
+        }
+		// Avivi: deny access for tab
+
 		return $scheme;
 	}
 
