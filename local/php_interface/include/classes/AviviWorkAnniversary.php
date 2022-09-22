@@ -14,11 +14,13 @@ class AviviWorkAnniversary
 
     public static function run()
     {
-        self::getCurrentDayAnniversaries();
+        self::fetchCurrentDayAnniversaries();
 
-        self::sendMessageToFeed();
         if (!empty(self::$anniversaries)) {
             self::sendNotification();
+            foreach (self::$anniversaries as $anniversary) {
+                self::sendMessageToFeed($anniversary);
+            }
         }
 
         return 'AviviWorkAnniversary::run();';
@@ -34,10 +36,8 @@ class AviviWorkAnniversary
         return self::$users;
     }
 
-    public static function setCurrentMonthAnniversaries()
+    public static function fetchWidgetAnniversaries()
     {
-        $currentMonth = date_format(date_create(), 'm');
-
         $arFilter['!' . self::WORK_ANNIVERSARY] = '';
         $arSelect = array('*', 'UF_*');
 
@@ -51,15 +51,97 @@ class AviviWorkAnniversary
         );
 
         while ($arUser = $dbUsers->fetch()) {
-            $userDate = explode('/', $arUser[self::WORK_ANNIVERSARY]);
+            $anniversaryInfo = self::checkWidgetAnniversaries($arUser[self::WORK_ANNIVERSARY]);
 
-            if ($currentMonth == $userDate[0]) {
+            if ($anniversaryInfo['isAnniversary'] == true) {
                 self::$anniversaries[$arUser['ID']] = $arUser;
+                self::$anniversaries[$arUser['ID']]['WORKED_TIME'] = $anniversaryInfo['title'];
+
+                if ($anniversaryInfo['title'] == '90 days') {
+                    self::$anniversaries[$arUser['ID']][self::WORK_ANNIVERSARY] = $anniversaryInfo['newDate'];
+                    self::$anniversaries[$arUser['ID']]['isAnniversary'] = $anniversaryInfo['isAnniversary'];
+                }
             }
         }
 
-        self::getNumberOfYears();
         self::sortAnniversaries();
+    }
+
+    protected static function checkWidgetAnniversaries($anniversaryDate)
+    {
+        $userDate = explode('/', $anniversaryDate);
+
+        $currentMonth = date_format(date_create(), 'm');
+        $currentYear = date_format(date_create(), 'Y');
+
+        switch ($userDate[0]) {
+            case 10:
+                $newMonth = 1;
+                break;
+            case 11:
+                $newMonth = 2;
+                break;
+            case 12:
+                $newMonth = 3;
+                break;
+            default:
+                $newMonth = $userDate[0] + 3;
+                break;
+        }
+
+        $result['isAnniversary'] = false;
+
+        if ($currentMonth == $newMonth) {
+            $result['isAnniversary'] = true;
+            $result['title'] = '90 days';
+
+            $result['newDate'] = $newMonth . '/' . $userDate[1] . '/' . $userDate[2];
+        } elseif ($currentMonth == $userDate[0] && $currentYear > $userDate[2]) {
+            $yearDiff = $currentYear - $userDate[2];
+
+            $result['isAnniversary'] = true;
+            $result['title'] = $yearDiff . ' year';
+        }
+
+        return $result;
+    }
+
+    protected static function checkCurrentDayAnniversaries($anniversaryDate)
+    {
+        $userDate = explode('/', $anniversaryDate);
+
+        $currentDay = date_format(date_create(), 'd');
+        $currentMonth = date_format(date_create(), 'm');
+        $currentYear = date_format(date_create(), 'Y');
+
+        switch ($userDate[0]) {
+            case 10:
+                $newMonth = 1;
+                break;
+            case 11:
+                $newMonth = 2;
+                break;
+            case 12:
+                $newMonth = 3;
+                break;
+            default:
+                $newMonth = $userDate[0] + 3;
+                break;
+        }
+
+        $result['isAnniversary'] = false;
+
+        if ($currentDay == $userDate[1] && $currentMonth == $newMonth) {
+            $result['isAnniversary'] = true;
+            $result['title'] = '90 days';
+        } elseif ($currentDay == $userDate[1] && $currentMonth == $userDate[0] && $currentYear > $userDate[2]) {
+            $yearDiff = $currentYear - $userDate[2];
+
+            $result['isAnniversary'] = true;
+            $result['title'] = $yearDiff . ' year';
+        }
+
+        return $result;
     }
 
     protected static function sortAnniversaries()
@@ -85,11 +167,8 @@ class AviviWorkAnniversary
         });
     }
 
-    protected static function getCurrentDayAnniversaries()
+    protected static function fetchCurrentDayAnniversaries()
     {
-        $currentDay = date_format(date_create(), 'd');
-        $currentMonth = date_format(date_create(), 'm');
-
         $arFilter['!' . self::WORK_ANNIVERSARY] = '';
         $arSelect = array('ID', 'NAME', 'LAST_NAME', self::WORK_ANNIVERSARY);
 
@@ -103,13 +182,13 @@ class AviviWorkAnniversary
         );
 
         while ($arUser = $dbUsers->fetch()) {
-            $userDate = explode('/', $arUser[self::WORK_ANNIVERSARY]);
+            $anniversaryInfo = self::checkCurrentDayAnniversaries($arUser[self::WORK_ANNIVERSARY]);
 
-            if ($currentMonth == $userDate[0] && $currentDay == $userDate[1])
+            if ($anniversaryInfo['isAnniversary'] == true) {
                 self::$anniversaries[$arUser['ID']] = $arUser;
+                self::$anniversaries[$arUser['ID']]['WORKED_TIME'] = $anniversaryInfo['title'];
+            }
         }
-
-        self::getNumberOfYears();
     }
 
     /**
@@ -171,45 +250,20 @@ class AviviWorkAnniversary
         }
     }
 
-    protected static function getNumberOfYears()
-    {
-        $currentDate = date_format(date_create(), 'm/d/Y');
-
-        foreach (self::$anniversaries as $anniversary) {
-            $dateDiff = strtotime($currentDate) - strtotime($anniversary[self::WORK_ANNIVERSARY]);
-            $workedDays = floor($dateDiff / (60 * 60 * 24));
-
-            self::$anniversaries[$anniversary['ID']]['WORKED_DAYS'] = $workedDays;
-
-            if ($workedDays < 365 && $workedDays > 30) {
-                $workedMonth = floor(floor($dateDiff / (60 * 60 * 24)) / 31);
-
-                self::$anniversaries[$anniversary['ID']]['WORKED_TIME'] = $workedMonth . ' month';
-
-            } else if ($workedDays >= 365) {
-                $workedYears = floor(floor($dateDiff / (60 * 60 * 24)) / 365);
-
-                self::$anniversaries[$anniversary['ID']]['WORKED_TIME'] = $workedYears . ' year';
-            } else {
-                self::$anniversaries[$anniversary['ID']]['WORKED_TIME'] = $workedDays . ' days';
-            }
-        }
-    }
-
     protected static function getMessage($anniversary)
     {
-        $message = "Please congratulate ";
+        $message = "[B]Please congratulate ";
 
         $message .= '<a href="https://' . self::DOMAIN . self::PATH_TO_USER_PROFILE . $anniversary['ID'] . '/">'
             . $anniversary['NAME'] . ' ' . $anniversary['LAST_NAME']
             . '</a>';
 
-        $message .= " on their " . $anniversary['WORKED_YEARS'] . " year Anniversary!";
+        $message .= " on their " . $anniversary['WORKED_TIME'] . " Anniversary![/B]";
 
         return $message;
     }
 
-    protected static function createNewBlogPost($anniversaryName)
+    protected static function createNewBlogPost($anniversary)
     {
         global $DB;
 
@@ -218,7 +272,7 @@ class AviviWorkAnniversary
             "BLOG_ID" => self::ADMIN_ID,
             "AUTHOR_ID" => self::ADMIN_ID,
             "PREVIEW_TEXT_TYPE" => 'text',
-            "DETAIL_TEXT" => '[B]Please congratulate ' . $anniversaryName . '[/B]',
+            "DETAIL_TEXT" => self::getMessage($anniversary),
             "=DATE_CREATE" => $DB->GetNowFunction(),
             "=DATE_PUBLISH" => $DB->GetNowFunction(),
             "PUBLISH_STATUS" => BLOG_PUBLISH_STATUS_PUBLISH,
@@ -239,7 +293,7 @@ class AviviWorkAnniversary
         return $postID;
     }
 
-    protected static function sendMessageToFeed()
+    protected static function sendMessageToFeed($anniversary)
     {
         global $DB;
 
@@ -247,7 +301,7 @@ class AviviWorkAnniversary
             throw new \Bitrix\Main\LoaderException('Unable to load SocialNetwork module');
         }
 
-        $blogPostID = self::createNewBlogPost('Test Name');
+        $blogPostID = self::createNewBlogPost($anniversary);
 
         $arEvent = array(
             'ENTITY_TYPE' => 'U',
@@ -257,8 +311,8 @@ class AviviWorkAnniversary
             '=LOG_DATE' => $DB->GetNowFunction(),
             'TITLE_TEMPLATE' => '#USER_NAME# has added post "#TITLE#" in blog',
             'TITLE' => "Anniversary",
-            'MESSAGE' => "[B]Please congratulate Bohdan[/B]",
-            'TEXT_MESSAGE' => "[B]Please congratulate Bohdan[/B]",
+            'MESSAGE' => self::getMessage($anniversary),
+            'TEXT_MESSAGE' => self::getMessage($anniversary),
             'URL' => '/company/personal/user/' . self::ADMIN_ID . '/blog/' . $blogPostID . '/',
             'MODULE_ID' => 'blog',
             'CALLBACK_FUNC' => false,

@@ -20,7 +20,7 @@ if (!$arParams['DETAIL_URL'])
 
 $arResult['USERS'] = array();
 
-\AviviWorkAnniversary::setCurrentMonthAnniversaries();
+\AviviWorkAnniversary::fetchWidgetAnniversaries();
 $anniversaries = \AviviWorkAnniversary::getAnniversaries();
 
 foreach ($anniversaries as $arUser) {
