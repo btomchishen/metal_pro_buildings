@@ -821,9 +821,9 @@ function checkResponsibleBeforeUpdate($arFields)
 }
 
 // Avivi #29941 Custom Search Filter by Attached CRM Item for Tasks
-AddEventHandler("tasks", "OnBeforeTaskAdd", 'copyCRMItemsForFilterCreate');
-AddEventHandler("tasks", "OnBeforeTaskUpdate", 'copyCRMItemsForFilterUpdate');
-function copyCRMItemsForFilterCreate(&$arFields)
+AddEventHandler("tasks", "OnBeforeTaskAdd", 'copyCRMItemsForFilterOnCreate');
+AddEventHandler("tasks", "OnBeforeTaskUpdate", 'copyCRMItemsForFilterOnUpdate');
+function copyCRMItemsForFilterOnCreate(&$arFields)
 {
     if (isset($arFields['UF_CRM_TASK']) && !empty($arFields['UF_CRM_TASK'])) {
         $ufCRMTask = $arFields['UF_CRM_TASK'];
@@ -834,7 +834,7 @@ function copyCRMItemsForFilterCreate(&$arFields)
     }
 }
 
-function copyCRMItemsForFilterUpdate($ID, &$arFields)
+function copyCRMItemsForFilterOnUpdate($ID, &$arFields)
 {
     if (isset($arFields['UF_CRM_TASK']) && !empty($arFields['UF_CRM_TASK'])) {
         $ufCRMTask = $arFields['UF_CRM_TASK'];
