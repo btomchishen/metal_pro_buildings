@@ -169,3 +169,34 @@ function fixAnalyticsFilter(&$control, $GUID) {
         }
     }
 }
+
+
+/**
+ * @param array $ufCRMTask Ex. D_1234, L_4321
+ * @return array
+ */
+function getTitlesForTaskFilter($ufCRMTask)
+{
+    $titles = array();
+    foreach ($ufCRMTask as $item) {
+        $explodedItem = explode('_', $item);
+
+        if ($explodedItem[0] == 'L') {
+//            $lead = CCrmLead::GetByID($explodedItem[1]);
+            $lead = CCrmLead::GetListEx(array(), array('ID' => $explodedItem[1]), false, false, array('TITLE'))
+                ->fetch();
+            $title = $lead['TITLE'];
+
+            $titles[] = $title;
+        } elseif ($explodedItem[0] == 'D') {
+//            $deal = CCrmDeal::GetByID($explodedItem[1]);
+            $deal = CCrmDeal::GetListEx(array(), array('ID' => $explodedItem[1]), false, false, array('TITLE'))
+                ->fetch();
+            $title = $deal['TITLE'];
+
+            $titles[] = $title;
+        }
+    }
+
+    return $titles;
+}
