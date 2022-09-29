@@ -7,6 +7,7 @@ $APPLICATION->SetTitle('Tasks updater');
 ?>
     <div id="info"></div>
     <button id="updateButton">Update</button>
+    <button id="stopButton">Stop script</button>
     <table id="resultTable">
         <tr>
             <td>Page Number</td>
@@ -21,80 +22,117 @@ $APPLICATION->SetTitle('Tasks updater');
         const itemsPerPage = 100;
         const ajaxUrl = '/task_updater/task_update.php';
 
-        let tasksCount = 0;
-        let lastId = 0;
-        let page = 1;
-        let pagesCount = 0;
-        let operatedPages = 0;
+        class TaskUpdater {
+            constructor() {
+                this.tasksCount = 0;
+                this.lastId = 0;
+                this.page = 1;
+                this.totalPages = 0;
+                this.operatedPages = 0;
+            }
+
+            getAjaxUrl() {
+                return ajaxUrl;
+            }
+
+            getItemsPerPage() {
+                return itemsPerPage;
+            }
+
+            setTotalPages(tasksCount) {
+                this.totalPages = Math.ceil(tasksCount / this.getItemsPerPage());
+            }
+
+            setTasksCount(tasksCount) {
+                this.tasksCount = tasksCount;
+            }
+
+            setLastId(lastId) {
+                this.lastId = lastId;
+            }
+
+            prepareStatus(status) {
+                return status === 'Success' ? '<span style="color: green;">' + status + '</span>' : '<span style="color: red;">' + status + '</span>';
+            }
+
+            prepareTasksInfo(operatedPages) {
+                return 'Tasks count: ' + this.tasksCount +
+                    '<br>Operated pages: ' + operatedPages + '/' + this.totalPages;
+            }
+
+            prepareRowForTable(data) {
+                return '<tr>' +
+                    '<td>' + data.page + '</td>' +
+                    '<td>' + this.lastId + '-' + data.lastId + '</td>' +
+                    '<td>' + this.prepareStatus(data.status) + '</td>' +
+                    '<td>' + data.time + '</td>' +
+                    '</tr>';
+            }
+
+            doAjax(url, action, async, inputData = null) {
+                let $this = this;
+                let mergedData = {action, ...inputData};
+
+                let ajaxResult = $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: mergedData,
+                    async: async,
+                    success: function (data) {
+                        if (action === 'getTasksCount')
+                            $this.displayTasksInfo(data);
+                        if (action === 'tasksUpdate') {
+                            $this.page++
+                            $this.displayPageResult(data);
+                        }
+                    }
+                }).responseText;
+
+                return ajaxResult;
+            }
+
+            displayTasksInfo(data) {
+                let parsedData = JSON.parse(data);
+
+                this.setTasksCount(parsedData.tasksCount);
+                this.setTotalPages(this.tasksCount);
+
+                $('#info').html(this.prepareTasksInfo(0));
+            }
+
+            displayPageResult(data) {
+                let parsedData = JSON.parse(data);
+                this.operatedPages++
+
+                $('#resultTable').append(this.prepareRowForTable(parsedData));
+                $('#info').html(this.prepareTasksInfo(this.operatedPages));
+
+                this.setLastId(parsedData.lastId);
+                if (this.page <= this.totalPages) {
+                    this.doAjax(this.getAjaxUrl(), 'tasksUpdate', true, {
+                        page: this.page,
+                        itemsPerPage: this.getItemsPerPage()
+                    });
+                }
+            }
+        }
 
         $(document).ready(function () {
-            $.ajax({
-                type: 'POST',
-                url: ajaxUrl,
-                data: {
-                    "action": "getTasksCount",
-                },
-                async: false,
-                success: function (data) {
-                    let parsedData = JSON.parse(data)
-                    tasksCount = parsedData.tasksCount;
+            let taskUpdater = new TaskUpdater();
 
-                    pagesCount = calculatePagesCount(tasksCount)
-
-                    $('#info').html('Tasks count: ' + tasksCount + '<br>Operated pages: ' + '0/' + pagesCount)
-                }
-            })
+            taskUpdater.doAjax(taskUpdater.getAjaxUrl(), 'getTasksCount', false);
 
             $('#updateButton').on('click', function (event) {
-                updateTasks();
+                taskUpdater.doAjax(taskUpdater.getAjaxUrl(), 'tasksUpdate', true, {
+                    page: taskUpdater.page,
+                    itemsPerPage: taskUpdater.getItemsPerPage()
+                });
+            })
+
+            $('#stopButton').on('click', function (event) {
+                taskUpdater.totalPages = taskUpdater.page;
             })
         })
-
-        function calculatePagesCount(tasksCount) {
-            return Math.ceil(tasksCount / itemsPerPage);
-        }
-
-        function formatStatus(status) {
-            if (status === 'Success')
-                return '<span style="color: green;">' + status + '</span>'
-            else
-                return '<span style="color: red;">' + status + '</span>'
-        }
-
-        function prepareRowForTable(page, fromId, toId, status, time) {
-            return '<tr>' +
-                '<td>' + page + '</td>' +
-                '<td>' + fromId + '-' + toId + '</td>' +
-                '<td>' + status + '</td>' +
-                '<td>' + time + '</td>' +
-                '</tr>'
-        }
-
-        function updateTasks() {
-            $.ajax({
-                type: 'POST',
-                url: ajaxUrl,
-                data: {
-                    "action": "tasksUpdate",
-                    "page": page,
-                    "itemsPerPage": itemsPerPage
-                },
-                async: true,
-                success: function (data) {
-                    let parsedData = JSON.parse(data)
-                    operatedPages++
-
-                    $('#resultTable').append(prepareRowForTable(parsedData.page, lastId, parsedData.lastId, formatStatus(parsedData.status), parsedData.time))
-                    $('#info').html('Tasks count: ' + tasksCount + '<br>Operated pages: ' + operatedPages + '/' + pagesCount)
-
-                    lastId = parsedData.lastId
-                    if (page <= pagesCount) {
-                        updateTasks();
-                    }
-                },
-            })
-            page++
-        }
     </script>
 
     <style>
