@@ -70,3 +70,14 @@ CJSCore::RegisterExt('custom_assets', [
     'use' => CJSCore::USE_PUBLIC
 ]);
 CJSCore::Init(['custom_assets']);
+
+//add custom js crm_entity_editor
+$arCustomJSDescr = array(
+    'js' => array(
+        '/local/php_interface/include/js/crm_entity_editor.js',
+    ),
+    'use' => CJSCore::USE_PUBLIC
+);
+CJSCore::RegisterExt('custom_js_crm_entity_editor', $arCustomJSDescr);
+CJSCore::Init(array("custom_js_crm_entity_editor"));
+//END_custom js crm_entity_editor
