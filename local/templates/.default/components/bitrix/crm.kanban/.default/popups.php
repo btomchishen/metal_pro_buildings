@@ -80,12 +80,21 @@ use \Bitrix\Crm\Conversion\LeadConversionScheme;
 
 <div id="crm_kanban_lead_win" class="crm-kanban-column-popup" data-title="<?= htmlspecialcharsbx(Loc::getMessage('CRM_KANBAN_POPUP_LEAD'));?>">
 	<div class="crm-kanban-popup-wrapper">
-		<div class="crm-kanban-popup-convert-list">
-			<?foreach (LeadConversionScheme::getJavaScriptDescriptions(true) as $code => $value):?>
-			<div class="kanban-converttype" data-type="<?= mb_strtolower($code);?>" onclick="BX.Crm.KanbanComponent.leadConvert('<?= \CUtil::JSEscape($code);?>');"><?= htmlspecialcharsbx($value);?></div>
-			<?endforeach;?>
-			<div class="kanban-converttype" data-type="select" onclick="BX.Crm.KanbanComponent.leadConvert('SELECT');"><?= Loc::getMessage('CRM_KANBAN_POPUP_LEAD_SELECT');?></div>
-		</div>
+        <div class="crm-kanban-popup-convert-list">
+            <? foreach (LeadConversionScheme::getJavaScriptDescriptions(true) as $code => $value): ?>
+                <?
+                // Avivi #34412 Specific access for converting leads
+                $allowedConvert = array('DEAL_CONTACT_COMPANY', 'DEAL_CONTACT');
+                if (in_array($code, $allowedConvert)):
+                    ?>
+                    <div class="kanban-converttype" data-type="<?= mb_strtolower($code); ?>"
+                         onclick="BX.Crm.KanbanComponent.leadConvert('<?= \CUtil::JSEscape($code); ?>');"><?= htmlspecialcharsbx($value); ?></div>
+                <? endif;// Avivi
+                ?>
+            <? endforeach; ?>
+            <div class="kanban-converttype" data-type="select"
+                 onclick="BX.Crm.KanbanComponent.leadConvert('SELECT');"><?= Loc::getMessage('CRM_KANBAN_POPUP_LEAD_SELECT'); ?></div>
+        </div>
 	</div>
 </div>
 

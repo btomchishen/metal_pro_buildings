@@ -159,7 +159,7 @@ if($arResult['CONVERSION_PERMITTED'] && $arResult['CAN_CONVERT'] && isset($arRes
 				<?if(isset($arResult['CONVERSION_SCRIPT_DESCRIPTIONS'])):?>
 					BX.CrmLeadConversionScheme.messages = <?=CUtil::PhpToJSObject($arResult['CONVERSION_SCRIPT_DESCRIPTIONS'])?>;
 				<?endif;?>
-                // Avivi
+                // Avivi #34412 Specific access for converting leads
                 delete BX.CrmLeadConversionScheme.company
                 delete BX.CrmLeadConversionScheme.deal
                 delete BX.CrmLeadConversionScheme.contact
