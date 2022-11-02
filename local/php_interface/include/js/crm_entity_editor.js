@@ -88,7 +88,9 @@ BX.ready(function() {
                         window.openContainers = [];
                     }
                     if (isViewMode && !window.openContainers.includes(this._schemeElement._settings.name)) {
-                        this._contentContainer.style.display = "none";
+                        if(this._id !== 'main') {
+                            this._contentContainer.style.display = "none";
+                        }
                     }
                 }
             //Avivi: finish code
@@ -102,19 +104,21 @@ BX.ready(function() {
             //Avivi: add open button
             if(options.userFieldLoader !== undefined)
                 if(options.userFieldLoader._owner._entityTypeName == "DEAL") {
-                    if (!window.openContainers.includes(this._schemeElement._settings.name)) {
-                        var open_button_class = "open_button closed";
-                    } else {
-                        var open_button_class = "open_button";
-                    }
-
-                    this._openButton = BX.create("span",
-                        {
-                            attrs: {className: open_button_class},
-                            events: {click: BX.delegate(this.onOpenClick, this)},
-                            text: "Open"
+                    if(this._id !== 'main') {
+                        if (!window.openContainers.includes(this._schemeElement._settings.name)) {
+                            var open_button_class = "open_button closed";
+                        } else {
+                            var open_button_class = "open_button";
                         }
-                    );
+
+                        this._openButton = BX.create("span",
+                            {
+                                attrs: {className: open_button_class},
+                                events: {click: BX.delegate(this.onOpenClick, this)},
+                                text: "Open"
+                            }
+                        );
+                    }
                 }
             //Avivi: finish code
 
