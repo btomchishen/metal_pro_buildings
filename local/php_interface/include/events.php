@@ -1067,27 +1067,37 @@ function copyCRMItemsForFilterOnUpdate($ID, &$arFields)
 }
 
 
-//AddEventHandler("main", "OnBeforeProlog", 'test');
-function test()
+// Avivi #33674 Auto Assign Prov/State based on Area Code
+AddEventHandler("crm", "OnBeforeCrmLeadAdd", 'assignStateOnCreate');
+AddEventHandler("crm", "OnBeforeCrmLeadUpdate", 'assignStateOnUpdate');
+function assignStateOnCreate(&$arFields)
 {
-//    global $USER;
-//    fp($USER, 'tom_USER');
-//    fp($_SERVER, 'tom_SERVER');
-//    fp($_SESSION, 'tom_SESSION');
-//    if($_SESSION['SESS_IP'] == '23.106.56.36'){
-//        header('Location: '.'https://metalpro.site/test_savin.php');
-//        die();
-//        http_response_code(403);
-//        die();
-//    }
+    if ($arFields["FM"]["PHONE"]) {
+        $phoneFields = $arFields["FM"]["PHONE"];
+        $number = array_shift($phoneFields);
 
-//    $ch = curl_init('https://ipwho.is/188.190.190.33');
-//    $ch = curl_init('https://maps.googleapis.com/maps/api/geocode/json?latlng=49.422983,26.987133&sensor=false&callback=myMap');
-//
-//    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//    $response = curl_exec($ch);
-//    curl_close($ch);
-//    $ipInfo = json_decode($response, true);
-//    fp($ipInfo, 'tom_ipInfo3');
+        $area = AviviAreaCodeAssigner::getArea($number);
+
+        $fieldsForUpdate = AviviAreaCodeAssigner::updateLead($arFields['ID'], $area);
+        if (!empty($fieldsForUpdate)) {
+            $arFields[AviviAreaCodeAssigner::STATE_FIELD] = $fieldsForUpdate[AviviAreaCodeAssigner::STATE_FIELD];
+            $arFields[AviviAreaCodeAssigner::PROVINCE_FIELD] = $fieldsForUpdate[AviviAreaCodeAssigner::PROVINCE_FIELD];
+        }
+    }
+}
+
+function assignStateOnUpdate(&$arFields)
+{
+    if ($arFields["FM"]["PHONE"]) {
+        $phoneFields = $arFields["FM"]["PHONE"];
+        $number = array_shift($phoneFields);
+
+        $area = AviviAreaCodeAssigner::getArea($number);
+
+        $fieldsForUpdate = AviviAreaCodeAssigner::updateLead($arFields['ID'], $area);
+        if (!empty($fieldsForUpdate)) {
+            $arFields[AviviAreaCodeAssigner::STATE_FIELD] = $fieldsForUpdate[AviviAreaCodeAssigner::STATE_FIELD];
+            $arFields[AviviAreaCodeAssigner::PROVINCE_FIELD] = $fieldsForUpdate[AviviAreaCodeAssigner::PROVINCE_FIELD];
+        }
+    }
 }
