@@ -151,3 +151,6 @@ define('HB_REPORT_ANALYTICS_CONFIG', 36);
 
 // Avivi #30293 Limit Access to Edit Deal Card
 define('DENIED_USERS_HLBT', 37);
+
+// Avivi #34412 Specific access for converting leads
+define('SALES_DEPARTMENT', 3);
