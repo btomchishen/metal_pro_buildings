@@ -139,3 +139,6 @@ define('PROVINCE', 'UF_CRM_1645643434352');
 
 // Avivi #30293 Limit Access to Edit Deal Card
 define('DENIED_USERS_HLBT', 39);
+
+// Avivi #34412 Specific access for converting leads
+define('SALES_DEPARTMENT', 3);

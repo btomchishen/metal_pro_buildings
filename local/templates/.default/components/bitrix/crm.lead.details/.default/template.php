@@ -160,12 +160,26 @@ if($arResult['CONVERSION_PERMITTED'] && $arResult['CAN_CONVERT'] && isset($arRes
 					BX.CrmLeadConversionScheme.messages = <?=CUtil::PhpToJSObject($arResult['CONVERSION_SCRIPT_DESCRIPTIONS'])?>;
 				<?endif;?>
                 // Avivi #34412 Specific access for converting leads
-                delete BX.CrmLeadConversionScheme.company
-                delete BX.CrmLeadConversionScheme.deal
-                delete BX.CrmLeadConversionScheme.contact
-                delete BX.CrmLeadConversionScheme.dealcompany
-                delete BX.CrmLeadConversionScheme.contactcompany
+
+                let salesDepartmentId = <?=SALES_DEPARTMENT?>;
+                BX.ajax({
+                    url: '/local/ajax/get_users_by_department.php',
+                    data: {'departmentId': <?=SALES_DEPARTMENT?>},
+                    method: 'POST',
+                    onsuccess: function (data) {
+                       let parsedData = JSON.parse(data)
+
+                        if(parsedData.departments[salesDepartmentId].includes(parsedData.userId)) {
+                            delete BX.CrmLeadConversionScheme.company
+                            delete BX.CrmLeadConversionScheme.deal
+                            delete BX.CrmLeadConversionScheme.contact
+                            delete BX.CrmLeadConversionScheme.dealcompany
+                            delete BX.CrmLeadConversionScheme.contactcompany
+                        }
+                    }
+                });
                 // Avivi
+
 				BX.CrmLeadConverter.messages =
 				{
 					accessDenied: "<?=GetMessageJS("CRM_LEAD_CONV_ACCESS_DENIED")?>",

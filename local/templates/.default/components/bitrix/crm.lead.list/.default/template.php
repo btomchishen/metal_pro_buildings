@@ -211,17 +211,30 @@ foreach($arResult['LEAD'] as $sKey => $arLead)
 			)->getSchemeJavaScriptDescriptions(true);
 
 			$arSchemeList = array();
-			fp($arSchemeDescriptions, 'avivi_$arSchemeDescriptions');
+
 			foreach($arSchemeDescriptions as $name => $description)
 			{
                 // Avivi #34412 Specific access for converting leads
-                $allowedConvert = array('DEAL_CONTACT_COMPANY', 'DEAL_CONTACT');
-                if (in_array($name, $allowedConvert))
+                global $USER;
+                $userId = $USER->GetId();
+                $userIds = getUsersByDepartmentId(SALES_DEPARTMENT);
+
+                if(in_array($userId, $userIds)) {
+                    $allowedConvert = array('DEAL_CONTACT_COMPANY', 'DEAL_CONTACT');
+
+                    if (in_array($name, $allowedConvert))
+                        $arSchemeList[] = array(
+                            'TITLE' => $description,
+                            'TEXT' => $description,
+                            'ONCLICK' => "BX.CrmLeadConverter.getCurrent().convert({$arLead['ID']}, BX.CrmLeadConversionScheme.createConfig('{$name}'), '" . CUtil::JSEscape($APPLICATION->GetCurPage()) . "');"
+                        );
+                } else {
                     $arSchemeList[] = array(
                         'TITLE' => $description,
                         'TEXT' => $description,
                         'ONCLICK' => "BX.CrmLeadConverter.getCurrent().convert({$arLead['ID']}, BX.CrmLeadConversionScheme.createConfig('{$name}'), '" . CUtil::JSEscape($APPLICATION->GetCurPage()) . "');"
                     );
+                }
 			    // Avivi
 			}
             if(!empty($arSchemeList))

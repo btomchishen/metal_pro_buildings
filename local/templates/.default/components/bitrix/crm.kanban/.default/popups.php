@@ -84,12 +84,23 @@ use \Bitrix\Crm\Conversion\LeadConversionScheme;
             <? foreach (LeadConversionScheme::getJavaScriptDescriptions(true) as $code => $value): ?>
                 <?
                 // Avivi #34412 Specific access for converting leads
-                $allowedConvert = array('DEAL_CONTACT_COMPANY', 'DEAL_CONTACT');
-                if (in_array($code, $allowedConvert)):
+                global $USER;
+                $userId = $USER->GetId();
+                $userIds = getUsersByDepartmentId(SALES_DEPARTMENT);
+
+                if (in_array($userId, $userIds)):
+                    $allowedConvert = array('DEAL_CONTACT_COMPANY', 'DEAL_CONTACT');
+                    if (in_array($code, $allowedConvert)):
+                        ?>
+                        <div class="kanban-converttype" data-type="<?= mb_strtolower($code); ?>"
+                             onclick="BX.Crm.KanbanComponent.leadConvert('<?= \CUtil::JSEscape($code); ?>');"><?= htmlspecialcharsbx($value); ?></div>
+                    <? endif;
+                else:
                     ?>
                     <div class="kanban-converttype" data-type="<?= mb_strtolower($code); ?>"
                          onclick="BX.Crm.KanbanComponent.leadConvert('<?= \CUtil::JSEscape($code); ?>');"><?= htmlspecialcharsbx($value); ?></div>
-                <? endif;// Avivi
+                <? endif;
+                    // Avivi
                 ?>
             <? endforeach; ?>
             <div class="kanban-converttype" data-type="select"

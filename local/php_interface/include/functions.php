@@ -250,3 +250,20 @@ function getTitlesForTaskFilter($ufCRMTask)
 
     return $titles;
 }
+
+function getUsersByDepartmentId($id)
+{
+    $rsUsers = CUser::GetList(
+        array('sort' => 'asc'),
+        'sort',
+        array('UF_DEPARTMENT' => $id, 'ACTIVE' => 'Y'),
+        array('FIELDS' => array('ID'))
+    );
+
+    $userIds = array();
+    while ($arUser = $rsUsers->fetch()) {
+        $userIds[] = $arUser['ID'];
+    }
+
+    return $userIds;
+}
