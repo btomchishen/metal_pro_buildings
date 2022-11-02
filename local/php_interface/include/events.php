@@ -845,38 +845,37 @@ function copyCRMItemsForFilterOnUpdate($ID, &$arFields)
     }
 }
 
-//AddEventHandler("main", "OnUserLogin", 'getUserInfoOnLogin');
-//function getUserInfoOnLogin() {
-//    Bitrix\Main\Loader::includeModule('main');
-//    global $USER;
-//
-//    $userId = $USER->GetId();
-//
-//    $userData = getDataByIP($_SERVER['REMOTE_ADDR']);
-//
-//    $arFields['USER_IP'] = $_SERVER['REMOTE_ADDR'];
-//    $arFields['COUNTRY'] = $userData['country'];
-//    $arFields['REGION'] = $userData['regionName'];
-//    $arFields['CITY'] = $userData['city'];
-//    $arFields['LAT'] = $userData['lat'];
-//    $arFields['LON'] = $userData['lon'];
-//
-//    $recordID = CHighData::IsRecordExist(HB_NAME, array('USER_ID' => $userId));
-//    if (empty($recordID)) {
-//        $user = CUser::GetById($userId)->Fetch();
-//
-//        $arFields['USER_ID'] = $userId;
-//        $arFields['NAME'] = $user['NAME'];
-//        $arFields['LAST_NAME'] = $user['LAST_NAME'];
-//        $arFields['LAST_LOGIN'] = $user['LAST_LOGIN'];
-//
-//        CHighData::AddRecord(HB_NAME, $arFields);
-//    } else {
-//        $HLBTInfo = CHighData::GetList(HB_NAME, array('USER_ID' => $userId));
-//
-//        if($HLBTInfo['USER_IP'] != $arFields['USER_IP'])
-//            CHighData::UpdateRecord(HB_NAME, $recordID, $arFields);
-//    }
-//
-//
-//}
+// Avivi #33674 Auto Assign Prov/State based on Area Code
+AddEventHandler("crm", "OnBeforeCrmLeadAdd", 'assignStateOnCreate');
+AddEventHandler("crm", "OnBeforeCrmLeadUpdate", 'assignStateOnUpdate');
+function assignStateOnCreate(&$arFields)
+{
+    if ($arFields["FM"]["PHONE"]) {
+        $phoneFields = $arFields["FM"]["PHONE"];
+        $number = array_shift($phoneFields);
+
+        $area = AviviAreaCodeAssigner::getArea($number);
+
+        $fieldsForUpdate = AviviAreaCodeAssigner::updateLead($arFields['ID'], $area);
+        if (!empty($fieldsForUpdate)) {
+            $arFields[AviviAreaCodeAssigner::STATE_FIELD] = $fieldsForUpdate[AviviAreaCodeAssigner::STATE_FIELD];
+            $arFields[AviviAreaCodeAssigner::PROVINCE_FIELD] = $fieldsForUpdate[AviviAreaCodeAssigner::PROVINCE_FIELD];
+        }
+    }
+}
+
+function assignStateOnUpdate(&$arFields)
+{
+    if ($arFields["FM"]["PHONE"]) {
+        $phoneFields = $arFields["FM"]["PHONE"];
+        $number = array_shift($phoneFields);
+
+        $area = AviviAreaCodeAssigner::getArea($number);
+
+        $fieldsForUpdate = AviviAreaCodeAssigner::updateLead($arFields['ID'], $area);
+        if (!empty($fieldsForUpdate)) {
+            $arFields[AviviAreaCodeAssigner::STATE_FIELD] = $fieldsForUpdate[AviviAreaCodeAssigner::STATE_FIELD];
+            $arFields[AviviAreaCodeAssigner::PROVINCE_FIELD] = $fieldsForUpdate[AviviAreaCodeAssigner::PROVINCE_FIELD];
+        }
+    }
+}
